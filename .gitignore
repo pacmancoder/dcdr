@@ -32,6 +32,9 @@
 *.app
 
 # dcdr specific
+target/
 
-bin/
-obj/
+# ide specific
+.idea/tasks.xml
+.idea/workspace.xml
+.idea/dictionaries/
