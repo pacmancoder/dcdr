@@ -1,8 +1,8 @@
 project(umath)
 
-set(SOURCE_FILES
-        src/Vector.cpp
-        include/umath/Vector.h)
+set(INCLUDE_FILES
+        include/umath/Vec3.h
+        include/umath/Mat4.h)
 
-add_library(${PROJECT_NAME} STATIC ${SOURCE_FILES})
-target_include_directories(${PROJECT_NAME} PUBLIC include)
+add_library(${PROJECT_NAME} INTERFACE)
+target_include_directories(${PROJECT_NAME} INTERFACE include)

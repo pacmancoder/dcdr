@@ -1,13 +1,12 @@
 #include <UmathTest.h>
 #include <approx.h>
-#include <umath/Vector.h>
-#include <cmath>
+#include <umath/Vec3.h>
 
 using namespace UMath;
 
 const float defaultApproxDelta = 0.000001;
 
-TEST_F(UmathTest, DataAlias)
+TEST_F(UmathTest, Vec3Constructors)
 {
     Vec3f v1;
     ASSERT_TRUE(v1.x == 0);
@@ -25,7 +24,7 @@ TEST_F(UmathTest, DataAlias)
     ASSERT_TRUE(v3.z       == 3);
 }
 
-TEST_F(UmathTest, ConstBinaryOperations)
+TEST_F(UmathTest, Vec3ConstBinaryOperations)
 {
     ASSERT_EQ(Vec3f(1, 2, 3) + Vec3f(3, 2, 1)   , Vec3f(4));
     ASSERT_EQ(Vec3f(3, 2, 1) - Vec3f(0, -1, -2) , Vec3f(3));
@@ -41,7 +40,7 @@ TEST_F(UmathTest, ConstBinaryOperations)
 
 }
 
-TEST_F(UmathTest, MutBinaryOperations)
+TEST_F(UmathTest, Vec3MutBinaryOperations)
 {
     Vec3d v(1, 2, 3);
 
@@ -64,7 +63,7 @@ TEST_F(UmathTest, MutBinaryOperations)
     ASSERT_EQ(v, Vec3d(-6, 15, -1));
 }
 
-TEST_F(UmathTest, ConstMethods)
+TEST_F(UmathTest, Vec3ConstMethods)
 {
     Vec3f v(1, 2, 3);
     ASSERT_EQ(v.x_axis() , Vec3f(1, 0, 0));
@@ -73,7 +72,7 @@ TEST_F(UmathTest, ConstMethods)
     ASSERT_EQ(v.len()    , static_cast<float>(sqrt(14.0f)));
 }
 
-TEST_F(UmathTest, MutMethods)
+TEST_F(UmathTest, Vec3MutMethods)
 {
     Vec3f v(1, 2, 3);
     auto len = static_cast<float>(sqrt(14.0f));

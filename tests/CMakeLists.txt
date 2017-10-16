@@ -10,7 +10,8 @@ add_executable(${PROJECT_NAME}
 
         main.cpp
 
-        umath/VectorTest.cpp)
+        umath/Vec3Test.cpp
+        umath/Mat4Test.cpp)
 
 target_link_libraries(${PROJECT_NAME}
         gtest

@@ -7,15 +7,17 @@ namespace UMath
     template<typename T>
     union Vec3
     {
+    public:
+        static const size_t ELEMENTS = 3;
+
         struct
         {
-            T x;
-            T y;
-            T z;
+            T x, y, z;
         };
-        T data[3];
+        T data[ELEMENTS];
 
         Vec3(T x_, T y_, T z_) : x(x_), y(y_), z(z_) {}
+
         explicit Vec3(T c) : Vec3(c, c, c) {}
         Vec3() : Vec3(0) {};
 
@@ -80,7 +82,7 @@ namespace UMath
         Vec3<T> z_axis() const { return Vec3(0, 0, z); }
     };
 
-    typedef Vec3<float> Vec3f;
+    typedef Vec3<float>  Vec3f;
     typedef Vec3<double> Vec3d;
 
     template<typename T> Vec3<T> operator*(T c, const Vec3<T>& v) { return v * c; }
