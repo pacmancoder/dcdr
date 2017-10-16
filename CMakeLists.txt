@@ -4,13 +4,17 @@ project(dcdr-suite)
 
 set(CMAKE_CXX_STANDARD 17)
 
+# Output binnaries and shared libraries to the same folder
 set (CMAKE_LIBRARY_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/bin)
 set (CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/bin)
 
+# Third-party libraries
 add_subdirectory(libs)
 
+# Core modules
 add_subdirectory(umath)
 add_subdirectory(dcdr)
 add_subdirectory(dcdr-cli)
 
+# Tests
 add_subdirectory(tests)
