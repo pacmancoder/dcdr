@@ -9,7 +9,7 @@
 namespace UMath
 {
     template<typename T>
-    union Mat4
+    union UMat4
     {
     public:
         static const size_t ELEMENTS = 16;
@@ -26,12 +26,12 @@ namespace UMath
         T data[COL_ELEMENTS][ROW_ELEMENTS];
 
     private:
-        Mat4() { std::memset(data, 0, sizeof(data)); }
-        Mat4(const T* buffer) { std::memcpy(data, buffer, sizeof(data)); }
+        UMat4() { std::memset(data, 0, sizeof(data)); }
+        UMat4(const T* buffer) { std::memcpy(data, buffer, sizeof(data)); }
 
     public:
 
-        Mat4<T> operator*(const Mat4<T>& rhs)
+        UMat4<T> operator*(const UMat4<T>& rhs)
         {
             // TODO: SIMD, NEON
             const T buffer[ELEMENTS] = {
@@ -52,20 +52,20 @@ namespace UMath
                     a14 * rhs.a31 + a24 * rhs.a32 + a34 * rhs.a33 + a44 * rhs.a34,
                     a14 * rhs.a41 + a24 * rhs.a42 + a34 * rhs.a43 + a44 * rhs.a44,
             };
-            return Mat4(buffer);
+            return UMat4(buffer);
         }
 
-        bool operator==(const Mat4<T>& rhs) const
+        bool operator==(const UMat4<T>& rhs) const
         {
             return memcmp(data, rhs.data, sizeof(data)) == 0;
         }
 
-        bool operator!=(const Mat4<T>& rhs) const
+        bool operator!=(const UMat4<T>& rhs) const
         {
             return !(*this == rhs);
         }
 
-        Mat4<T>& transpose()
+        UMat4<T>& transpose()
         {
             std::swap(a21, a12);
             std::swap(a31, a13);
@@ -75,38 +75,41 @@ namespace UMath
             std::swap(a43, a34);
         }
 
-        Vec3<T> transform_point(Vec3<T> v) const
+        UVec3<T> transform_point(UVec3<T> v) const
         {
             T x = a11 * v.x + a21 * v.y + a31 * v.z + a41;
             T y = a12 * v.x + a22 * v.y + a32 * v.z + a42;
             T z = a13 * v.x + a23 * v.y + a33 * v.z + a43;
             T w = a14 * v.x + a24 * v.y + a34 * v.z + a44;
 
-            return Vec3<T>(x / w, y / w, z / w);
+            return UVec3<T>(x / w, y / w, z / w);
         }
 
-        Vec3<T> transform_direction(Vec3<T> v) const
+        UVec3<T> transform_direction(UVec3<T> v) const
         {
             T x = a11 * v.x + a21 * v.y + a31 * v.z;
             T y = a12 * v.x + a22 * v.y + a32 * v.z;
             T z = a13 * v.x + a23 * v.y + a33 * v.z;
             T w = a14 * v.x + a24 * v.y + a34 * v.z;
 
-            return Vec3<T>(x, y, z);
+            return UVec3<T>(x, y, z);
         }
 
-        static Mat4<T> zero() { return Mat4<T>(); }
-        static Mat4<T> from_buffer(const T* buffer) { return Mat4<T>(buffer); }
-        static Mat4<T> identity()
+        static UMat4<T> zero() { return UMat4<T>(); }
+        static UMat4<T> from_buffer(const T* buffer) { return UMat4<T>(buffer); }
+        static UMat4<T> identity()
         {
-            Mat4 m;
+            UMat4 m;
             for (int i = 0; i < COL_ELEMENTS; ++i)
                 m.data[i][i] = 1;
             return m;
         }
     };
 
-    typedef Mat4<float>  Mat4f;
-    typedef Mat4<double> Mat4d;
+    typedef UMat4<float>  UMat4f;
+    typedef UMat4<double> UMat4d;
+
+    // Default matrix type
+    typedef UMat4f Mat4;
 }
 

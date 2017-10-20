@@ -6,5 +6,4 @@ using namespace UMath;
 
 Tracer::Tracer()
 {
-    Vec3<double> v;
 }
