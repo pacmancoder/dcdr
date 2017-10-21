@@ -2,13 +2,13 @@
 
 #include <DcdrTypes.h>
 #include <tracing/Ray.h>
-#include <tracing/Intersection.h>
+#include <tracing/IntersectionInfo.h>
 
 namespace Dcdr::Scene
 {
     class ISceneObject
     {
     public:
-        virtual bool intersect(Dcdr::Tracing::Ray& ray, Dcdr::Tracing::Intersection& intersection) = 0;
+        virtual bool intersect(Dcdr::Tracing::Ray& ray, Dcdr::Tracing::IntersectionInfo& intersection) = 0;
     };
 }

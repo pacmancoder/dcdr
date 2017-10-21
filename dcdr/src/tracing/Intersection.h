@@ -1,21 +1,23 @@
 #pragma once
 
-#include <DcdrTypes.h>
+#include <scene/ISceneObject.h>
+#include <tracing/IntersectionInfo.h>
 
 namespace Dcdr::Tracing
 {
-    struct Intersection
+    class Intersection
     {
-        Dcdr::Types::Vec3 hit;
-        Dcdr::Types::Vec3 normal;
-        Dcdr::Types::Scalar distance;
-        Dcdr::Types::UVCoord uv;
+    public:
+        Intersection(const Dcdr::Scene::ISceneObject& object, Dcdr::Tracing::IntersectionInfo info) :
+                object_(object),
+                info_(info) {}
 
-        Intersection(
-                Dcdr::Types::Vec3 hit_,
-                Dcdr::Types::Vec3 normal_,
-                Dcdr::Types::Scalar distance_,
-                Dcdr::Types::UVCoord uv_) :
-                hit(hit_), normal(normal_), distance(distance_), uv(uv_) {}
+        const Dcdr::Scene::ISceneObject& get_object() { return object_; }
+
+        const Dcdr::Tracing::IntersectionInfo& get_info() { return info_; }
+
+    private:
+        const Dcdr::Scene::ISceneObject& object_;
+        Dcdr::Tracing::IntersectionInfo info_;
     };
 }

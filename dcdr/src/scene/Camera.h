@@ -7,7 +7,7 @@ namespace Dcdr::Scene
     class Camera
     {
     public:
-        Camera(Dcdr::Types::Vec3 pos, Dcdr::Types::Vec3 dir, Dcdr::Types::Scalar fov) :
+        Camera(Dcdr::Types::Vec3 pos, Dcdr::Types::Vec3 dir, Types::Real fov) :
                 pos_(pos), dir_(dir), fov_(fov) {}
 
         const Dcdr::Types::Vec3 &get_pos()
@@ -20,7 +20,7 @@ namespace Dcdr::Scene
             return dir_;
         }
 
-        const Dcdr::Types::Scalar get_fow()
+        const Dcdr::Types::Real get_fow()
         {
             return fov_;
         }
@@ -29,8 +29,6 @@ namespace Dcdr::Scene
         Dcdr::Types::Vec3 pos_;
         Dcdr::Types::Vec3 dir_;
 
-        Dcdr::Types::Scalar fov_;
-
-        // TODO: World -> NDC projection matirx
+        Dcdr::Types::Real fov_;
     };
 }
