@@ -9,6 +9,6 @@ namespace Dcdr::Scene
     class ISceneObject
     {
     public:
-        virtual bool intersect(Dcdr::Tracing::Ray& ray, Dcdr::Tracing::IntersectionInfo& intersection) = 0;
+        virtual bool intersect(Tracing::Ray& ray, Tracing::IntersectionInfo& intersection) = 0;
     };
 }

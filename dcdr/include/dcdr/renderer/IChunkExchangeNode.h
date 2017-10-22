@@ -3,7 +3,8 @@
 #include <dcdr/Types.h>
 #include <dcdr/renderer/Chunk.h>
 
-namespace Dcdr::Renderer {
+namespace Dcdr::Renderer
+{
 
     enum class ChunkSeizureStatus
     {
@@ -18,12 +19,15 @@ namespace Dcdr::Renderer {
         NotSeizured,
     };
 
-    class IChunkExchangeNode {
+    class IChunkExchangeNode
+    {
     public:
         virtual ChunkSeizureStatus seizure_chunk(Dcdr::Types::Offset x, Dcdr::Types::Offset y) = 0;
+
         virtual ChunkReleaseStatus release_chunk(Dcdr::Types::Offset x, Dcdr::Types::Offset y) = 0;
 
         virtual void save_chunk(const Chunk& chunk, Dcdr::Types::Offset x, Dcdr::Types::Offset y) = 0;
+
         virtual Chunk request_chunk(Dcdr::Types::Offset x, Dcdr::Types::Offset y) = 0;
     };
 

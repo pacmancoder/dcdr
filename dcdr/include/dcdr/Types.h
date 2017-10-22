@@ -7,9 +7,9 @@ namespace Dcdr::Types
 {
     typedef float Real;
 
-    typedef unsigned int  Offset;
-    typedef int           RelativeOffset;
-    typedef unsigned int  Size;
+    typedef unsigned int Offset;
+    typedef int RelativeOffset;
+    typedef unsigned int Size;
     typedef unsigned long Counter;
 
     typedef float RealOffset;

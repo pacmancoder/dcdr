@@ -2,8 +2,5 @@
 
 #include <scene/ISceneObject.h>
 
-class Sphere
-{
-
-};
+class Sphere {};
 

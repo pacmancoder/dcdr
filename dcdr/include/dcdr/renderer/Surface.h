@@ -18,9 +18,11 @@ namespace Dcdr::Renderer
                 IChunkExchangeNode& linkedChunkExchangeNode);
 
         ChunkSeizureStatus seizure_chunk(Dcdr::Types::Offset x, Dcdr::Types::Offset y) override;
+
         ChunkReleaseStatus release_chunk(Dcdr::Types::Offset x, Dcdr::Types::Offset y) override;
 
         void save_chunk(const Chunk& chunk, Dcdr::Types::Offset x, Dcdr::Types::Offset y) override;
+
         Chunk request_chunk(Dcdr::Types::Offset x, Dcdr::Types::Offset y) override;
 
         void render_single_chunk(IChunkRenderer& renderer);
@@ -28,15 +30,16 @@ namespace Dcdr::Renderer
         void set_rasterizer(std::shared_ptr<ISurfaceRasterizer> rasterizer);
 
         Surface(Chunk& rhs) = delete;
+
         Chunk& operator=(const Chunk& rhs) = delete;
+
     private:
         std::deque<Chunk> chunksPool_;
-        std::mutex chunk_pool_mutex_;
 
         Types::Size width_;
         Types::Size height_;
-        Types::Size chunk_size_;
 
+        Types::Size chunk_size_;
         Types::Offset current_chunk_;
 
         std::shared_ptr<ISurfaceRasterizer> rasterizer_;

@@ -10,12 +10,12 @@ namespace Dcdr::Scene
         Camera(Dcdr::Types::Vec3 pos, Dcdr::Types::Vec3 dir, Types::Real fov) :
                 pos_(pos), dir_(dir), fov_(fov) {}
 
-        const Dcdr::Types::Vec3 &get_pos()
+        const Dcdr::Types::Vec3& get_pos()
         {
             return pos_;
         }
 
-        const Dcdr::Types::Vec3 &get_dir()
+        const Dcdr::Types::Vec3& get_dir()
         {
             return dir_;
         }

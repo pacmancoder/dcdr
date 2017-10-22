@@ -9,14 +9,15 @@ namespace Dcdr::Renderer
     public:
         UnbakedPixel();
 
-        void add_sample(Types::Vec3 sample);
+        void add_sample(const Types::Vec3& sample);
 
-        Types::Vec3& get_color();
-        Types::Vec3& get_variance();
+        const Types::Vec3& get_color();
+
+        const Types::Vec3& get_variance();
 
     private:
-        Types::Counter samples_;
         Types::Vec3 color_;
         Types::Vec3 variance_;
+        Types::Counter samples_;
     };
 }

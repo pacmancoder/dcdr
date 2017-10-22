@@ -18,16 +18,19 @@ namespace UMath
 
         struct
         {
-            T   a11, a12, a13, a14,
-                a21, a22, a23, a24,
-                a31, a32, a33, a34,
-                a41, a42, a43, a44;
+            T a11, a12, a13, a14,
+                    a21, a22, a23, a24,
+                    a31, a32, a33, a34,
+                    a41, a42, a43, a44;
         };
         T data[COL_ELEMENTS][ROW_ELEMENTS];
 
     private:
-        UMat4() { std::memset(data, 0, sizeof(data)); }
-        UMat4(const T* buffer) { std::memcpy(data, buffer, sizeof(data)); }
+        UMat4()
+        { std::memset(data, 0, sizeof(data)); }
+
+        UMat4(const T* buffer)
+        { std::memcpy(data, buffer, sizeof(data)); }
 
     public:
 
@@ -95,8 +98,12 @@ namespace UMath
             return UVec3<T>(x, y, z);
         }
 
-        static UMat4<T> zero() { return UMat4<T>(); }
-        static UMat4<T> from_buffer(const T* buffer) { return UMat4<T>(buffer); }
+        static UMat4<T> zero()
+        { return UMat4<T>(); }
+
+        static UMat4<T> from_buffer(const T* buffer)
+        { return UMat4<T>(buffer); }
+
         static UMat4<T> identity()
         {
             UMat4 m;
@@ -106,7 +113,7 @@ namespace UMath
         }
     };
 
-    typedef UMat4<float>  UMat4f;
+    typedef UMat4<float> UMat4f;
     typedef UMat4<double> UMat4d;
 
     // Default matrix type

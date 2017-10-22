@@ -6,9 +6,11 @@
 using namespace Dcdr;
 using namespace Dcdr::Renderer;
 
-Types::Color ChunkRendererStub::render_sample(Types::Offset x, Types::Offset y) {
+Types::Color ChunkRendererStub::render_sample(Types::Offset x, Types::Offset y)
+{
     Types::Color result;
-    result.r = Types::Real(std::rand()) / RAND_MAX;
-    result.g = Types::Real(std::rand()) / RAND_MAX;
-    result.b = Types::Real(std::rand()) / RAND_MAX;
+    result.r = Types::Real(y) / 480;
+    result.g = Types::Real(x) / 640;
+    result.b = 0.0;
+    return result;
 }

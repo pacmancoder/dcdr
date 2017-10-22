@@ -5,11 +5,13 @@ using namespace Dcdr::Renderer;
 
 Surface::Surface(Types::Size width, Types::Size height, Types::Size chunk_size,
                  IChunkExchangeNode& linkedChunkExchangeNode) :
-    width_(width),
-    height_(height),
-    chunk_size_(chunk_size),
-    rasterizer_(nullptr),
-    linkedChunkExchangeNode_(linkedChunkExchangeNode)
+        chunksPool_(),
+        width_(width),
+        height_(height),
+        chunk_size_(chunk_size),
+        current_chunk_(0),
+        rasterizer_(nullptr),
+        linkedChunkExchangeNode_(linkedChunkExchangeNode)
 {
     for (auto y = 0; y < height / chunk_size; ++y)
         for (auto x = 0; x < width / chunk_size; ++x)
@@ -27,7 +29,7 @@ ChunkReleaseStatus Surface::release_chunk(Dcdr::Types::Offset x, Dcdr::Types::Of
 }
 
 
-void Surface::save_chunk(const Chunk &chunk, Dcdr::Types::Offset x, Dcdr::Types::Offset y)
+void Surface::save_chunk(const Chunk& chunk, Dcdr::Types::Offset x, Dcdr::Types::Offset y)
 {
     chunksPool_[y * (width_ / chunk_size_) + x] = chunk;
 }

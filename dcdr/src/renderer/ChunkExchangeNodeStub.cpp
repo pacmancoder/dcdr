@@ -14,7 +14,7 @@ ChunkReleaseStatus ChunkExchangeNodeStub::release_chunk(Dcdr::Types::Offset x, D
     return ChunkReleaseStatus::Success;
 }
 
-void ChunkExchangeNodeStub::save_chunk(const Chunk &chunk, Dcdr::Types::Offset x, Dcdr::Types::Offset y)
+void ChunkExchangeNodeStub::save_chunk(const Chunk& chunk, Dcdr::Types::Offset x, Dcdr::Types::Offset y)
 {
     // skip request
 }
