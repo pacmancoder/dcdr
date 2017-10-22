@@ -1,6 +1,6 @@
 #pragma once
 
-#include <DcdrTypes.h>
+#include <dcdr/Types.h>
 #include <tracing/Ray.h>
 #include <tracing/IntersectionInfo.h>
 

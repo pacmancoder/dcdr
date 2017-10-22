@@ -1,7 +1,7 @@
 #pragma once
 
-#include <DcdrTypes.h>
-#include <renderer/Chunk.h>
+#include <dcdr/Types.h>
+#include <dcdr/renderer/Chunk.h>
 
 namespace Dcdr::Renderer {
 

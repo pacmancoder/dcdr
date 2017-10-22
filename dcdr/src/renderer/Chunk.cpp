@@ -1,4 +1,4 @@
-#include "Chunk.h"
+#include <dcdr/renderer/Chunk.h>
 
 #include <algorithm>
 
@@ -35,4 +35,24 @@ void Chunk::render_chunk(IChunkRenderer& renderer)
             add_sample(x, y, renderer.render_sample(x + global_x_, y + global_y_));
         }
     }
+}
+
+Types::Vec3 Chunk::get_pixel(Types::Offset x, Types::Offset y) {
+    return pixels_[y * width_ + x].get_color();
+}
+
+Types::Offset Chunk::get_width() {
+    return width_;
+}
+
+Types::Offset Chunk::get_height() {
+    return height_;
+}
+
+Types::Offset Chunk::get_chunk_pos_x() {
+    return global_x_;
+}
+
+Types::Offset Chunk::get_chunk_pos_y() {
+    return global_y_;
 }

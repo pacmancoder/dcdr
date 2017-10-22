@@ -1,4 +1,4 @@
-#include "ChunkExchangeNodeStub.h"
+#include <dcdr/renderer/ChunkExchangeNodeStub.h>
 
 
 using namespace Dcdr;

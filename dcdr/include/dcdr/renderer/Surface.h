@@ -1,9 +1,9 @@
 #pragma once
 
-#include <renderer/Chunk.h>
-#include <renderer/IChunkExchangeNode.h>
-#include <renderer/IChunkRenderer.h>
-#include <renderer/ISurfaceRasterizator.h>
+#include <dcdr/renderer/Chunk.h>
+#include <dcdr/renderer/IChunkExchangeNode.h>
+#include <dcdr/renderer/IChunkRenderer.h>
+#include <dcdr/renderer/ISurfaceRasterizer.h>
 
 #include <deque>
 #include <mutex>
@@ -25,7 +25,7 @@ namespace Dcdr::Renderer
 
         void render_single_chunk(IChunkRenderer& renderer);
 
-        void set_rasterizer(std::shared_ptr<ISurfaceRasterizator> rasterizer);
+        void set_rasterizer(std::shared_ptr<ISurfaceRasterizer> rasterizer);
 
         Surface(Chunk& rhs) = delete;
         Chunk& operator=(const Chunk& rhs) = delete;
@@ -37,7 +37,9 @@ namespace Dcdr::Renderer
         Types::Size height_;
         Types::Size chunk_size_;
 
-        std::shared_ptr<ISurfaceRasterizator> rasterizer_;
+        Types::Offset current_chunk_;
+
+        std::shared_ptr<ISurfaceRasterizer> rasterizer_;
         IChunkExchangeNode& linkedChunkExchangeNode_;
     };
 

@@ -1,6 +1,6 @@
 #pragma once
 
-#include <DcdrTypes.h>
+#include <dcdr/Types.h>
 
 namespace Dcdr::Tracing
 {

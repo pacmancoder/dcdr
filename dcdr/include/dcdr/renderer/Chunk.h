@@ -3,9 +3,9 @@
 #include <vector>
 #include <mutex>
 
-#include <DcdrTypes.h>
-#include <renderer/UnbakedPixel.h>
-#include <renderer/IChunkRenderer.h>
+#include <dcdr/Types.h>
+#include <dcdr/renderer/UnbakedPixel.h>
+#include <dcdr/renderer/IChunkRenderer.h>
 
 namespace Dcdr::Renderer
 {
@@ -18,8 +18,17 @@ namespace Dcdr::Renderer
 
         void render_chunk(IChunkRenderer& renderer);
 
+        Types::Vec3 get_pixel(Types::Offset x, Types::Offset y);
+
+        Types::Offset get_width();
+        Types::Offset get_height();
+        Types::Offset get_chunk_pos_x();
+        Types::Offset get_chunk_pos_y();
+
+
     private:
         void add_sample(Types::Offset x, Types::Offset y, Types::Vec3);
+
 
     private:
         Types::Offset global_x_;

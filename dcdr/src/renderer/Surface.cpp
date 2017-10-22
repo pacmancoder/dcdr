@@ -1,4 +1,4 @@
-#include "Surface.h"
+#include <dcdr/renderer/Surface.h>
 
 using namespace Dcdr;
 using namespace Dcdr::Renderer;
@@ -39,15 +39,30 @@ Chunk Surface::request_chunk(Dcdr::Types::Offset x, Dcdr::Types::Offset y)
 
 void Surface::render_single_chunk(IChunkRenderer& renderer)
 {
-    linkedChunkExchangeNode_.seizure_chunk(0, 0);
+    Types::Offset current_chunk_x = current_chunk_ % (width_ / chunk_size_);
+    Types::Offset current_chunk_y = current_chunk_ / (width_ / chunk_size_);
 
-    chunksPool_[0].render_chunk(renderer);
+    linkedChunkExchangeNode_.seizure_chunk(current_chunk_x, current_chunk_y);
 
-    linkedChunkExchangeNode_.release_chunk(0, 0);
-    linkedChunkExchangeNode_.save_chunk(chunksPool_[0], 0, 0);
+    chunksPool_[current_chunk_].render_chunk(renderer);
+
+    if (rasterizer_ != nullptr)
+    {
+        for (Types::Offset i = 0; i < chunk_size_; ++i)
+            for (Types::Offset j = 0; j < chunk_size_; ++j)
+                rasterizer_->draw_pixel(
+                        chunksPool_[current_chunk_].get_pixel(j, i),
+                        chunksPool_[current_chunk_].get_chunk_pos_x() + j,
+                        chunksPool_[current_chunk_].get_chunk_pos_y() + i);
+    }
+
+    linkedChunkExchangeNode_.release_chunk(current_chunk_x, current_chunk_y);
+    linkedChunkExchangeNode_.save_chunk(chunksPool_[current_chunk_], current_chunk_x, current_chunk_y);
+
+    current_chunk_ = Types::Offset((current_chunk_ + 1) % chunksPool_.size());
 }
 
-void Surface::set_rasterizer(std::shared_ptr<ISurfaceRasterizator> rasterizer)
+void Surface::set_rasterizer(std::shared_ptr<ISurfaceRasterizer> rasterizer)
 {
     rasterizer_ = rasterizer;
 }

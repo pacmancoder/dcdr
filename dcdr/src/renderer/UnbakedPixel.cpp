@@ -1,6 +1,6 @@
-#include "UnbakedPixel.h"
+#include <dcdr/renderer/UnbakedPixel.h>
 
-#include <DcdrConstants.h>
+#include <dcdr/Constants.h>
 
 using namespace Dcdr;
 using namespace Dcdr::Renderer;
