@@ -5,7 +5,7 @@
 
 #include <dcdr/Types.h>
 #include <dcdr/renderer/UnbakedPixel.h>
-#include <dcdr/renderer/IChunkRenderer.h>
+#include <dcdr/renderer/ISampleRenderer.h>
 
 namespace Dcdr::Renderer
 {
@@ -18,7 +18,7 @@ namespace Dcdr::Renderer
 
         Chunk(const Chunk& rhs);
 
-        void render_chunk(IChunkRenderer& renderer);
+        void render_chunk(ISampleRenderer& renderer);
 
         Types::Vec3 get_pixel(Types::Offset x, Types::Offset y);
 

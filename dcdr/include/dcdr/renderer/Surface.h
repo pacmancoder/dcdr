@@ -2,7 +2,7 @@
 
 #include <dcdr/renderer/Chunk.h>
 #include <dcdr/renderer/IChunkExchangeNode.h>
-#include <dcdr/renderer/IChunkRenderer.h>
+#include <dcdr/renderer/ISampleRenderer.h>
 #include <dcdr/renderer/ISurfaceRasterizer.h>
 
 #include <deque>
@@ -25,7 +25,7 @@ namespace Dcdr::Renderer
 
         Chunk request_chunk(Dcdr::Types::Offset x, Dcdr::Types::Offset y) override;
 
-        void render_single_chunk(IChunkRenderer& renderer);
+        void render_single_chunk(ISampleRenderer& renderer);
 
         void set_rasterizer(std::shared_ptr<ISurfaceRasterizer> rasterizer);
 

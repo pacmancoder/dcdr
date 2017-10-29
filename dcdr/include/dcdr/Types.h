@@ -25,5 +25,9 @@ namespace Dcdr::Types
     {
         Real u;
         Real v;
+
+        UVCoord() : u(0), v(0) {};
+        UVCoord(Real c) : u(c), v(c) {};
+        UVCoord(Real u_, Real v_) : u(u_), v(v_) {};
     };
 }

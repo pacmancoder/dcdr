@@ -9,3 +9,9 @@ namespace Dcdr::Constants::Position
 {
     Types::Vec3 Zero(0, 0, 0);
 }
+
+namespace Dcdr::Constants::Math
+{
+    Types::Real Epsilon(0.00001);
+    Types::Real Pi(3.141592);
+}

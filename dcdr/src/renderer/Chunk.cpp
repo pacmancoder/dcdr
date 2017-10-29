@@ -28,7 +28,7 @@ void Chunk::add_sample(Types::Offset x, Types::Offset y, Types::Vec3 sample)
 }
 
 
-void Chunk::render_chunk(IChunkRenderer& renderer)
+void Chunk::render_chunk(ISampleRenderer& renderer)
 {
     for (Types::Offset y = 0; y < height_; ++y)
     {

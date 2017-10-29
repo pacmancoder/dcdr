@@ -39,8 +39,10 @@ Chunk Surface::request_chunk(Dcdr::Types::Offset x, Dcdr::Types::Offset y)
     return chunksPool_[y * (width_ / chunk_size_) + x];
 }
 
-void Surface::render_single_chunk(IChunkRenderer& renderer)
+void Surface::render_single_chunk(ISampleRenderer& renderer)
 {
+    renderer.set_surface_size(width_, height_);
+
     Types::Offset current_chunk_x = current_chunk_ % (width_ / chunk_size_);
     Types::Offset current_chunk_y = current_chunk_ / (width_ / chunk_size_);
 

@@ -79,3 +79,11 @@ TEST_F(UmathTest, UVec3MutMethods)
     ASSERT_EQ(v.normalize()  , UVec3f(1.0f / len, 2.0f / len, 3.0f / len));
     ASSERT_TRUE(TestUtils::CompareApprox(v.len(), 1.0f, defaultApproxDelta));
 }
+
+TEST_F(UmathTest, UVec3CrossTest)
+{
+    UVec3 x(1, 0, 0);
+    UVec3 y(0, 1, 0);
+    UVec3 z(0, 0, 1);
+    ASSERT_EQ(x ^ y, z);
+}

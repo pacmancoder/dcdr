@@ -9,14 +9,14 @@ namespace Dcdr::Tracing
     {
         Dcdr::Types::Vec3 hit;
         Dcdr::Types::Vec3 normal;
-        Dcdr::Types::Real distance;
         Dcdr::Types::UVCoord uv;
 
+        IntersectionInfo() :
+            hit(0), normal(0), uv(0) {};
         IntersectionInfo(
                 Dcdr::Types::Vec3 hit_,
                 Dcdr::Types::Vec3 normal_,
-                Dcdr::Types::Real distance_,
                 Dcdr::Types::UVCoord uv_) :
-                hit(hit_), normal(normal_), distance(distance_), uv(uv_) {}
+                hit(hit_), normal(normal_), uv(uv_) {}
     };
 }

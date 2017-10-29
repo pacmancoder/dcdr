@@ -13,4 +13,10 @@ namespace Dcdr::Constants
     {
         extern Types::Vec3 Zero;
     }
+
+    namespace Math
+    {
+        extern Types::Real Epsilon;
+        extern Types::Real Pi;
+    }
 }

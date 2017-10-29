@@ -1,23 +1,49 @@
 project(dcdr)
 
-set(SOURCE_FILES
+set(DCDR_INCLUDES
         include/dcdr/Types.h
+        include/dcdr/Constants.h
 
-        src/Tracer.cpp
-        include/dcdr/Tracer.h
+        include/dcdr/utils/Iterator.h
+        include/dcdr/utils/Rng.h
+
+        include/dcdr/renderer/UnbakedPixel.h
+        include/dcdr/renderer/Chunk.h
+        include/dcdr/renderer/Surface.h
+        include/dcdr/renderer/ISampleRenderer.h
+        include/dcdr/renderer/IChunkExchangeNode.h
+        include/dcdr/renderer/ISurfaceRasterizer.h
+
+        include/dcdr/tracing/Ray.h
+        include/dcdr/tracing/IntersectionInfo.h
+
+        include/dcdr/scene/IScene.h
+        include/dcdr/scene/Scene.h
+        include/dcdr/scene/Camera.h
+        include/dcdr/scene/ISceneObject.h
+        include/dcdr/scene/IMaterial.h
+
+        include/dcdr/scene/objects/Sphere.h
+
+        include/dcdr/pathtracing/PathTracer.h)
+
+set(DCDR_SOURCES
+        src/Constants.cpp
+
+        src/utils/Rng.cpp
 
         src/scene/Camera.cpp
-        src/scene/Camera.h
-        src/scene/ISceneObject.h
-        src/scene/IMaterial.h
+        src/scene/Scene.cpp
 
         src/scene/objects/Sphere.cpp
-        src/scene/objects/Sphere.h
 
-        src/tracing/IntersectionInfo.h
-        src/tracing/Ray.h
+        src/renderer/UnbakedPixel.cpp
+        src/renderer/Chunk.cpp
+        src/renderer/Surface.cpp
 
-        src/tracing/Intersection.h src/renderer/UnbakedPixel.cpp include/dcdr/renderer/UnbakedPixel.h include/dcdr/Constants.h src/Constants.cpp src/renderer/Chunk.cpp include/dcdr/renderer/Chunk.h src/renderer/Surface.cpp include/dcdr/renderer/Surface.h include/dcdr/renderer/IChunkRenderer.h include/dcdr/renderer/IChunkExchangeNode.h src/renderer/ChunkExchangeNodeStub.cpp include/dcdr/renderer/ChunkExchangeNodeStub.h include/dcdr/renderer/ISurfaceRasterizer.h src/renderer/ChunkRendererStub.cpp include/dcdr/renderer/ChunkRendererStub.h)
+        src/pathtracer/PathTracer.cpp)
+
+set(SOURCE_FILES ${DCDR_INCLUDES} ${DCDR_SOURCES})
 
 include_directories(${PROJECT_SOURCE_DIR}/src)
 
