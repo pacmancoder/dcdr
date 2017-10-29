@@ -88,8 +88,8 @@ namespace
 }
 int main(int argc, char* argv[])
 {
-    const Types::Size SURFACE_WIDTH = 800;
-    const Types::Size SURFACE_HEIGHT = 640;
+    const Types::Size SURFACE_WIDTH = 640;
+    const Types::Size SURFACE_HEIGHT = 480;
     const Types::Size CHUNK_SIZE = 16;
 
     ChunkExchangeNodeStub exchangeNode;
@@ -105,7 +105,7 @@ int main(int argc, char* argv[])
             0.10); // aperture radius;
     scene->set_camera(std::move(camera));
 
-    auto sphere1 = std::make_unique<Scene::Sphere>(Types::Vec3(0, 0, Types::Real(-4.0)), Types::Real(0.5), 0);
+    auto sphere1 = std::make_unique<Scene::Sphere>(Types::Vec3(0, 0, Types::Real(-4.0)), Types::Real(1.0), 0);
     auto sphere2 = std::make_unique<Scene::Sphere>(Types::Vec3(2, 3, Types::Real(-6.0)), Types::Real(0.5), 0);
     scene->add_object("Sphere1", std::move(sphere1));
     scene->add_object("Sphere2", std::move(sphere2));
@@ -119,7 +119,7 @@ int main(int argc, char* argv[])
             = std::shared_ptr < PpmRasterizer > (new PpmRasterizer(SURFACE_WIDTH, SURFACE_HEIGHT));
 
     surface.set_rasterizer(rasterizer);
-    for (int i = 0; i < 1024 * 4; ++i)
+    for (int i = 0; i < 1024 * 64; ++i)
         surface.render_single_chunk(renderer);
 
     rasterizer->save_file("test.ppm");
