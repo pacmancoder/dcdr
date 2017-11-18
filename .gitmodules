@@ -1,3 +1,6 @@
 [submodule "libs/gtest-1.8.0"]
 	path = libs/gtest-1.8.0
 	url = https://github.com/google/googletest
+[submodule "libs/mongoose/mongoose-6.10"]
+	path = libs/mongoose/mongoose-6.10
+	url = https://github.com/cesanta/mongoose.git

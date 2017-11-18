@@ -108,10 +108,27 @@ namespace UMath
         }
 
         UVec3<T>& normalize()
-        { *this /= len(); }
+        {
+            *this /= len();
+            return *this;
+        }
 
-        T len() const
-        { return std::sqrt(x * x + y * y + z * z); }
+        T len() const { return std::sqrt(x * x + y * y + z * z); }
+
+        UVec3<T> pow(T m) const
+        {
+            return UVec3(std::pow(x, m), std::pow(y, m), std::pow(z, m));
+        }
+
+        T mean() const
+        {
+            return (x + y + z) / 3;
+        }
+
+        T max_component() const
+        {
+            return x > y ? (x > z ? x : z) : (y > x ? y : z);
+        }
 
         UVec3<T> x_axis() const
         { return UVec3(x, 0, 0); }

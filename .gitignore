@@ -33,6 +33,7 @@
 
 # dcdr specific
 target/
+cmake-build-debug/
 
 # ide specific
 .idea/tasks.xml

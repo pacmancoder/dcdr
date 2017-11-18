@@ -70,6 +70,13 @@ TEST_F(UmathTest, Vec3ConstMethods)
     ASSERT_EQ(v.y_axis() , UVec3f(0, 2, 0));
     ASSERT_EQ(v.z_axis() , UVec3f(0, 0, 3));
     ASSERT_EQ(v.len()    , static_cast<float>(sqrt(14.0f)));
+    ASSERT_EQ(v.pow(2)   , UVec3f(1, 4, 9));
+    ASSERT_EQ(v.mean()   , 2f);
+
+    ASSERT_EQ(UVec3f(1, 2, 3).max_component(), 3f);
+    ASSERT_EQ(UVec3f(1, 3, 2).max_component(), 3f);
+    ASSERT_EQ(UVec3f(2, 1, 3).max_component(), 3f);
+    ASSERT_EQ(UVec3f(2, 3, 1).max_component(), 3f);
 }
 
 TEST_F(UmathTest, UVec3MutMethods)
