@@ -46,8 +46,6 @@ namespace Dcdr::Renderer
         Types::Size width_;
         Types::Size height_;
         std::vector<UnbakedPixel> pixels_;
-
-        Types::Real chunkVariance_;
     };
 
 }

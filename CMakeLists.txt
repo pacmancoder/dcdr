@@ -4,7 +4,11 @@ project(dcdr-suite)
 
 set(CMAKE_CXX_STANDARD 17)
 
-set (CMAKE_CXX_FLAGS "-std=c++1z")
+if(MSVC)
+    set(CMAKE_CXX_FLAGS "/W4 /WX /std:c++latest")
+else()
+    set(CMAKE_CXX_FLAGS "-std=c++1z -Wall -Werror")
+endif()
 
 # Output binnaries and shared libraries to the same folder
 set (CMAKE_LIBRARY_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/bin)

@@ -1,5 +1,5 @@
-#include <UmathTest.h>
-#include <approx.h>
+#include "UmathTest.h"
+#include <test_utils/approx.h>
 #include <umath/Vec3.h>
 
 using namespace UMath;
@@ -71,12 +71,12 @@ TEST_F(UmathTest, Vec3ConstMethods)
     ASSERT_EQ(v.z_axis() , UVec3f(0, 0, 3));
     ASSERT_EQ(v.len()    , static_cast<float>(sqrt(14.0f)));
     ASSERT_EQ(v.pow(2)   , UVec3f(1, 4, 9));
-    ASSERT_EQ(v.mean()   , 2f);
+    ASSERT_EQ(v.mean()   , 2.0f);
 
-    ASSERT_EQ(UVec3f(1, 2, 3).max_component(), 3f);
-    ASSERT_EQ(UVec3f(1, 3, 2).max_component(), 3f);
-    ASSERT_EQ(UVec3f(2, 1, 3).max_component(), 3f);
-    ASSERT_EQ(UVec3f(2, 3, 1).max_component(), 3f);
+    ASSERT_EQ(UVec3f(1, 2, 3).max_component(), 3.0f);
+    ASSERT_EQ(UVec3f(1, 3, 2).max_component(), 3.0f);
+    ASSERT_EQ(UVec3f(2, 1, 3).max_component(), 3.0f);
+    ASSERT_EQ(UVec3f(2, 3, 1).max_component(), 3.0f);
 }
 
 TEST_F(UmathTest, UVec3MutMethods)
@@ -89,8 +89,8 @@ TEST_F(UmathTest, UVec3MutMethods)
 
 TEST_F(UmathTest, UVec3CrossTest)
 {
-    UVec3 x(1, 0, 0);
-    UVec3 y(0, 1, 0);
-    UVec3 z(0, 0, 1);
+    UVec3f x(1, 0, 0);
+    UVec3f y(0, 1, 0);
+    UVec3f z(0, 0, 1);
     ASSERT_EQ(x ^ y, z);
 }

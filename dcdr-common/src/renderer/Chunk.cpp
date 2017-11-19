@@ -11,17 +11,14 @@ Chunk::Chunk(Types::Offset x, Types::Offset y, Types::Size width, Types::Size he
         global_y_(y),
         width_(width),
         height_(height),
-        pixels_(height * width),
-        chunkVariance_(0)
-{}
+        pixels_(height * width) {}
 
 Chunk::Chunk(const Chunk& rhs) :
         global_x_(rhs.global_x_),
         global_y_(rhs.global_y_),
         width_(rhs.width_),
         height_(rhs.height_),
-        pixels_(rhs.pixels_)
-{}
+        pixels_(rhs.pixels_) {}
 
 void Chunk::add_sample(Types::Offset x, Types::Offset y, Types::Vec3 sample)
 {
@@ -33,11 +30,14 @@ void Chunk::render_chunk(ISampleRenderer& renderer, const ISPPDistribution& dist
 {
     for (Types::Offset y = 0; y < height_; ++y)
     {
-        for (Types::Offset x = 0; x < width_; ++x)
-        {
+        for (Types::Offset x = 0; x < width_; ++x) {
+
             auto spp = distribution.get_samples_count(pixels_[y * width_ + x].get_standard_derivation());
-            for (Types::Counter sample_index = 0; x < spp; ++x)
-            add_sample(x, y, renderer.render_sample(x + global_x_, y + global_y_));
+
+            for (Types::Counter sample_index = 0; sample_index < spp; ++sample_index)
+            {
+                add_sample(x, y, renderer.render_sample(x + global_x_, y + global_y_));
+            }
         }
     }
 }

@@ -76,6 +76,7 @@ namespace UMath
             std::swap(a32, a23);
             std::swap(a42, a24);
             std::swap(a43, a34);
+            return *this;
         }
 
         UVec3<T> transform_point(UVec3<T> v) const
@@ -93,7 +94,6 @@ namespace UMath
             T x = a11 * v.x + a21 * v.y + a31 * v.z;
             T y = a12 * v.x + a22 * v.y + a32 * v.z;
             T z = a13 * v.x + a23 * v.y + a33 * v.z;
-            T w = a14 * v.x + a24 * v.y + a34 * v.z;
 
             return UVec3<T>(x, y, z);
         }

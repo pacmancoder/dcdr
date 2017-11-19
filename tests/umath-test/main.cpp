@@ -1,5 +1,5 @@
 #include <gtest/gtest.h>
-#include "fixtures/UmathTest.h"
+#include "UmathTest.h"
 
 int main(int argc, char **argv) {
     ::testing::InitGoogleTest(&argc, argv);

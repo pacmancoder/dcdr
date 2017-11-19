@@ -11,7 +11,6 @@ namespace Dcdr::Scene
     {
     public:
         explicit SceneObjectsIterator(const Dcdr::Scene::SceneController& scene) :
-                scene_(scene),
                 current(scene.objects_.cbegin()),
                 end(scene.objects_.cend()) {}
 
@@ -24,7 +23,6 @@ namespace Dcdr::Scene
             return *(current->get());
         }
     private:
-        const Dcdr::Scene::SceneController& scene_;
         std::vector<SceneObjectPtr>::const_iterator current;
         std::vector<SceneObjectPtr>::const_iterator end;
     };

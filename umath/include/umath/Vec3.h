@@ -127,7 +127,7 @@ namespace UMath
 
         T max_component() const
         {
-            return x > y ? (x > z ? x : z) : (y > x ? y : z);
+            return x > y ? (x > z ? x : z) : (y > z ? y : z);
         }
 
         UVec3<T> x_axis() const
