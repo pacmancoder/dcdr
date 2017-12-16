@@ -1,3 +1,9 @@
 [submodule "libs/gtest-1.8.0"]
 	path = libs/gtest-1.8.0
 	url = https://github.com/google/googletest
+[submodule "libs/microtar-git"]
+	path = libs/microtar-git
+	url = https://github.com/rxi/microtar.git
+[submodule "libs/mongoose-git"]
+	path = libs/mongoose-git
+	url = https://github.com/cesanta/mongoose
