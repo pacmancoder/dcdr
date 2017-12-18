@@ -107,7 +107,7 @@ namespace UMath
         static UMat4<T> identity()
         {
             UMat4 m;
-            for (int i = 0; i < COL_ELEMENTS; ++i)
+            for (size_t i = 0; i < COL_ELEMENTS; ++i)
                 m.data[i][i] = 1;
             return m;
         }

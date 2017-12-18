@@ -6,20 +6,20 @@ using namespace UMath;
 TEST_F(UmathTest, Mat4Constructors)
 {
     UMat4f mz = UMat4f::zero();
-    for (int i = 0; i < UMat4f::ROW_ELEMENTS; ++i)
-        for (int j = 0; j < UMat4f::COL_ELEMENTS; ++j)
+    for (size_t i = 0; i < UMat4f::ROW_ELEMENTS; ++i)
+        for (size_t j = 0; j < UMat4f::COL_ELEMENTS; ++j)
             ASSERT_EQ(mz.data[i][j], 0);
 
     UMat4f mi = UMat4f::identity();
-    for (int i = 0; i < UMat4f::ROW_ELEMENTS; ++i)
-        for (int j = 0; j < UMat4f::COL_ELEMENTS; ++j)
+    for (size_t i = 0; i < UMat4f::ROW_ELEMENTS; ++i)
+        for (size_t j = 0; j < UMat4f::COL_ELEMENTS; ++j)
             ASSERT_EQ(mi.data[i][j], (i == j) ? 1 : 0);
 
     float buffer[UMat4f::ELEMENTS];
-    for (int i = 0; i < UMat4f::ELEMENTS; i++) buffer[i] = i;
+    for (size_t i = 0; i < UMat4f::ELEMENTS; i++) buffer[i] = i;
 
     UMat4f mb = UMat4f::from_buffer(buffer);
-    for (int i = 0; i < UMat4f::ELEMENTS; ++i)
+    for (size_t i = 0; i < UMat4f::ELEMENTS; ++i)
         ASSERT_EQ(*((float*)mb.data + i), i);
 
     ASSERT_EQ(mb.a11, 0); ASSERT_EQ(mb.a21, 4); ASSERT_EQ(mb.a31,  8); ASSERT_EQ(mb.a41, 12);

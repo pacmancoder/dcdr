@@ -1,0 +1,128 @@
+namespace Dcdr.Interconnect.DcdrFlatBuffers;
+
+// Protocol-specific
+
+// Chunk data
+
+table Vec3
+{
+    x: float;
+    y: float;
+    z: float;
+}
+
+table Pixel
+{
+    color: Vec3;
+    variance: Vec3;
+    samples: ulong;
+}
+
+table ChunkInfo
+{
+    x: ushort;
+    y: ushort;
+    w: ushort;
+    h: ushort;
+}
+
+table Chunk
+{
+    info: ChunkInfo;
+    pixels: [Pixel];
+}
+
+// Chunk rendering task
+
+table ChunkTask
+{
+    chunk: ChunkInfo;
+    iterations: uint;
+}
+
+// Request data's
+
+table ConnectRequestData
+{
+    userToken: string;
+}
+
+table DisconnectRequestData {}
+
+table GetSceneInfoRequestData {}
+
+table VerifySceneRequestData
+{
+    sceneMD5: string;
+}
+
+table GetWorkScopeRequestData 
+{
+    threadsAvailable: ushort;
+}
+
+table PublishArtifactsRequestData
+{
+    chunks: [Chunk];
+}
+
+union RequestData
+{
+    ConnectRequestData,
+    DisconnectRequestData,
+    GetSceneInfoRequestData,
+    VerifySceneRequestData,
+    GetWorkScopeRequestData,
+    PublishArtifactsRequestData,
+}
+
+table Request
+{
+    connectionId: [ubyte];
+    requestData: RequestData;
+}
+
+// Response Data's
+
+table ErrorResponseData
+{
+    cause: string;
+}
+
+table ConnectResponseData
+{
+    connectionId: [ubyte];
+}
+
+table DisconnectResponseData {}
+
+table GetSceneInfoResponseData
+{
+    sceneId: string;
+}
+
+table VerifySceneResponseData {}
+
+table GetWorkScopeResponseData
+{
+    tasks: [ChunkTask];
+}
+
+table PublishArtifactsResponseData {}
+
+union ResponseData
+{
+    ErrorResponseData,
+    ConnectResponseData,
+    DisconnectResponseData,
+    GetSceneInfoResponseData,
+    VerifySceneResponseData,
+    GetWorkScopeResponseData,
+    PublishArtifactsResponseData,
+}
+
+table Response
+{
+    session: [ubyte];
+    responseData: ResponseData;
+}

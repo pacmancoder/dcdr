@@ -7,3 +7,6 @@
 [submodule "libs/mongoose-git"]
 	path = libs/mongoose-git
 	url = https://github.com/cesanta/mongoose
+[submodule "libs/flatbuffers-git"]
+	path = libs/flatbuffers-git
+	url = https://github.com/google/flatbuffers.git

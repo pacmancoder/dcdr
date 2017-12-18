@@ -22,6 +22,7 @@ add_subdirectory(umath)
 add_subdirectory(dcdr-common)
 add_subdirectory(dcdr-pathtracer)
 add_subdirectory(dcdr-worker)
+add_subdirectory(dcdr-interconnect)
 
 # Tests
 add_subdirectory(tests)
