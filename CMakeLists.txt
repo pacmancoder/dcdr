@@ -20,9 +20,11 @@ add_subdirectory(libs)
 # Core modules
 add_subdirectory(umath)
 add_subdirectory(dcdr-common)
+add_subdirectory(dcdr-logger)
 add_subdirectory(dcdr-pathtracer)
 add_subdirectory(dcdr-worker)
 add_subdirectory(dcdr-interconnect)
+add_subdirectory(dcdr-server)
 
 # Tests
 add_subdirectory(tests)

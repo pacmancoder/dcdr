@@ -10,7 +10,7 @@ set(DCDR_COMMON_INCLUDES
         include/dcdr/renderer/UnbakedPixel.h
         include/dcdr/renderer/Chunk.h
         include/dcdr/renderer/ISampleRenderer.h
-        include/dcdr/renderer/ISPPDistribution.h)
+        include/dcdr/renderer/ISPPDistribution.h include/dcdr/Exception.h)
 
 set(DCDR_COMMON_SOURCES
         src/Constants.cpp

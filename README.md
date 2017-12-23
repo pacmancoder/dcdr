@@ -23,3 +23,9 @@ Implemented:
     - [x] PPM rasterizer
     - [ ] Realtime surface rasterizer
     - [ ] Parallelization (CPU)
+
+### Running dcdr-server
+execute the following for allowing dcdr-server to bind 80 port
+```bash
+sudo setcap 'cap_net_bind_service=+ep' $PATH_TO_DCDR_SERVER
+```
