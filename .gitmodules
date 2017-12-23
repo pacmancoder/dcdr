@@ -4,3 +4,9 @@
 [submodule "libs/flatbuffers-git"]
 	path = libs/flatbuffers-git
 	url = https://github.com/google/flatbuffers.git
+[submodule "libs/mongoose/mongoose-git"]
+	path = libs/mongoose/mongoose-git
+	url = https://github.com/cesanta/mongoose.git
+[submodule "libs/microtar/microtar-git"]
+	path = libs/microtar/microtar-git
+	url = https://github.com/rxi/microtar.git
