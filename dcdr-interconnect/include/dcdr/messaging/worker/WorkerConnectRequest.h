@@ -2,7 +2,7 @@
 
 #include <array>
 #include <cstdint>
-#include <dcdr/messaging/AWorkerRequestParcel.h>
+#include <dcdr/messaging/worker/AWorkerRequestParcel.h>
 
 namespace Dcdr::Interconnect
 {

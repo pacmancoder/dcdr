@@ -2,7 +2,7 @@
 
 using namespace Dcdr::Interconnect;
 
-IParcel::ParcelHandle EmptyParcel::dispatch(IParcelDispatcher &dispatcher)
+IParcel::ParcelHandle EmptyParcel::dispatch(AParcelDispatcher &dispatcher)
 {
     // Return future without shared state
     return IParcel::ParcelHandle();

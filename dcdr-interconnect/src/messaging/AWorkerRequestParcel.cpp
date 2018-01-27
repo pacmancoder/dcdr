@@ -1,11 +1,11 @@
-#include <dcdr/messaging/AWorkerRequestParcel.h>
+#include <dcdr/messaging/worker/AWorkerRequestParcel.h>
 
 #include <algorithm>
-#include <dcdr/messaging/IParcelDispatcher.h>
+#include <dcdr/messaging/AParcelDispatcher.h>
 
 using namespace Dcdr::Interconnect;
 
-IParcel::ParcelHandle AWorkerRequestParcel::dispatch(IParcelDispatcher& dispatcher)
+IParcel::ParcelHandle AWorkerRequestParcel::dispatch(AParcelDispatcher& dispatcher)
 {
     return dispatcher.dispatch(*this);
 }

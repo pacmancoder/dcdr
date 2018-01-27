@@ -40,89 +40,152 @@ table ChunkTask
     iterations: uint;
 }
 
-// Request data's
+// ========== Worker Requests ==========
 
-table ConnectRequestData
+table WorkerConnectRequest
 {
     token: [ubyte];
 }
 
-table DisconnectRequestData {}
+table WorkerDisconnectRequest {}
 
-table GetSceneInfoRequestData {}
+table WorkerGetSceneInfoRequest {}
 
-table VerifySceneRequestData
+table WorkerVerifySceneRequest
 {
     sceneMD5: string;
 }
 
-table GetWorkScopeRequestData 
+table WorkerGetWorkScopeRequest 
 {
     threadsAvailable: ushort;
 }
 
-table PublishArtifactsRequestData
+table WorkerPublishArtifactsRequest
 {
     chunks: [Chunk];
 }
 
 union WorkerRequestData
 {
-    ConnectRequestData,
-    DisconnectRequestData,
-    GetSceneInfoRequestData,
-    VerifySceneRequestData,
-    GetWorkScopeRequestData,
-    PublishArtifactsRequestData,
+    WorkerConnectRequest,
+    WorkerDisconnectRequest,
+    WorkerGetSceneInfoRequest,
+    WorkerVerifySceneRequest,
+    WorkerGetWorkScopeRequest,
+    WorkerPublishArtifactsRequest,
 }
 
 table WorkerRequest
 {
     session: [ubyte];
-    data: WorkerRequestData;
+    requestData: WorkerRequestData;
 }
 
-// Response Data's
+// ========== Worker responses ==========
 
-table ErrorResponseData
+table WorkerErrorResponse
 {
     cause: string;
 }
 
-table ConnectResponseData
+table WorkerConnectResponse
 {
     connectionId: [ubyte];
 }
 
-table DisconnectResponseData {}
+table WorkerDisconnectResponse {}
 
-table GetSceneInfoResponseData
+table WorkerGetSceneInfoResponse
 {
     sceneId: string;
 }
 
-table VerifySceneResponseData {}
+table WorkerVerifySceneResponse {}
 
-table GetWorkScopeResponseData
+table WorkerGetWorkScopeResponse
 {
     tasks: [ChunkTask];
 }
 
-table PublishArtifactsResponseData {}
+table WorkerPublishArtifactsResponse {}
 
-union ResponseData
+union WorkerResponseData
 {
-    ErrorResponseData,
-    ConnectResponseData,
-    DisconnectResponseData,
-    GetSceneInfoResponseData,
-    VerifySceneResponseData,
-    GetWorkScopeResponseData,
-    PublishArtifactsResponseData,
+    WorkerErrorResponse,
+    WorkerConnectResponse,
+    WorkerDisconnectResponse,
+    WorkerGetSceneInfoResponse,
+    WorkerVerifySceneResponse,
+    WorkerGetWorkScopeResponse,
+    WorkerPublishArtifactsResponse,
 }
 
-table Response
+table WorkerResponse
 {
     session: [ubyte];
-    responseData: ResponseData;
+    responseData: WorkerResponseData;
+}
+
+
+// ========== Commander requests ==========
+
+table CommanderGetSurfaceInfoRequest {}
+table CommanderGetSurfaceRequest {}
+
+union CommanderRequestData
+{
+    CommanderGetSurfaceInfoRequest,
+    CommanderGetSurfaceRequest,
+}
+
+table CommanderRequest
+{
+    requestData: CommanderRequestData;
+}
+
+
+table CommanderGetSurfaceInfoResponse
+{
+    width: uint32;
+    height: uint32;
+}
+
+// ========== Commander Responses ==========
+
+enum SurfaceImageFormat : uint16
+{
+    Png,
+    Unknown,
+}
+
+table CommanderGetSurfaceResponse
+{
+    format: SurfaceImageFormat;
+    buffer: [ubyte];
+}
+
+
+union CommanderResponseData
+{
+    CommanderGetSurfaceInfoResponse,
+    CommanderGetSurfaceResponse,
+}
+
+table CommanderResponse
+{
+    responseData : CommanderResponseData;
+}
+
+union ParcelData
+{
+    WorkerRequest,
+    WorkerResponse,
+    CommanderRequest,
+    CommanderResponse,
+}
+
+table Parcel
+{
+    parcelData: ParcelData;
 }

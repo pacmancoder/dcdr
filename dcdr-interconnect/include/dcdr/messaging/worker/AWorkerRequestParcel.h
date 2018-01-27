@@ -16,7 +16,7 @@ namespace Dcdr::Interconnect
     public:
         AWorkerRequestParcel();
 
-        ParcelHandle dispatch(IParcelDispatcher &dispatcher) override;
+        ParcelHandle dispatch(AParcelDispatcher &dispatcher) override;
 
         void       set_session_id(const SessionID& sessionID);
         const SessionID& get_session_id() const;

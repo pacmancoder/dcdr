@@ -1,4 +1,4 @@
-#include <dcdr/messaging/WorkerConnectRequest.h>
+#include <dcdr/messaging/worker/WorkerConnectRequest.h>
 
 #include <algorithm>
 #include <dcdr/messaging/AParcelSerializer.h>

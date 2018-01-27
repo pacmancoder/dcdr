@@ -20,57 +20,71 @@ struct Chunk;
 
 struct ChunkTask;
 
-struct ConnectRequestData;
+struct WorkerConnectRequest;
 
-struct DisconnectRequestData;
+struct WorkerDisconnectRequest;
 
-struct GetSceneInfoRequestData;
+struct WorkerGetSceneInfoRequest;
 
-struct VerifySceneRequestData;
+struct WorkerVerifySceneRequest;
 
-struct GetWorkScopeRequestData;
+struct WorkerGetWorkScopeRequest;
 
-struct PublishArtifactsRequestData;
+struct WorkerPublishArtifactsRequest;
 
 struct WorkerRequest;
 
-struct ErrorResponseData;
+struct WorkerErrorResponse;
 
-struct ConnectResponseData;
+struct WorkerConnectResponse;
 
-struct DisconnectResponseData;
+struct WorkerDisconnectResponse;
 
-struct GetSceneInfoResponseData;
+struct WorkerGetSceneInfoResponse;
 
-struct VerifySceneResponseData;
+struct WorkerVerifySceneResponse;
 
-struct GetWorkScopeResponseData;
+struct WorkerGetWorkScopeResponse;
 
-struct PublishArtifactsResponseData;
+struct WorkerPublishArtifactsResponse;
 
-struct Response;
+struct WorkerResponse;
+
+struct CommanderGetSurfaceInfoRequest;
+
+struct CommanderGetSurfaceRequest;
+
+struct CommanderRequest;
+
+struct CommanderGetSurfaceInfoResponse;
+
+struct CommanderGetSurfaceResponse;
+
+struct CommanderResponse;
+
+struct Parcel;
 
 enum WorkerRequestData {
   WorkerRequestData_NONE = 0,
-  WorkerRequestData_ConnectRequestData = 1,
-  WorkerRequestData_DisconnectRequestData = 2,
-  WorkerRequestData_GetSceneInfoRequestData = 3,
-  WorkerRequestData_VerifySceneRequestData = 4,
-  WorkerRequestData_GetWorkScopeRequestData = 5,
-  WorkerRequestData_PublishArtifactsRequestData = 6,
+  WorkerRequestData_WorkerConnectRequest = 1,
+  WorkerRequestData_WorkerDisconnectRequest = 2,
+  WorkerRequestData_WorkerGetSceneInfoRequest = 3,
+  WorkerRequestData_WorkerVerifySceneRequest = 4,
+  WorkerRequestData_WorkerGetWorkScopeRequest = 5,
+  WorkerRequestData_WorkerPublishArtifactsRequest = 6,
   WorkerRequestData_MIN = WorkerRequestData_NONE,
-  WorkerRequestData_MAX = WorkerRequestData_PublishArtifactsRequestData
+  WorkerRequestData_MAX = WorkerRequestData_WorkerPublishArtifactsRequest
 };
 
 inline WorkerRequestData (&EnumValuesWorkerRequestData())[7] {
   static WorkerRequestData values[] = {
     WorkerRequestData_NONE,
-    WorkerRequestData_ConnectRequestData,
-    WorkerRequestData_DisconnectRequestData,
-    WorkerRequestData_GetSceneInfoRequestData,
-    WorkerRequestData_VerifySceneRequestData,
-    WorkerRequestData_GetWorkScopeRequestData,
-    WorkerRequestData_PublishArtifactsRequestData
+    WorkerRequestData_WorkerConnectRequest,
+    WorkerRequestData_WorkerDisconnectRequest,
+    WorkerRequestData_WorkerGetSceneInfoRequest,
+    WorkerRequestData_WorkerVerifySceneRequest,
+    WorkerRequestData_WorkerGetWorkScopeRequest,
+    WorkerRequestData_WorkerPublishArtifactsRequest
   };
   return values;
 }
@@ -78,12 +92,12 @@ inline WorkerRequestData (&EnumValuesWorkerRequestData())[7] {
 inline const char **EnumNamesWorkerRequestData() {
   static const char *names[] = {
     "NONE",
-    "ConnectRequestData",
-    "DisconnectRequestData",
-    "GetSceneInfoRequestData",
-    "VerifySceneRequestData",
-    "GetWorkScopeRequestData",
-    "PublishArtifactsRequestData",
+    "WorkerConnectRequest",
+    "WorkerDisconnectRequest",
+    "WorkerGetSceneInfoRequest",
+    "WorkerVerifySceneRequest",
+    "WorkerGetWorkScopeRequest",
+    "WorkerPublishArtifactsRequest",
     nullptr
   };
   return names;
@@ -98,114 +112,298 @@ template<typename T> struct WorkerRequestDataTraits {
   static const WorkerRequestData enum_value = WorkerRequestData_NONE;
 };
 
-template<> struct WorkerRequestDataTraits<ConnectRequestData> {
-  static const WorkerRequestData enum_value = WorkerRequestData_ConnectRequestData;
+template<> struct WorkerRequestDataTraits<WorkerConnectRequest> {
+  static const WorkerRequestData enum_value = WorkerRequestData_WorkerConnectRequest;
 };
 
-template<> struct WorkerRequestDataTraits<DisconnectRequestData> {
-  static const WorkerRequestData enum_value = WorkerRequestData_DisconnectRequestData;
+template<> struct WorkerRequestDataTraits<WorkerDisconnectRequest> {
+  static const WorkerRequestData enum_value = WorkerRequestData_WorkerDisconnectRequest;
 };
 
-template<> struct WorkerRequestDataTraits<GetSceneInfoRequestData> {
-  static const WorkerRequestData enum_value = WorkerRequestData_GetSceneInfoRequestData;
+template<> struct WorkerRequestDataTraits<WorkerGetSceneInfoRequest> {
+  static const WorkerRequestData enum_value = WorkerRequestData_WorkerGetSceneInfoRequest;
 };
 
-template<> struct WorkerRequestDataTraits<VerifySceneRequestData> {
-  static const WorkerRequestData enum_value = WorkerRequestData_VerifySceneRequestData;
+template<> struct WorkerRequestDataTraits<WorkerVerifySceneRequest> {
+  static const WorkerRequestData enum_value = WorkerRequestData_WorkerVerifySceneRequest;
 };
 
-template<> struct WorkerRequestDataTraits<GetWorkScopeRequestData> {
-  static const WorkerRequestData enum_value = WorkerRequestData_GetWorkScopeRequestData;
+template<> struct WorkerRequestDataTraits<WorkerGetWorkScopeRequest> {
+  static const WorkerRequestData enum_value = WorkerRequestData_WorkerGetWorkScopeRequest;
 };
 
-template<> struct WorkerRequestDataTraits<PublishArtifactsRequestData> {
-  static const WorkerRequestData enum_value = WorkerRequestData_PublishArtifactsRequestData;
+template<> struct WorkerRequestDataTraits<WorkerPublishArtifactsRequest> {
+  static const WorkerRequestData enum_value = WorkerRequestData_WorkerPublishArtifactsRequest;
 };
 
 bool VerifyWorkerRequestData(flatbuffers::Verifier &verifier, const void *obj, WorkerRequestData type);
 bool VerifyWorkerRequestDataVector(flatbuffers::Verifier &verifier, const flatbuffers::Vector<flatbuffers::Offset<void>> *values, const flatbuffers::Vector<uint8_t> *types);
 
-enum ResponseData {
-  ResponseData_NONE = 0,
-  ResponseData_ErrorResponseData = 1,
-  ResponseData_ConnectResponseData = 2,
-  ResponseData_DisconnectResponseData = 3,
-  ResponseData_GetSceneInfoResponseData = 4,
-  ResponseData_VerifySceneResponseData = 5,
-  ResponseData_GetWorkScopeResponseData = 6,
-  ResponseData_PublishArtifactsResponseData = 7,
-  ResponseData_MIN = ResponseData_NONE,
-  ResponseData_MAX = ResponseData_PublishArtifactsResponseData
+enum WorkerResponseData {
+  WorkerResponseData_NONE = 0,
+  WorkerResponseData_WorkerErrorResponse = 1,
+  WorkerResponseData_WorkerConnectResponse = 2,
+  WorkerResponseData_WorkerDisconnectResponse = 3,
+  WorkerResponseData_WorkerGetSceneInfoResponse = 4,
+  WorkerResponseData_WorkerVerifySceneResponse = 5,
+  WorkerResponseData_WorkerGetWorkScopeResponse = 6,
+  WorkerResponseData_WorkerPublishArtifactsResponse = 7,
+  WorkerResponseData_MIN = WorkerResponseData_NONE,
+  WorkerResponseData_MAX = WorkerResponseData_WorkerPublishArtifactsResponse
 };
 
-inline ResponseData (&EnumValuesResponseData())[8] {
-  static ResponseData values[] = {
-    ResponseData_NONE,
-    ResponseData_ErrorResponseData,
-    ResponseData_ConnectResponseData,
-    ResponseData_DisconnectResponseData,
-    ResponseData_GetSceneInfoResponseData,
-    ResponseData_VerifySceneResponseData,
-    ResponseData_GetWorkScopeResponseData,
-    ResponseData_PublishArtifactsResponseData
+inline WorkerResponseData (&EnumValuesWorkerResponseData())[8] {
+  static WorkerResponseData values[] = {
+    WorkerResponseData_NONE,
+    WorkerResponseData_WorkerErrorResponse,
+    WorkerResponseData_WorkerConnectResponse,
+    WorkerResponseData_WorkerDisconnectResponse,
+    WorkerResponseData_WorkerGetSceneInfoResponse,
+    WorkerResponseData_WorkerVerifySceneResponse,
+    WorkerResponseData_WorkerGetWorkScopeResponse,
+    WorkerResponseData_WorkerPublishArtifactsResponse
   };
   return values;
 }
 
-inline const char **EnumNamesResponseData() {
+inline const char **EnumNamesWorkerResponseData() {
   static const char *names[] = {
     "NONE",
-    "ErrorResponseData",
-    "ConnectResponseData",
-    "DisconnectResponseData",
-    "GetSceneInfoResponseData",
-    "VerifySceneResponseData",
-    "GetWorkScopeResponseData",
-    "PublishArtifactsResponseData",
+    "WorkerErrorResponse",
+    "WorkerConnectResponse",
+    "WorkerDisconnectResponse",
+    "WorkerGetSceneInfoResponse",
+    "WorkerVerifySceneResponse",
+    "WorkerGetWorkScopeResponse",
+    "WorkerPublishArtifactsResponse",
     nullptr
   };
   return names;
 }
 
-inline const char *EnumNameResponseData(ResponseData e) {
+inline const char *EnumNameWorkerResponseData(WorkerResponseData e) {
   const size_t index = static_cast<int>(e);
-  return EnumNamesResponseData()[index];
+  return EnumNamesWorkerResponseData()[index];
 }
 
-template<typename T> struct ResponseDataTraits {
-  static const ResponseData enum_value = ResponseData_NONE;
+template<typename T> struct WorkerResponseDataTraits {
+  static const WorkerResponseData enum_value = WorkerResponseData_NONE;
 };
 
-template<> struct ResponseDataTraits<ErrorResponseData> {
-  static const ResponseData enum_value = ResponseData_ErrorResponseData;
+template<> struct WorkerResponseDataTraits<WorkerErrorResponse> {
+  static const WorkerResponseData enum_value = WorkerResponseData_WorkerErrorResponse;
 };
 
-template<> struct ResponseDataTraits<ConnectResponseData> {
-  static const ResponseData enum_value = ResponseData_ConnectResponseData;
+template<> struct WorkerResponseDataTraits<WorkerConnectResponse> {
+  static const WorkerResponseData enum_value = WorkerResponseData_WorkerConnectResponse;
 };
 
-template<> struct ResponseDataTraits<DisconnectResponseData> {
-  static const ResponseData enum_value = ResponseData_DisconnectResponseData;
+template<> struct WorkerResponseDataTraits<WorkerDisconnectResponse> {
+  static const WorkerResponseData enum_value = WorkerResponseData_WorkerDisconnectResponse;
 };
 
-template<> struct ResponseDataTraits<GetSceneInfoResponseData> {
-  static const ResponseData enum_value = ResponseData_GetSceneInfoResponseData;
+template<> struct WorkerResponseDataTraits<WorkerGetSceneInfoResponse> {
+  static const WorkerResponseData enum_value = WorkerResponseData_WorkerGetSceneInfoResponse;
 };
 
-template<> struct ResponseDataTraits<VerifySceneResponseData> {
-  static const ResponseData enum_value = ResponseData_VerifySceneResponseData;
+template<> struct WorkerResponseDataTraits<WorkerVerifySceneResponse> {
+  static const WorkerResponseData enum_value = WorkerResponseData_WorkerVerifySceneResponse;
 };
 
-template<> struct ResponseDataTraits<GetWorkScopeResponseData> {
-  static const ResponseData enum_value = ResponseData_GetWorkScopeResponseData;
+template<> struct WorkerResponseDataTraits<WorkerGetWorkScopeResponse> {
+  static const WorkerResponseData enum_value = WorkerResponseData_WorkerGetWorkScopeResponse;
 };
 
-template<> struct ResponseDataTraits<PublishArtifactsResponseData> {
-  static const ResponseData enum_value = ResponseData_PublishArtifactsResponseData;
+template<> struct WorkerResponseDataTraits<WorkerPublishArtifactsResponse> {
+  static const WorkerResponseData enum_value = WorkerResponseData_WorkerPublishArtifactsResponse;
 };
 
-bool VerifyResponseData(flatbuffers::Verifier &verifier, const void *obj, ResponseData type);
-bool VerifyResponseDataVector(flatbuffers::Verifier &verifier, const flatbuffers::Vector<flatbuffers::Offset<void>> *values, const flatbuffers::Vector<uint8_t> *types);
+bool VerifyWorkerResponseData(flatbuffers::Verifier &verifier, const void *obj, WorkerResponseData type);
+bool VerifyWorkerResponseDataVector(flatbuffers::Verifier &verifier, const flatbuffers::Vector<flatbuffers::Offset<void>> *values, const flatbuffers::Vector<uint8_t> *types);
+
+enum CommanderRequestData {
+  CommanderRequestData_NONE = 0,
+  CommanderRequestData_CommanderGetSurfaceInfoRequest = 1,
+  CommanderRequestData_CommanderGetSurfaceRequest = 2,
+  CommanderRequestData_MIN = CommanderRequestData_NONE,
+  CommanderRequestData_MAX = CommanderRequestData_CommanderGetSurfaceRequest
+};
+
+inline CommanderRequestData (&EnumValuesCommanderRequestData())[3] {
+  static CommanderRequestData values[] = {
+    CommanderRequestData_NONE,
+    CommanderRequestData_CommanderGetSurfaceInfoRequest,
+    CommanderRequestData_CommanderGetSurfaceRequest
+  };
+  return values;
+}
+
+inline const char **EnumNamesCommanderRequestData() {
+  static const char *names[] = {
+    "NONE",
+    "CommanderGetSurfaceInfoRequest",
+    "CommanderGetSurfaceRequest",
+    nullptr
+  };
+  return names;
+}
+
+inline const char *EnumNameCommanderRequestData(CommanderRequestData e) {
+  const size_t index = static_cast<int>(e);
+  return EnumNamesCommanderRequestData()[index];
+}
+
+template<typename T> struct CommanderRequestDataTraits {
+  static const CommanderRequestData enum_value = CommanderRequestData_NONE;
+};
+
+template<> struct CommanderRequestDataTraits<CommanderGetSurfaceInfoRequest> {
+  static const CommanderRequestData enum_value = CommanderRequestData_CommanderGetSurfaceInfoRequest;
+};
+
+template<> struct CommanderRequestDataTraits<CommanderGetSurfaceRequest> {
+  static const CommanderRequestData enum_value = CommanderRequestData_CommanderGetSurfaceRequest;
+};
+
+bool VerifyCommanderRequestData(flatbuffers::Verifier &verifier, const void *obj, CommanderRequestData type);
+bool VerifyCommanderRequestDataVector(flatbuffers::Verifier &verifier, const flatbuffers::Vector<flatbuffers::Offset<void>> *values, const flatbuffers::Vector<uint8_t> *types);
+
+enum SurfaceImageFormat {
+  SurfaceImageFormat_Png = 0,
+  SurfaceImageFormat_Unknown = 1,
+  SurfaceImageFormat_MIN = SurfaceImageFormat_Png,
+  SurfaceImageFormat_MAX = SurfaceImageFormat_Unknown
+};
+
+inline SurfaceImageFormat (&EnumValuesSurfaceImageFormat())[2] {
+  static SurfaceImageFormat values[] = {
+    SurfaceImageFormat_Png,
+    SurfaceImageFormat_Unknown
+  };
+  return values;
+}
+
+inline const char **EnumNamesSurfaceImageFormat() {
+  static const char *names[] = {
+    "Png",
+    "Unknown",
+    nullptr
+  };
+  return names;
+}
+
+inline const char *EnumNameSurfaceImageFormat(SurfaceImageFormat e) {
+  const size_t index = static_cast<int>(e);
+  return EnumNamesSurfaceImageFormat()[index];
+}
+
+enum CommanderResponseData {
+  CommanderResponseData_NONE = 0,
+  CommanderResponseData_CommanderGetSurfaceInfoResponse = 1,
+  CommanderResponseData_CommanderGetSurfaceResponse = 2,
+  CommanderResponseData_MIN = CommanderResponseData_NONE,
+  CommanderResponseData_MAX = CommanderResponseData_CommanderGetSurfaceResponse
+};
+
+inline CommanderResponseData (&EnumValuesCommanderResponseData())[3] {
+  static CommanderResponseData values[] = {
+    CommanderResponseData_NONE,
+    CommanderResponseData_CommanderGetSurfaceInfoResponse,
+    CommanderResponseData_CommanderGetSurfaceResponse
+  };
+  return values;
+}
+
+inline const char **EnumNamesCommanderResponseData() {
+  static const char *names[] = {
+    "NONE",
+    "CommanderGetSurfaceInfoResponse",
+    "CommanderGetSurfaceResponse",
+    nullptr
+  };
+  return names;
+}
+
+inline const char *EnumNameCommanderResponseData(CommanderResponseData e) {
+  const size_t index = static_cast<int>(e);
+  return EnumNamesCommanderResponseData()[index];
+}
+
+template<typename T> struct CommanderResponseDataTraits {
+  static const CommanderResponseData enum_value = CommanderResponseData_NONE;
+};
+
+template<> struct CommanderResponseDataTraits<CommanderGetSurfaceInfoResponse> {
+  static const CommanderResponseData enum_value = CommanderResponseData_CommanderGetSurfaceInfoResponse;
+};
+
+template<> struct CommanderResponseDataTraits<CommanderGetSurfaceResponse> {
+  static const CommanderResponseData enum_value = CommanderResponseData_CommanderGetSurfaceResponse;
+};
+
+bool VerifyCommanderResponseData(flatbuffers::Verifier &verifier, const void *obj, CommanderResponseData type);
+bool VerifyCommanderResponseDataVector(flatbuffers::Verifier &verifier, const flatbuffers::Vector<flatbuffers::Offset<void>> *values, const flatbuffers::Vector<uint8_t> *types);
+
+enum ParcelData {
+  ParcelData_NONE = 0,
+  ParcelData_WorkerRequest = 1,
+  ParcelData_WorkerResponse = 2,
+  ParcelData_CommanderRequest = 3,
+  ParcelData_CommanderResponse = 4,
+  ParcelData_MIN = ParcelData_NONE,
+  ParcelData_MAX = ParcelData_CommanderResponse
+};
+
+inline ParcelData (&EnumValuesParcelData())[5] {
+  static ParcelData values[] = {
+    ParcelData_NONE,
+    ParcelData_WorkerRequest,
+    ParcelData_WorkerResponse,
+    ParcelData_CommanderRequest,
+    ParcelData_CommanderResponse
+  };
+  return values;
+}
+
+inline const char **EnumNamesParcelData() {
+  static const char *names[] = {
+    "NONE",
+    "WorkerRequest",
+    "WorkerResponse",
+    "CommanderRequest",
+    "CommanderResponse",
+    nullptr
+  };
+  return names;
+}
+
+inline const char *EnumNameParcelData(ParcelData e) {
+  const size_t index = static_cast<int>(e);
+  return EnumNamesParcelData()[index];
+}
+
+template<typename T> struct ParcelDataTraits {
+  static const ParcelData enum_value = ParcelData_NONE;
+};
+
+template<> struct ParcelDataTraits<WorkerRequest> {
+  static const ParcelData enum_value = ParcelData_WorkerRequest;
+};
+
+template<> struct ParcelDataTraits<WorkerResponse> {
+  static const ParcelData enum_value = ParcelData_WorkerResponse;
+};
+
+template<> struct ParcelDataTraits<CommanderRequest> {
+  static const ParcelData enum_value = ParcelData_CommanderRequest;
+};
+
+template<> struct ParcelDataTraits<CommanderResponse> {
+  static const ParcelData enum_value = ParcelData_CommanderResponse;
+};
+
+bool VerifyParcelData(flatbuffers::Verifier &verifier, const void *obj, ParcelData type);
+bool VerifyParcelDataVector(flatbuffers::Verifier &verifier, const flatbuffers::Vector<flatbuffers::Offset<void>> *values, const flatbuffers::Vector<uint8_t> *types);
 
 struct Vec3 FLATBUFFERS_FINAL_CLASS : private flatbuffers::Table {
   enum {
@@ -513,7 +711,7 @@ inline flatbuffers::Offset<ChunkTask> CreateChunkTask(
   return builder_.Finish();
 }
 
-struct ConnectRequestData FLATBUFFERS_FINAL_CLASS : private flatbuffers::Table {
+struct WorkerConnectRequest FLATBUFFERS_FINAL_CLASS : private flatbuffers::Table {
   enum {
     VT_TOKEN = 4
   };
@@ -528,97 +726,97 @@ struct ConnectRequestData FLATBUFFERS_FINAL_CLASS : private flatbuffers::Table {
   }
 };
 
-struct ConnectRequestDataBuilder {
+struct WorkerConnectRequestBuilder {
   flatbuffers::FlatBufferBuilder &fbb_;
   flatbuffers::uoffset_t start_;
   void add_token(flatbuffers::Offset<flatbuffers::Vector<uint8_t>> token) {
-    fbb_.AddOffset(ConnectRequestData::VT_TOKEN, token);
+    fbb_.AddOffset(WorkerConnectRequest::VT_TOKEN, token);
   }
-  explicit ConnectRequestDataBuilder(flatbuffers::FlatBufferBuilder &_fbb)
+  explicit WorkerConnectRequestBuilder(flatbuffers::FlatBufferBuilder &_fbb)
         : fbb_(_fbb) {
     start_ = fbb_.StartTable();
   }
-  ConnectRequestDataBuilder &operator=(const ConnectRequestDataBuilder &);
-  flatbuffers::Offset<ConnectRequestData> Finish() {
+  WorkerConnectRequestBuilder &operator=(const WorkerConnectRequestBuilder &);
+  flatbuffers::Offset<WorkerConnectRequest> Finish() {
     const auto end = fbb_.EndTable(start_);
-    auto o = flatbuffers::Offset<ConnectRequestData>(end);
+    auto o = flatbuffers::Offset<WorkerConnectRequest>(end);
     return o;
   }
 };
 
-inline flatbuffers::Offset<ConnectRequestData> CreateConnectRequestData(
+inline flatbuffers::Offset<WorkerConnectRequest> CreateWorkerConnectRequest(
     flatbuffers::FlatBufferBuilder &_fbb,
     flatbuffers::Offset<flatbuffers::Vector<uint8_t>> token = 0) {
-  ConnectRequestDataBuilder builder_(_fbb);
+  WorkerConnectRequestBuilder builder_(_fbb);
   builder_.add_token(token);
   return builder_.Finish();
 }
 
-inline flatbuffers::Offset<ConnectRequestData> CreateConnectRequestDataDirect(
+inline flatbuffers::Offset<WorkerConnectRequest> CreateWorkerConnectRequestDirect(
     flatbuffers::FlatBufferBuilder &_fbb,
     const std::vector<uint8_t> *token = nullptr) {
-  return Dcdr::Interconnect::DcdrFlatBuffers::CreateConnectRequestData(
+  return Dcdr::Interconnect::DcdrFlatBuffers::CreateWorkerConnectRequest(
       _fbb,
       token ? _fbb.CreateVector<uint8_t>(*token) : 0);
 }
 
-struct DisconnectRequestData FLATBUFFERS_FINAL_CLASS : private flatbuffers::Table {
+struct WorkerDisconnectRequest FLATBUFFERS_FINAL_CLASS : private flatbuffers::Table {
   bool Verify(flatbuffers::Verifier &verifier) const {
     return VerifyTableStart(verifier) &&
            verifier.EndTable();
   }
 };
 
-struct DisconnectRequestDataBuilder {
+struct WorkerDisconnectRequestBuilder {
   flatbuffers::FlatBufferBuilder &fbb_;
   flatbuffers::uoffset_t start_;
-  explicit DisconnectRequestDataBuilder(flatbuffers::FlatBufferBuilder &_fbb)
+  explicit WorkerDisconnectRequestBuilder(flatbuffers::FlatBufferBuilder &_fbb)
         : fbb_(_fbb) {
     start_ = fbb_.StartTable();
   }
-  DisconnectRequestDataBuilder &operator=(const DisconnectRequestDataBuilder &);
-  flatbuffers::Offset<DisconnectRequestData> Finish() {
+  WorkerDisconnectRequestBuilder &operator=(const WorkerDisconnectRequestBuilder &);
+  flatbuffers::Offset<WorkerDisconnectRequest> Finish() {
     const auto end = fbb_.EndTable(start_);
-    auto o = flatbuffers::Offset<DisconnectRequestData>(end);
+    auto o = flatbuffers::Offset<WorkerDisconnectRequest>(end);
     return o;
   }
 };
 
-inline flatbuffers::Offset<DisconnectRequestData> CreateDisconnectRequestData(
+inline flatbuffers::Offset<WorkerDisconnectRequest> CreateWorkerDisconnectRequest(
     flatbuffers::FlatBufferBuilder &_fbb) {
-  DisconnectRequestDataBuilder builder_(_fbb);
+  WorkerDisconnectRequestBuilder builder_(_fbb);
   return builder_.Finish();
 }
 
-struct GetSceneInfoRequestData FLATBUFFERS_FINAL_CLASS : private flatbuffers::Table {
+struct WorkerGetSceneInfoRequest FLATBUFFERS_FINAL_CLASS : private flatbuffers::Table {
   bool Verify(flatbuffers::Verifier &verifier) const {
     return VerifyTableStart(verifier) &&
            verifier.EndTable();
   }
 };
 
-struct GetSceneInfoRequestDataBuilder {
+struct WorkerGetSceneInfoRequestBuilder {
   flatbuffers::FlatBufferBuilder &fbb_;
   flatbuffers::uoffset_t start_;
-  explicit GetSceneInfoRequestDataBuilder(flatbuffers::FlatBufferBuilder &_fbb)
+  explicit WorkerGetSceneInfoRequestBuilder(flatbuffers::FlatBufferBuilder &_fbb)
         : fbb_(_fbb) {
     start_ = fbb_.StartTable();
   }
-  GetSceneInfoRequestDataBuilder &operator=(const GetSceneInfoRequestDataBuilder &);
-  flatbuffers::Offset<GetSceneInfoRequestData> Finish() {
+  WorkerGetSceneInfoRequestBuilder &operator=(const WorkerGetSceneInfoRequestBuilder &);
+  flatbuffers::Offset<WorkerGetSceneInfoRequest> Finish() {
     const auto end = fbb_.EndTable(start_);
-    auto o = flatbuffers::Offset<GetSceneInfoRequestData>(end);
+    auto o = flatbuffers::Offset<WorkerGetSceneInfoRequest>(end);
     return o;
   }
 };
 
-inline flatbuffers::Offset<GetSceneInfoRequestData> CreateGetSceneInfoRequestData(
+inline flatbuffers::Offset<WorkerGetSceneInfoRequest> CreateWorkerGetSceneInfoRequest(
     flatbuffers::FlatBufferBuilder &_fbb) {
-  GetSceneInfoRequestDataBuilder builder_(_fbb);
+  WorkerGetSceneInfoRequestBuilder builder_(_fbb);
   return builder_.Finish();
 }
 
-struct VerifySceneRequestData FLATBUFFERS_FINAL_CLASS : private flatbuffers::Table {
+struct WorkerVerifySceneRequest FLATBUFFERS_FINAL_CLASS : private flatbuffers::Table {
   enum {
     VT_SCENEMD5 = 4
   };
@@ -633,41 +831,41 @@ struct VerifySceneRequestData FLATBUFFERS_FINAL_CLASS : private flatbuffers::Tab
   }
 };
 
-struct VerifySceneRequestDataBuilder {
+struct WorkerVerifySceneRequestBuilder {
   flatbuffers::FlatBufferBuilder &fbb_;
   flatbuffers::uoffset_t start_;
   void add_sceneMD5(flatbuffers::Offset<flatbuffers::String> sceneMD5) {
-    fbb_.AddOffset(VerifySceneRequestData::VT_SCENEMD5, sceneMD5);
+    fbb_.AddOffset(WorkerVerifySceneRequest::VT_SCENEMD5, sceneMD5);
   }
-  explicit VerifySceneRequestDataBuilder(flatbuffers::FlatBufferBuilder &_fbb)
+  explicit WorkerVerifySceneRequestBuilder(flatbuffers::FlatBufferBuilder &_fbb)
         : fbb_(_fbb) {
     start_ = fbb_.StartTable();
   }
-  VerifySceneRequestDataBuilder &operator=(const VerifySceneRequestDataBuilder &);
-  flatbuffers::Offset<VerifySceneRequestData> Finish() {
+  WorkerVerifySceneRequestBuilder &operator=(const WorkerVerifySceneRequestBuilder &);
+  flatbuffers::Offset<WorkerVerifySceneRequest> Finish() {
     const auto end = fbb_.EndTable(start_);
-    auto o = flatbuffers::Offset<VerifySceneRequestData>(end);
+    auto o = flatbuffers::Offset<WorkerVerifySceneRequest>(end);
     return o;
   }
 };
 
-inline flatbuffers::Offset<VerifySceneRequestData> CreateVerifySceneRequestData(
+inline flatbuffers::Offset<WorkerVerifySceneRequest> CreateWorkerVerifySceneRequest(
     flatbuffers::FlatBufferBuilder &_fbb,
     flatbuffers::Offset<flatbuffers::String> sceneMD5 = 0) {
-  VerifySceneRequestDataBuilder builder_(_fbb);
+  WorkerVerifySceneRequestBuilder builder_(_fbb);
   builder_.add_sceneMD5(sceneMD5);
   return builder_.Finish();
 }
 
-inline flatbuffers::Offset<VerifySceneRequestData> CreateVerifySceneRequestDataDirect(
+inline flatbuffers::Offset<WorkerVerifySceneRequest> CreateWorkerVerifySceneRequestDirect(
     flatbuffers::FlatBufferBuilder &_fbb,
     const char *sceneMD5 = nullptr) {
-  return Dcdr::Interconnect::DcdrFlatBuffers::CreateVerifySceneRequestData(
+  return Dcdr::Interconnect::DcdrFlatBuffers::CreateWorkerVerifySceneRequest(
       _fbb,
       sceneMD5 ? _fbb.CreateString(sceneMD5) : 0);
 }
 
-struct GetWorkScopeRequestData FLATBUFFERS_FINAL_CLASS : private flatbuffers::Table {
+struct WorkerGetWorkScopeRequest FLATBUFFERS_FINAL_CLASS : private flatbuffers::Table {
   enum {
     VT_THREADSAVAILABLE = 4
   };
@@ -681,33 +879,33 @@ struct GetWorkScopeRequestData FLATBUFFERS_FINAL_CLASS : private flatbuffers::Ta
   }
 };
 
-struct GetWorkScopeRequestDataBuilder {
+struct WorkerGetWorkScopeRequestBuilder {
   flatbuffers::FlatBufferBuilder &fbb_;
   flatbuffers::uoffset_t start_;
   void add_threadsAvailable(uint16_t threadsAvailable) {
-    fbb_.AddElement<uint16_t>(GetWorkScopeRequestData::VT_THREADSAVAILABLE, threadsAvailable, 0);
+    fbb_.AddElement<uint16_t>(WorkerGetWorkScopeRequest::VT_THREADSAVAILABLE, threadsAvailable, 0);
   }
-  explicit GetWorkScopeRequestDataBuilder(flatbuffers::FlatBufferBuilder &_fbb)
+  explicit WorkerGetWorkScopeRequestBuilder(flatbuffers::FlatBufferBuilder &_fbb)
         : fbb_(_fbb) {
     start_ = fbb_.StartTable();
   }
-  GetWorkScopeRequestDataBuilder &operator=(const GetWorkScopeRequestDataBuilder &);
-  flatbuffers::Offset<GetWorkScopeRequestData> Finish() {
+  WorkerGetWorkScopeRequestBuilder &operator=(const WorkerGetWorkScopeRequestBuilder &);
+  flatbuffers::Offset<WorkerGetWorkScopeRequest> Finish() {
     const auto end = fbb_.EndTable(start_);
-    auto o = flatbuffers::Offset<GetWorkScopeRequestData>(end);
+    auto o = flatbuffers::Offset<WorkerGetWorkScopeRequest>(end);
     return o;
   }
 };
 
-inline flatbuffers::Offset<GetWorkScopeRequestData> CreateGetWorkScopeRequestData(
+inline flatbuffers::Offset<WorkerGetWorkScopeRequest> CreateWorkerGetWorkScopeRequest(
     flatbuffers::FlatBufferBuilder &_fbb,
     uint16_t threadsAvailable = 0) {
-  GetWorkScopeRequestDataBuilder builder_(_fbb);
+  WorkerGetWorkScopeRequestBuilder builder_(_fbb);
   builder_.add_threadsAvailable(threadsAvailable);
   return builder_.Finish();
 }
 
-struct PublishArtifactsRequestData FLATBUFFERS_FINAL_CLASS : private flatbuffers::Table {
+struct WorkerPublishArtifactsRequest FLATBUFFERS_FINAL_CLASS : private flatbuffers::Table {
   enum {
     VT_CHUNKS = 4
   };
@@ -723,36 +921,36 @@ struct PublishArtifactsRequestData FLATBUFFERS_FINAL_CLASS : private flatbuffers
   }
 };
 
-struct PublishArtifactsRequestDataBuilder {
+struct WorkerPublishArtifactsRequestBuilder {
   flatbuffers::FlatBufferBuilder &fbb_;
   flatbuffers::uoffset_t start_;
   void add_chunks(flatbuffers::Offset<flatbuffers::Vector<flatbuffers::Offset<Chunk>>> chunks) {
-    fbb_.AddOffset(PublishArtifactsRequestData::VT_CHUNKS, chunks);
+    fbb_.AddOffset(WorkerPublishArtifactsRequest::VT_CHUNKS, chunks);
   }
-  explicit PublishArtifactsRequestDataBuilder(flatbuffers::FlatBufferBuilder &_fbb)
+  explicit WorkerPublishArtifactsRequestBuilder(flatbuffers::FlatBufferBuilder &_fbb)
         : fbb_(_fbb) {
     start_ = fbb_.StartTable();
   }
-  PublishArtifactsRequestDataBuilder &operator=(const PublishArtifactsRequestDataBuilder &);
-  flatbuffers::Offset<PublishArtifactsRequestData> Finish() {
+  WorkerPublishArtifactsRequestBuilder &operator=(const WorkerPublishArtifactsRequestBuilder &);
+  flatbuffers::Offset<WorkerPublishArtifactsRequest> Finish() {
     const auto end = fbb_.EndTable(start_);
-    auto o = flatbuffers::Offset<PublishArtifactsRequestData>(end);
+    auto o = flatbuffers::Offset<WorkerPublishArtifactsRequest>(end);
     return o;
   }
 };
 
-inline flatbuffers::Offset<PublishArtifactsRequestData> CreatePublishArtifactsRequestData(
+inline flatbuffers::Offset<WorkerPublishArtifactsRequest> CreateWorkerPublishArtifactsRequest(
     flatbuffers::FlatBufferBuilder &_fbb,
     flatbuffers::Offset<flatbuffers::Vector<flatbuffers::Offset<Chunk>>> chunks = 0) {
-  PublishArtifactsRequestDataBuilder builder_(_fbb);
+  WorkerPublishArtifactsRequestBuilder builder_(_fbb);
   builder_.add_chunks(chunks);
   return builder_.Finish();
 }
 
-inline flatbuffers::Offset<PublishArtifactsRequestData> CreatePublishArtifactsRequestDataDirect(
+inline flatbuffers::Offset<WorkerPublishArtifactsRequest> CreateWorkerPublishArtifactsRequestDirect(
     flatbuffers::FlatBufferBuilder &_fbb,
     const std::vector<flatbuffers::Offset<Chunk>> *chunks = nullptr) {
-  return Dcdr::Interconnect::DcdrFlatBuffers::CreatePublishArtifactsRequestData(
+  return Dcdr::Interconnect::DcdrFlatBuffers::CreateWorkerPublishArtifactsRequest(
       _fbb,
       chunks ? _fbb.CreateVector<flatbuffers::Offset<Chunk>>(*chunks) : 0);
 }
@@ -760,70 +958,70 @@ inline flatbuffers::Offset<PublishArtifactsRequestData> CreatePublishArtifactsRe
 struct WorkerRequest FLATBUFFERS_FINAL_CLASS : private flatbuffers::Table {
   enum {
     VT_SESSION = 4,
-    VT_DATA_TYPE = 6,
-    VT_DATA = 8
+    VT_REQUESTDATA_TYPE = 6,
+    VT_REQUESTDATA = 8
   };
   const flatbuffers::Vector<uint8_t> *session() const {
     return GetPointer<const flatbuffers::Vector<uint8_t> *>(VT_SESSION);
   }
-  WorkerRequestData data_type() const {
-    return static_cast<WorkerRequestData>(GetField<uint8_t>(VT_DATA_TYPE, 0));
+  WorkerRequestData requestData_type() const {
+    return static_cast<WorkerRequestData>(GetField<uint8_t>(VT_REQUESTDATA_TYPE, 0));
   }
-  const void *data() const {
-    return GetPointer<const void *>(VT_DATA);
+  const void *requestData() const {
+    return GetPointer<const void *>(VT_REQUESTDATA);
   }
-  template<typename T> const T *data_as() const;
-  const ConnectRequestData *data_as_ConnectRequestData() const {
-    return data_type() == WorkerRequestData_ConnectRequestData ? static_cast<const ConnectRequestData *>(data()) : nullptr;
+  template<typename T> const T *requestData_as() const;
+  const WorkerConnectRequest *requestData_as_WorkerConnectRequest() const {
+    return requestData_type() == WorkerRequestData_WorkerConnectRequest ? static_cast<const WorkerConnectRequest *>(requestData()) : nullptr;
   }
-  const DisconnectRequestData *data_as_DisconnectRequestData() const {
-    return data_type() == WorkerRequestData_DisconnectRequestData ? static_cast<const DisconnectRequestData *>(data()) : nullptr;
+  const WorkerDisconnectRequest *requestData_as_WorkerDisconnectRequest() const {
+    return requestData_type() == WorkerRequestData_WorkerDisconnectRequest ? static_cast<const WorkerDisconnectRequest *>(requestData()) : nullptr;
   }
-  const GetSceneInfoRequestData *data_as_GetSceneInfoRequestData() const {
-    return data_type() == WorkerRequestData_GetSceneInfoRequestData ? static_cast<const GetSceneInfoRequestData *>(data()) : nullptr;
+  const WorkerGetSceneInfoRequest *requestData_as_WorkerGetSceneInfoRequest() const {
+    return requestData_type() == WorkerRequestData_WorkerGetSceneInfoRequest ? static_cast<const WorkerGetSceneInfoRequest *>(requestData()) : nullptr;
   }
-  const VerifySceneRequestData *data_as_VerifySceneRequestData() const {
-    return data_type() == WorkerRequestData_VerifySceneRequestData ? static_cast<const VerifySceneRequestData *>(data()) : nullptr;
+  const WorkerVerifySceneRequest *requestData_as_WorkerVerifySceneRequest() const {
+    return requestData_type() == WorkerRequestData_WorkerVerifySceneRequest ? static_cast<const WorkerVerifySceneRequest *>(requestData()) : nullptr;
   }
-  const GetWorkScopeRequestData *data_as_GetWorkScopeRequestData() const {
-    return data_type() == WorkerRequestData_GetWorkScopeRequestData ? static_cast<const GetWorkScopeRequestData *>(data()) : nullptr;
+  const WorkerGetWorkScopeRequest *requestData_as_WorkerGetWorkScopeRequest() const {
+    return requestData_type() == WorkerRequestData_WorkerGetWorkScopeRequest ? static_cast<const WorkerGetWorkScopeRequest *>(requestData()) : nullptr;
   }
-  const PublishArtifactsRequestData *data_as_PublishArtifactsRequestData() const {
-    return data_type() == WorkerRequestData_PublishArtifactsRequestData ? static_cast<const PublishArtifactsRequestData *>(data()) : nullptr;
+  const WorkerPublishArtifactsRequest *requestData_as_WorkerPublishArtifactsRequest() const {
+    return requestData_type() == WorkerRequestData_WorkerPublishArtifactsRequest ? static_cast<const WorkerPublishArtifactsRequest *>(requestData()) : nullptr;
   }
   bool Verify(flatbuffers::Verifier &verifier) const {
     return VerifyTableStart(verifier) &&
            VerifyOffset(verifier, VT_SESSION) &&
            verifier.Verify(session()) &&
-           VerifyField<uint8_t>(verifier, VT_DATA_TYPE) &&
-           VerifyOffset(verifier, VT_DATA) &&
-           VerifyWorkerRequestData(verifier, data(), data_type()) &&
+           VerifyField<uint8_t>(verifier, VT_REQUESTDATA_TYPE) &&
+           VerifyOffset(verifier, VT_REQUESTDATA) &&
+           VerifyWorkerRequestData(verifier, requestData(), requestData_type()) &&
            verifier.EndTable();
   }
 };
 
-template<> inline const ConnectRequestData *WorkerRequest::data_as<ConnectRequestData>() const {
-  return data_as_ConnectRequestData();
+template<> inline const WorkerConnectRequest *WorkerRequest::requestData_as<WorkerConnectRequest>() const {
+  return requestData_as_WorkerConnectRequest();
 }
 
-template<> inline const DisconnectRequestData *WorkerRequest::data_as<DisconnectRequestData>() const {
-  return data_as_DisconnectRequestData();
+template<> inline const WorkerDisconnectRequest *WorkerRequest::requestData_as<WorkerDisconnectRequest>() const {
+  return requestData_as_WorkerDisconnectRequest();
 }
 
-template<> inline const GetSceneInfoRequestData *WorkerRequest::data_as<GetSceneInfoRequestData>() const {
-  return data_as_GetSceneInfoRequestData();
+template<> inline const WorkerGetSceneInfoRequest *WorkerRequest::requestData_as<WorkerGetSceneInfoRequest>() const {
+  return requestData_as_WorkerGetSceneInfoRequest();
 }
 
-template<> inline const VerifySceneRequestData *WorkerRequest::data_as<VerifySceneRequestData>() const {
-  return data_as_VerifySceneRequestData();
+template<> inline const WorkerVerifySceneRequest *WorkerRequest::requestData_as<WorkerVerifySceneRequest>() const {
+  return requestData_as_WorkerVerifySceneRequest();
 }
 
-template<> inline const GetWorkScopeRequestData *WorkerRequest::data_as<GetWorkScopeRequestData>() const {
-  return data_as_GetWorkScopeRequestData();
+template<> inline const WorkerGetWorkScopeRequest *WorkerRequest::requestData_as<WorkerGetWorkScopeRequest>() const {
+  return requestData_as_WorkerGetWorkScopeRequest();
 }
 
-template<> inline const PublishArtifactsRequestData *WorkerRequest::data_as<PublishArtifactsRequestData>() const {
-  return data_as_PublishArtifactsRequestData();
+template<> inline const WorkerPublishArtifactsRequest *WorkerRequest::requestData_as<WorkerPublishArtifactsRequest>() const {
+  return requestData_as_WorkerPublishArtifactsRequest();
 }
 
 struct WorkerRequestBuilder {
@@ -832,11 +1030,11 @@ struct WorkerRequestBuilder {
   void add_session(flatbuffers::Offset<flatbuffers::Vector<uint8_t>> session) {
     fbb_.AddOffset(WorkerRequest::VT_SESSION, session);
   }
-  void add_data_type(WorkerRequestData data_type) {
-    fbb_.AddElement<uint8_t>(WorkerRequest::VT_DATA_TYPE, static_cast<uint8_t>(data_type), 0);
+  void add_requestData_type(WorkerRequestData requestData_type) {
+    fbb_.AddElement<uint8_t>(WorkerRequest::VT_REQUESTDATA_TYPE, static_cast<uint8_t>(requestData_type), 0);
   }
-  void add_data(flatbuffers::Offset<void> data) {
-    fbb_.AddOffset(WorkerRequest::VT_DATA, data);
+  void add_requestData(flatbuffers::Offset<void> requestData) {
+    fbb_.AddOffset(WorkerRequest::VT_REQUESTDATA, requestData);
   }
   explicit WorkerRequestBuilder(flatbuffers::FlatBufferBuilder &_fbb)
         : fbb_(_fbb) {
@@ -853,28 +1051,28 @@ struct WorkerRequestBuilder {
 inline flatbuffers::Offset<WorkerRequest> CreateWorkerRequest(
     flatbuffers::FlatBufferBuilder &_fbb,
     flatbuffers::Offset<flatbuffers::Vector<uint8_t>> session = 0,
-    WorkerRequestData data_type = WorkerRequestData_NONE,
-    flatbuffers::Offset<void> data = 0) {
+    WorkerRequestData requestData_type = WorkerRequestData_NONE,
+    flatbuffers::Offset<void> requestData = 0) {
   WorkerRequestBuilder builder_(_fbb);
-  builder_.add_data(data);
+  builder_.add_requestData(requestData);
   builder_.add_session(session);
-  builder_.add_data_type(data_type);
+  builder_.add_requestData_type(requestData_type);
   return builder_.Finish();
 }
 
 inline flatbuffers::Offset<WorkerRequest> CreateWorkerRequestDirect(
     flatbuffers::FlatBufferBuilder &_fbb,
     const std::vector<uint8_t> *session = nullptr,
-    WorkerRequestData data_type = WorkerRequestData_NONE,
-    flatbuffers::Offset<void> data = 0) {
+    WorkerRequestData requestData_type = WorkerRequestData_NONE,
+    flatbuffers::Offset<void> requestData = 0) {
   return Dcdr::Interconnect::DcdrFlatBuffers::CreateWorkerRequest(
       _fbb,
       session ? _fbb.CreateVector<uint8_t>(*session) : 0,
-      data_type,
-      data);
+      requestData_type,
+      requestData);
 }
 
-struct ErrorResponseData FLATBUFFERS_FINAL_CLASS : private flatbuffers::Table {
+struct WorkerErrorResponse FLATBUFFERS_FINAL_CLASS : private flatbuffers::Table {
   enum {
     VT_CAUSE = 4
   };
@@ -889,41 +1087,41 @@ struct ErrorResponseData FLATBUFFERS_FINAL_CLASS : private flatbuffers::Table {
   }
 };
 
-struct ErrorResponseDataBuilder {
+struct WorkerErrorResponseBuilder {
   flatbuffers::FlatBufferBuilder &fbb_;
   flatbuffers::uoffset_t start_;
   void add_cause(flatbuffers::Offset<flatbuffers::String> cause) {
-    fbb_.AddOffset(ErrorResponseData::VT_CAUSE, cause);
+    fbb_.AddOffset(WorkerErrorResponse::VT_CAUSE, cause);
   }
-  explicit ErrorResponseDataBuilder(flatbuffers::FlatBufferBuilder &_fbb)
+  explicit WorkerErrorResponseBuilder(flatbuffers::FlatBufferBuilder &_fbb)
         : fbb_(_fbb) {
     start_ = fbb_.StartTable();
   }
-  ErrorResponseDataBuilder &operator=(const ErrorResponseDataBuilder &);
-  flatbuffers::Offset<ErrorResponseData> Finish() {
+  WorkerErrorResponseBuilder &operator=(const WorkerErrorResponseBuilder &);
+  flatbuffers::Offset<WorkerErrorResponse> Finish() {
     const auto end = fbb_.EndTable(start_);
-    auto o = flatbuffers::Offset<ErrorResponseData>(end);
+    auto o = flatbuffers::Offset<WorkerErrorResponse>(end);
     return o;
   }
 };
 
-inline flatbuffers::Offset<ErrorResponseData> CreateErrorResponseData(
+inline flatbuffers::Offset<WorkerErrorResponse> CreateWorkerErrorResponse(
     flatbuffers::FlatBufferBuilder &_fbb,
     flatbuffers::Offset<flatbuffers::String> cause = 0) {
-  ErrorResponseDataBuilder builder_(_fbb);
+  WorkerErrorResponseBuilder builder_(_fbb);
   builder_.add_cause(cause);
   return builder_.Finish();
 }
 
-inline flatbuffers::Offset<ErrorResponseData> CreateErrorResponseDataDirect(
+inline flatbuffers::Offset<WorkerErrorResponse> CreateWorkerErrorResponseDirect(
     flatbuffers::FlatBufferBuilder &_fbb,
     const char *cause = nullptr) {
-  return Dcdr::Interconnect::DcdrFlatBuffers::CreateErrorResponseData(
+  return Dcdr::Interconnect::DcdrFlatBuffers::CreateWorkerErrorResponse(
       _fbb,
       cause ? _fbb.CreateString(cause) : 0);
 }
 
-struct ConnectResponseData FLATBUFFERS_FINAL_CLASS : private flatbuffers::Table {
+struct WorkerConnectResponse FLATBUFFERS_FINAL_CLASS : private flatbuffers::Table {
   enum {
     VT_CONNECTIONID = 4
   };
@@ -938,69 +1136,69 @@ struct ConnectResponseData FLATBUFFERS_FINAL_CLASS : private flatbuffers::Table 
   }
 };
 
-struct ConnectResponseDataBuilder {
+struct WorkerConnectResponseBuilder {
   flatbuffers::FlatBufferBuilder &fbb_;
   flatbuffers::uoffset_t start_;
   void add_connectionId(flatbuffers::Offset<flatbuffers::Vector<uint8_t>> connectionId) {
-    fbb_.AddOffset(ConnectResponseData::VT_CONNECTIONID, connectionId);
+    fbb_.AddOffset(WorkerConnectResponse::VT_CONNECTIONID, connectionId);
   }
-  explicit ConnectResponseDataBuilder(flatbuffers::FlatBufferBuilder &_fbb)
+  explicit WorkerConnectResponseBuilder(flatbuffers::FlatBufferBuilder &_fbb)
         : fbb_(_fbb) {
     start_ = fbb_.StartTable();
   }
-  ConnectResponseDataBuilder &operator=(const ConnectResponseDataBuilder &);
-  flatbuffers::Offset<ConnectResponseData> Finish() {
+  WorkerConnectResponseBuilder &operator=(const WorkerConnectResponseBuilder &);
+  flatbuffers::Offset<WorkerConnectResponse> Finish() {
     const auto end = fbb_.EndTable(start_);
-    auto o = flatbuffers::Offset<ConnectResponseData>(end);
+    auto o = flatbuffers::Offset<WorkerConnectResponse>(end);
     return o;
   }
 };
 
-inline flatbuffers::Offset<ConnectResponseData> CreateConnectResponseData(
+inline flatbuffers::Offset<WorkerConnectResponse> CreateWorkerConnectResponse(
     flatbuffers::FlatBufferBuilder &_fbb,
     flatbuffers::Offset<flatbuffers::Vector<uint8_t>> connectionId = 0) {
-  ConnectResponseDataBuilder builder_(_fbb);
+  WorkerConnectResponseBuilder builder_(_fbb);
   builder_.add_connectionId(connectionId);
   return builder_.Finish();
 }
 
-inline flatbuffers::Offset<ConnectResponseData> CreateConnectResponseDataDirect(
+inline flatbuffers::Offset<WorkerConnectResponse> CreateWorkerConnectResponseDirect(
     flatbuffers::FlatBufferBuilder &_fbb,
     const std::vector<uint8_t> *connectionId = nullptr) {
-  return Dcdr::Interconnect::DcdrFlatBuffers::CreateConnectResponseData(
+  return Dcdr::Interconnect::DcdrFlatBuffers::CreateWorkerConnectResponse(
       _fbb,
       connectionId ? _fbb.CreateVector<uint8_t>(*connectionId) : 0);
 }
 
-struct DisconnectResponseData FLATBUFFERS_FINAL_CLASS : private flatbuffers::Table {
+struct WorkerDisconnectResponse FLATBUFFERS_FINAL_CLASS : private flatbuffers::Table {
   bool Verify(flatbuffers::Verifier &verifier) const {
     return VerifyTableStart(verifier) &&
            verifier.EndTable();
   }
 };
 
-struct DisconnectResponseDataBuilder {
+struct WorkerDisconnectResponseBuilder {
   flatbuffers::FlatBufferBuilder &fbb_;
   flatbuffers::uoffset_t start_;
-  explicit DisconnectResponseDataBuilder(flatbuffers::FlatBufferBuilder &_fbb)
+  explicit WorkerDisconnectResponseBuilder(flatbuffers::FlatBufferBuilder &_fbb)
         : fbb_(_fbb) {
     start_ = fbb_.StartTable();
   }
-  DisconnectResponseDataBuilder &operator=(const DisconnectResponseDataBuilder &);
-  flatbuffers::Offset<DisconnectResponseData> Finish() {
+  WorkerDisconnectResponseBuilder &operator=(const WorkerDisconnectResponseBuilder &);
+  flatbuffers::Offset<WorkerDisconnectResponse> Finish() {
     const auto end = fbb_.EndTable(start_);
-    auto o = flatbuffers::Offset<DisconnectResponseData>(end);
+    auto o = flatbuffers::Offset<WorkerDisconnectResponse>(end);
     return o;
   }
 };
 
-inline flatbuffers::Offset<DisconnectResponseData> CreateDisconnectResponseData(
+inline flatbuffers::Offset<WorkerDisconnectResponse> CreateWorkerDisconnectResponse(
     flatbuffers::FlatBufferBuilder &_fbb) {
-  DisconnectResponseDataBuilder builder_(_fbb);
+  WorkerDisconnectResponseBuilder builder_(_fbb);
   return builder_.Finish();
 }
 
-struct GetSceneInfoResponseData FLATBUFFERS_FINAL_CLASS : private flatbuffers::Table {
+struct WorkerGetSceneInfoResponse FLATBUFFERS_FINAL_CLASS : private flatbuffers::Table {
   enum {
     VT_SCENEID = 4
   };
@@ -1015,69 +1213,69 @@ struct GetSceneInfoResponseData FLATBUFFERS_FINAL_CLASS : private flatbuffers::T
   }
 };
 
-struct GetSceneInfoResponseDataBuilder {
+struct WorkerGetSceneInfoResponseBuilder {
   flatbuffers::FlatBufferBuilder &fbb_;
   flatbuffers::uoffset_t start_;
   void add_sceneId(flatbuffers::Offset<flatbuffers::String> sceneId) {
-    fbb_.AddOffset(GetSceneInfoResponseData::VT_SCENEID, sceneId);
+    fbb_.AddOffset(WorkerGetSceneInfoResponse::VT_SCENEID, sceneId);
   }
-  explicit GetSceneInfoResponseDataBuilder(flatbuffers::FlatBufferBuilder &_fbb)
+  explicit WorkerGetSceneInfoResponseBuilder(flatbuffers::FlatBufferBuilder &_fbb)
         : fbb_(_fbb) {
     start_ = fbb_.StartTable();
   }
-  GetSceneInfoResponseDataBuilder &operator=(const GetSceneInfoResponseDataBuilder &);
-  flatbuffers::Offset<GetSceneInfoResponseData> Finish() {
+  WorkerGetSceneInfoResponseBuilder &operator=(const WorkerGetSceneInfoResponseBuilder &);
+  flatbuffers::Offset<WorkerGetSceneInfoResponse> Finish() {
     const auto end = fbb_.EndTable(start_);
-    auto o = flatbuffers::Offset<GetSceneInfoResponseData>(end);
+    auto o = flatbuffers::Offset<WorkerGetSceneInfoResponse>(end);
     return o;
   }
 };
 
-inline flatbuffers::Offset<GetSceneInfoResponseData> CreateGetSceneInfoResponseData(
+inline flatbuffers::Offset<WorkerGetSceneInfoResponse> CreateWorkerGetSceneInfoResponse(
     flatbuffers::FlatBufferBuilder &_fbb,
     flatbuffers::Offset<flatbuffers::String> sceneId = 0) {
-  GetSceneInfoResponseDataBuilder builder_(_fbb);
+  WorkerGetSceneInfoResponseBuilder builder_(_fbb);
   builder_.add_sceneId(sceneId);
   return builder_.Finish();
 }
 
-inline flatbuffers::Offset<GetSceneInfoResponseData> CreateGetSceneInfoResponseDataDirect(
+inline flatbuffers::Offset<WorkerGetSceneInfoResponse> CreateWorkerGetSceneInfoResponseDirect(
     flatbuffers::FlatBufferBuilder &_fbb,
     const char *sceneId = nullptr) {
-  return Dcdr::Interconnect::DcdrFlatBuffers::CreateGetSceneInfoResponseData(
+  return Dcdr::Interconnect::DcdrFlatBuffers::CreateWorkerGetSceneInfoResponse(
       _fbb,
       sceneId ? _fbb.CreateString(sceneId) : 0);
 }
 
-struct VerifySceneResponseData FLATBUFFERS_FINAL_CLASS : private flatbuffers::Table {
+struct WorkerVerifySceneResponse FLATBUFFERS_FINAL_CLASS : private flatbuffers::Table {
   bool Verify(flatbuffers::Verifier &verifier) const {
     return VerifyTableStart(verifier) &&
            verifier.EndTable();
   }
 };
 
-struct VerifySceneResponseDataBuilder {
+struct WorkerVerifySceneResponseBuilder {
   flatbuffers::FlatBufferBuilder &fbb_;
   flatbuffers::uoffset_t start_;
-  explicit VerifySceneResponseDataBuilder(flatbuffers::FlatBufferBuilder &_fbb)
+  explicit WorkerVerifySceneResponseBuilder(flatbuffers::FlatBufferBuilder &_fbb)
         : fbb_(_fbb) {
     start_ = fbb_.StartTable();
   }
-  VerifySceneResponseDataBuilder &operator=(const VerifySceneResponseDataBuilder &);
-  flatbuffers::Offset<VerifySceneResponseData> Finish() {
+  WorkerVerifySceneResponseBuilder &operator=(const WorkerVerifySceneResponseBuilder &);
+  flatbuffers::Offset<WorkerVerifySceneResponse> Finish() {
     const auto end = fbb_.EndTable(start_);
-    auto o = flatbuffers::Offset<VerifySceneResponseData>(end);
+    auto o = flatbuffers::Offset<WorkerVerifySceneResponse>(end);
     return o;
   }
 };
 
-inline flatbuffers::Offset<VerifySceneResponseData> CreateVerifySceneResponseData(
+inline flatbuffers::Offset<WorkerVerifySceneResponse> CreateWorkerVerifySceneResponse(
     flatbuffers::FlatBufferBuilder &_fbb) {
-  VerifySceneResponseDataBuilder builder_(_fbb);
+  WorkerVerifySceneResponseBuilder builder_(_fbb);
   return builder_.Finish();
 }
 
-struct GetWorkScopeResponseData FLATBUFFERS_FINAL_CLASS : private flatbuffers::Table {
+struct WorkerGetWorkScopeResponse FLATBUFFERS_FINAL_CLASS : private flatbuffers::Table {
   enum {
     VT_TASKS = 4
   };
@@ -1093,69 +1291,69 @@ struct GetWorkScopeResponseData FLATBUFFERS_FINAL_CLASS : private flatbuffers::T
   }
 };
 
-struct GetWorkScopeResponseDataBuilder {
+struct WorkerGetWorkScopeResponseBuilder {
   flatbuffers::FlatBufferBuilder &fbb_;
   flatbuffers::uoffset_t start_;
   void add_tasks(flatbuffers::Offset<flatbuffers::Vector<flatbuffers::Offset<ChunkTask>>> tasks) {
-    fbb_.AddOffset(GetWorkScopeResponseData::VT_TASKS, tasks);
+    fbb_.AddOffset(WorkerGetWorkScopeResponse::VT_TASKS, tasks);
   }
-  explicit GetWorkScopeResponseDataBuilder(flatbuffers::FlatBufferBuilder &_fbb)
+  explicit WorkerGetWorkScopeResponseBuilder(flatbuffers::FlatBufferBuilder &_fbb)
         : fbb_(_fbb) {
     start_ = fbb_.StartTable();
   }
-  GetWorkScopeResponseDataBuilder &operator=(const GetWorkScopeResponseDataBuilder &);
-  flatbuffers::Offset<GetWorkScopeResponseData> Finish() {
+  WorkerGetWorkScopeResponseBuilder &operator=(const WorkerGetWorkScopeResponseBuilder &);
+  flatbuffers::Offset<WorkerGetWorkScopeResponse> Finish() {
     const auto end = fbb_.EndTable(start_);
-    auto o = flatbuffers::Offset<GetWorkScopeResponseData>(end);
+    auto o = flatbuffers::Offset<WorkerGetWorkScopeResponse>(end);
     return o;
   }
 };
 
-inline flatbuffers::Offset<GetWorkScopeResponseData> CreateGetWorkScopeResponseData(
+inline flatbuffers::Offset<WorkerGetWorkScopeResponse> CreateWorkerGetWorkScopeResponse(
     flatbuffers::FlatBufferBuilder &_fbb,
     flatbuffers::Offset<flatbuffers::Vector<flatbuffers::Offset<ChunkTask>>> tasks = 0) {
-  GetWorkScopeResponseDataBuilder builder_(_fbb);
+  WorkerGetWorkScopeResponseBuilder builder_(_fbb);
   builder_.add_tasks(tasks);
   return builder_.Finish();
 }
 
-inline flatbuffers::Offset<GetWorkScopeResponseData> CreateGetWorkScopeResponseDataDirect(
+inline flatbuffers::Offset<WorkerGetWorkScopeResponse> CreateWorkerGetWorkScopeResponseDirect(
     flatbuffers::FlatBufferBuilder &_fbb,
     const std::vector<flatbuffers::Offset<ChunkTask>> *tasks = nullptr) {
-  return Dcdr::Interconnect::DcdrFlatBuffers::CreateGetWorkScopeResponseData(
+  return Dcdr::Interconnect::DcdrFlatBuffers::CreateWorkerGetWorkScopeResponse(
       _fbb,
       tasks ? _fbb.CreateVector<flatbuffers::Offset<ChunkTask>>(*tasks) : 0);
 }
 
-struct PublishArtifactsResponseData FLATBUFFERS_FINAL_CLASS : private flatbuffers::Table {
+struct WorkerPublishArtifactsResponse FLATBUFFERS_FINAL_CLASS : private flatbuffers::Table {
   bool Verify(flatbuffers::Verifier &verifier) const {
     return VerifyTableStart(verifier) &&
            verifier.EndTable();
   }
 };
 
-struct PublishArtifactsResponseDataBuilder {
+struct WorkerPublishArtifactsResponseBuilder {
   flatbuffers::FlatBufferBuilder &fbb_;
   flatbuffers::uoffset_t start_;
-  explicit PublishArtifactsResponseDataBuilder(flatbuffers::FlatBufferBuilder &_fbb)
+  explicit WorkerPublishArtifactsResponseBuilder(flatbuffers::FlatBufferBuilder &_fbb)
         : fbb_(_fbb) {
     start_ = fbb_.StartTable();
   }
-  PublishArtifactsResponseDataBuilder &operator=(const PublishArtifactsResponseDataBuilder &);
-  flatbuffers::Offset<PublishArtifactsResponseData> Finish() {
+  WorkerPublishArtifactsResponseBuilder &operator=(const WorkerPublishArtifactsResponseBuilder &);
+  flatbuffers::Offset<WorkerPublishArtifactsResponse> Finish() {
     const auto end = fbb_.EndTable(start_);
-    auto o = flatbuffers::Offset<PublishArtifactsResponseData>(end);
+    auto o = flatbuffers::Offset<WorkerPublishArtifactsResponse>(end);
     return o;
   }
 };
 
-inline flatbuffers::Offset<PublishArtifactsResponseData> CreatePublishArtifactsResponseData(
+inline flatbuffers::Offset<WorkerPublishArtifactsResponse> CreateWorkerPublishArtifactsResponse(
     flatbuffers::FlatBufferBuilder &_fbb) {
-  PublishArtifactsResponseDataBuilder builder_(_fbb);
+  WorkerPublishArtifactsResponseBuilder builder_(_fbb);
   return builder_.Finish();
 }
 
-struct Response FLATBUFFERS_FINAL_CLASS : private flatbuffers::Table {
+struct WorkerResponse FLATBUFFERS_FINAL_CLASS : private flatbuffers::Table {
   enum {
     VT_SESSION = 4,
     VT_RESPONSEDATA_TYPE = 6,
@@ -1164,33 +1362,33 @@ struct Response FLATBUFFERS_FINAL_CLASS : private flatbuffers::Table {
   const flatbuffers::Vector<uint8_t> *session() const {
     return GetPointer<const flatbuffers::Vector<uint8_t> *>(VT_SESSION);
   }
-  ResponseData responseData_type() const {
-    return static_cast<ResponseData>(GetField<uint8_t>(VT_RESPONSEDATA_TYPE, 0));
+  WorkerResponseData responseData_type() const {
+    return static_cast<WorkerResponseData>(GetField<uint8_t>(VT_RESPONSEDATA_TYPE, 0));
   }
   const void *responseData() const {
     return GetPointer<const void *>(VT_RESPONSEDATA);
   }
   template<typename T> const T *responseData_as() const;
-  const ErrorResponseData *responseData_as_ErrorResponseData() const {
-    return responseData_type() == ResponseData_ErrorResponseData ? static_cast<const ErrorResponseData *>(responseData()) : nullptr;
+  const WorkerErrorResponse *responseData_as_WorkerErrorResponse() const {
+    return responseData_type() == WorkerResponseData_WorkerErrorResponse ? static_cast<const WorkerErrorResponse *>(responseData()) : nullptr;
   }
-  const ConnectResponseData *responseData_as_ConnectResponseData() const {
-    return responseData_type() == ResponseData_ConnectResponseData ? static_cast<const ConnectResponseData *>(responseData()) : nullptr;
+  const WorkerConnectResponse *responseData_as_WorkerConnectResponse() const {
+    return responseData_type() == WorkerResponseData_WorkerConnectResponse ? static_cast<const WorkerConnectResponse *>(responseData()) : nullptr;
   }
-  const DisconnectResponseData *responseData_as_DisconnectResponseData() const {
-    return responseData_type() == ResponseData_DisconnectResponseData ? static_cast<const DisconnectResponseData *>(responseData()) : nullptr;
+  const WorkerDisconnectResponse *responseData_as_WorkerDisconnectResponse() const {
+    return responseData_type() == WorkerResponseData_WorkerDisconnectResponse ? static_cast<const WorkerDisconnectResponse *>(responseData()) : nullptr;
   }
-  const GetSceneInfoResponseData *responseData_as_GetSceneInfoResponseData() const {
-    return responseData_type() == ResponseData_GetSceneInfoResponseData ? static_cast<const GetSceneInfoResponseData *>(responseData()) : nullptr;
+  const WorkerGetSceneInfoResponse *responseData_as_WorkerGetSceneInfoResponse() const {
+    return responseData_type() == WorkerResponseData_WorkerGetSceneInfoResponse ? static_cast<const WorkerGetSceneInfoResponse *>(responseData()) : nullptr;
   }
-  const VerifySceneResponseData *responseData_as_VerifySceneResponseData() const {
-    return responseData_type() == ResponseData_VerifySceneResponseData ? static_cast<const VerifySceneResponseData *>(responseData()) : nullptr;
+  const WorkerVerifySceneResponse *responseData_as_WorkerVerifySceneResponse() const {
+    return responseData_type() == WorkerResponseData_WorkerVerifySceneResponse ? static_cast<const WorkerVerifySceneResponse *>(responseData()) : nullptr;
   }
-  const GetWorkScopeResponseData *responseData_as_GetWorkScopeResponseData() const {
-    return responseData_type() == ResponseData_GetWorkScopeResponseData ? static_cast<const GetWorkScopeResponseData *>(responseData()) : nullptr;
+  const WorkerGetWorkScopeResponse *responseData_as_WorkerGetWorkScopeResponse() const {
+    return responseData_type() == WorkerResponseData_WorkerGetWorkScopeResponse ? static_cast<const WorkerGetWorkScopeResponse *>(responseData()) : nullptr;
   }
-  const PublishArtifactsResponseData *responseData_as_PublishArtifactsResponseData() const {
-    return responseData_type() == ResponseData_PublishArtifactsResponseData ? static_cast<const PublishArtifactsResponseData *>(responseData()) : nullptr;
+  const WorkerPublishArtifactsResponse *responseData_as_WorkerPublishArtifactsResponse() const {
+    return responseData_type() == WorkerResponseData_WorkerPublishArtifactsResponse ? static_cast<const WorkerPublishArtifactsResponse *>(responseData()) : nullptr;
   }
   bool Verify(flatbuffers::Verifier &verifier) const {
     return VerifyTableStart(verifier) &&
@@ -1198,85 +1396,464 @@ struct Response FLATBUFFERS_FINAL_CLASS : private flatbuffers::Table {
            verifier.Verify(session()) &&
            VerifyField<uint8_t>(verifier, VT_RESPONSEDATA_TYPE) &&
            VerifyOffset(verifier, VT_RESPONSEDATA) &&
-           VerifyResponseData(verifier, responseData(), responseData_type()) &&
+           VerifyWorkerResponseData(verifier, responseData(), responseData_type()) &&
            verifier.EndTable();
   }
 };
 
-template<> inline const ErrorResponseData *Response::responseData_as<ErrorResponseData>() const {
-  return responseData_as_ErrorResponseData();
+template<> inline const WorkerErrorResponse *WorkerResponse::responseData_as<WorkerErrorResponse>() const {
+  return responseData_as_WorkerErrorResponse();
 }
 
-template<> inline const ConnectResponseData *Response::responseData_as<ConnectResponseData>() const {
-  return responseData_as_ConnectResponseData();
+template<> inline const WorkerConnectResponse *WorkerResponse::responseData_as<WorkerConnectResponse>() const {
+  return responseData_as_WorkerConnectResponse();
 }
 
-template<> inline const DisconnectResponseData *Response::responseData_as<DisconnectResponseData>() const {
-  return responseData_as_DisconnectResponseData();
+template<> inline const WorkerDisconnectResponse *WorkerResponse::responseData_as<WorkerDisconnectResponse>() const {
+  return responseData_as_WorkerDisconnectResponse();
 }
 
-template<> inline const GetSceneInfoResponseData *Response::responseData_as<GetSceneInfoResponseData>() const {
-  return responseData_as_GetSceneInfoResponseData();
+template<> inline const WorkerGetSceneInfoResponse *WorkerResponse::responseData_as<WorkerGetSceneInfoResponse>() const {
+  return responseData_as_WorkerGetSceneInfoResponse();
 }
 
-template<> inline const VerifySceneResponseData *Response::responseData_as<VerifySceneResponseData>() const {
-  return responseData_as_VerifySceneResponseData();
+template<> inline const WorkerVerifySceneResponse *WorkerResponse::responseData_as<WorkerVerifySceneResponse>() const {
+  return responseData_as_WorkerVerifySceneResponse();
 }
 
-template<> inline const GetWorkScopeResponseData *Response::responseData_as<GetWorkScopeResponseData>() const {
-  return responseData_as_GetWorkScopeResponseData();
+template<> inline const WorkerGetWorkScopeResponse *WorkerResponse::responseData_as<WorkerGetWorkScopeResponse>() const {
+  return responseData_as_WorkerGetWorkScopeResponse();
 }
 
-template<> inline const PublishArtifactsResponseData *Response::responseData_as<PublishArtifactsResponseData>() const {
-  return responseData_as_PublishArtifactsResponseData();
+template<> inline const WorkerPublishArtifactsResponse *WorkerResponse::responseData_as<WorkerPublishArtifactsResponse>() const {
+  return responseData_as_WorkerPublishArtifactsResponse();
 }
 
-struct ResponseBuilder {
+struct WorkerResponseBuilder {
   flatbuffers::FlatBufferBuilder &fbb_;
   flatbuffers::uoffset_t start_;
   void add_session(flatbuffers::Offset<flatbuffers::Vector<uint8_t>> session) {
-    fbb_.AddOffset(Response::VT_SESSION, session);
+    fbb_.AddOffset(WorkerResponse::VT_SESSION, session);
   }
-  void add_responseData_type(ResponseData responseData_type) {
-    fbb_.AddElement<uint8_t>(Response::VT_RESPONSEDATA_TYPE, static_cast<uint8_t>(responseData_type), 0);
+  void add_responseData_type(WorkerResponseData responseData_type) {
+    fbb_.AddElement<uint8_t>(WorkerResponse::VT_RESPONSEDATA_TYPE, static_cast<uint8_t>(responseData_type), 0);
   }
   void add_responseData(flatbuffers::Offset<void> responseData) {
-    fbb_.AddOffset(Response::VT_RESPONSEDATA, responseData);
+    fbb_.AddOffset(WorkerResponse::VT_RESPONSEDATA, responseData);
   }
-  explicit ResponseBuilder(flatbuffers::FlatBufferBuilder &_fbb)
+  explicit WorkerResponseBuilder(flatbuffers::FlatBufferBuilder &_fbb)
         : fbb_(_fbb) {
     start_ = fbb_.StartTable();
   }
-  ResponseBuilder &operator=(const ResponseBuilder &);
-  flatbuffers::Offset<Response> Finish() {
+  WorkerResponseBuilder &operator=(const WorkerResponseBuilder &);
+  flatbuffers::Offset<WorkerResponse> Finish() {
     const auto end = fbb_.EndTable(start_);
-    auto o = flatbuffers::Offset<Response>(end);
+    auto o = flatbuffers::Offset<WorkerResponse>(end);
     return o;
   }
 };
 
-inline flatbuffers::Offset<Response> CreateResponse(
+inline flatbuffers::Offset<WorkerResponse> CreateWorkerResponse(
     flatbuffers::FlatBufferBuilder &_fbb,
     flatbuffers::Offset<flatbuffers::Vector<uint8_t>> session = 0,
-    ResponseData responseData_type = ResponseData_NONE,
+    WorkerResponseData responseData_type = WorkerResponseData_NONE,
     flatbuffers::Offset<void> responseData = 0) {
-  ResponseBuilder builder_(_fbb);
+  WorkerResponseBuilder builder_(_fbb);
   builder_.add_responseData(responseData);
   builder_.add_session(session);
   builder_.add_responseData_type(responseData_type);
   return builder_.Finish();
 }
 
-inline flatbuffers::Offset<Response> CreateResponseDirect(
+inline flatbuffers::Offset<WorkerResponse> CreateWorkerResponseDirect(
     flatbuffers::FlatBufferBuilder &_fbb,
     const std::vector<uint8_t> *session = nullptr,
-    ResponseData responseData_type = ResponseData_NONE,
+    WorkerResponseData responseData_type = WorkerResponseData_NONE,
     flatbuffers::Offset<void> responseData = 0) {
-  return Dcdr::Interconnect::DcdrFlatBuffers::CreateResponse(
+  return Dcdr::Interconnect::DcdrFlatBuffers::CreateWorkerResponse(
       _fbb,
       session ? _fbb.CreateVector<uint8_t>(*session) : 0,
       responseData_type,
       responseData);
+}
+
+struct CommanderGetSurfaceInfoRequest FLATBUFFERS_FINAL_CLASS : private flatbuffers::Table {
+  bool Verify(flatbuffers::Verifier &verifier) const {
+    return VerifyTableStart(verifier) &&
+           verifier.EndTable();
+  }
+};
+
+struct CommanderGetSurfaceInfoRequestBuilder {
+  flatbuffers::FlatBufferBuilder &fbb_;
+  flatbuffers::uoffset_t start_;
+  explicit CommanderGetSurfaceInfoRequestBuilder(flatbuffers::FlatBufferBuilder &_fbb)
+        : fbb_(_fbb) {
+    start_ = fbb_.StartTable();
+  }
+  CommanderGetSurfaceInfoRequestBuilder &operator=(const CommanderGetSurfaceInfoRequestBuilder &);
+  flatbuffers::Offset<CommanderGetSurfaceInfoRequest> Finish() {
+    const auto end = fbb_.EndTable(start_);
+    auto o = flatbuffers::Offset<CommanderGetSurfaceInfoRequest>(end);
+    return o;
+  }
+};
+
+inline flatbuffers::Offset<CommanderGetSurfaceInfoRequest> CreateCommanderGetSurfaceInfoRequest(
+    flatbuffers::FlatBufferBuilder &_fbb) {
+  CommanderGetSurfaceInfoRequestBuilder builder_(_fbb);
+  return builder_.Finish();
+}
+
+struct CommanderGetSurfaceRequest FLATBUFFERS_FINAL_CLASS : private flatbuffers::Table {
+  bool Verify(flatbuffers::Verifier &verifier) const {
+    return VerifyTableStart(verifier) &&
+           verifier.EndTable();
+  }
+};
+
+struct CommanderGetSurfaceRequestBuilder {
+  flatbuffers::FlatBufferBuilder &fbb_;
+  flatbuffers::uoffset_t start_;
+  explicit CommanderGetSurfaceRequestBuilder(flatbuffers::FlatBufferBuilder &_fbb)
+        : fbb_(_fbb) {
+    start_ = fbb_.StartTable();
+  }
+  CommanderGetSurfaceRequestBuilder &operator=(const CommanderGetSurfaceRequestBuilder &);
+  flatbuffers::Offset<CommanderGetSurfaceRequest> Finish() {
+    const auto end = fbb_.EndTable(start_);
+    auto o = flatbuffers::Offset<CommanderGetSurfaceRequest>(end);
+    return o;
+  }
+};
+
+inline flatbuffers::Offset<CommanderGetSurfaceRequest> CreateCommanderGetSurfaceRequest(
+    flatbuffers::FlatBufferBuilder &_fbb) {
+  CommanderGetSurfaceRequestBuilder builder_(_fbb);
+  return builder_.Finish();
+}
+
+struct CommanderRequest FLATBUFFERS_FINAL_CLASS : private flatbuffers::Table {
+  enum {
+    VT_REQUESTDATA_TYPE = 4,
+    VT_REQUESTDATA = 6
+  };
+  CommanderRequestData requestData_type() const {
+    return static_cast<CommanderRequestData>(GetField<uint8_t>(VT_REQUESTDATA_TYPE, 0));
+  }
+  const void *requestData() const {
+    return GetPointer<const void *>(VT_REQUESTDATA);
+  }
+  template<typename T> const T *requestData_as() const;
+  const CommanderGetSurfaceInfoRequest *requestData_as_CommanderGetSurfaceInfoRequest() const {
+    return requestData_type() == CommanderRequestData_CommanderGetSurfaceInfoRequest ? static_cast<const CommanderGetSurfaceInfoRequest *>(requestData()) : nullptr;
+  }
+  const CommanderGetSurfaceRequest *requestData_as_CommanderGetSurfaceRequest() const {
+    return requestData_type() == CommanderRequestData_CommanderGetSurfaceRequest ? static_cast<const CommanderGetSurfaceRequest *>(requestData()) : nullptr;
+  }
+  bool Verify(flatbuffers::Verifier &verifier) const {
+    return VerifyTableStart(verifier) &&
+           VerifyField<uint8_t>(verifier, VT_REQUESTDATA_TYPE) &&
+           VerifyOffset(verifier, VT_REQUESTDATA) &&
+           VerifyCommanderRequestData(verifier, requestData(), requestData_type()) &&
+           verifier.EndTable();
+  }
+};
+
+template<> inline const CommanderGetSurfaceInfoRequest *CommanderRequest::requestData_as<CommanderGetSurfaceInfoRequest>() const {
+  return requestData_as_CommanderGetSurfaceInfoRequest();
+}
+
+template<> inline const CommanderGetSurfaceRequest *CommanderRequest::requestData_as<CommanderGetSurfaceRequest>() const {
+  return requestData_as_CommanderGetSurfaceRequest();
+}
+
+struct CommanderRequestBuilder {
+  flatbuffers::FlatBufferBuilder &fbb_;
+  flatbuffers::uoffset_t start_;
+  void add_requestData_type(CommanderRequestData requestData_type) {
+    fbb_.AddElement<uint8_t>(CommanderRequest::VT_REQUESTDATA_TYPE, static_cast<uint8_t>(requestData_type), 0);
+  }
+  void add_requestData(flatbuffers::Offset<void> requestData) {
+    fbb_.AddOffset(CommanderRequest::VT_REQUESTDATA, requestData);
+  }
+  explicit CommanderRequestBuilder(flatbuffers::FlatBufferBuilder &_fbb)
+        : fbb_(_fbb) {
+    start_ = fbb_.StartTable();
+  }
+  CommanderRequestBuilder &operator=(const CommanderRequestBuilder &);
+  flatbuffers::Offset<CommanderRequest> Finish() {
+    const auto end = fbb_.EndTable(start_);
+    auto o = flatbuffers::Offset<CommanderRequest>(end);
+    return o;
+  }
+};
+
+inline flatbuffers::Offset<CommanderRequest> CreateCommanderRequest(
+    flatbuffers::FlatBufferBuilder &_fbb,
+    CommanderRequestData requestData_type = CommanderRequestData_NONE,
+    flatbuffers::Offset<void> requestData = 0) {
+  CommanderRequestBuilder builder_(_fbb);
+  builder_.add_requestData(requestData);
+  builder_.add_requestData_type(requestData_type);
+  return builder_.Finish();
+}
+
+struct CommanderGetSurfaceInfoResponse FLATBUFFERS_FINAL_CLASS : private flatbuffers::Table {
+  enum {
+    VT_WIDTH = 4,
+    VT_HEIGHT = 6
+  };
+  uint32_t width() const {
+    return GetField<uint32_t>(VT_WIDTH, 0);
+  }
+  uint32_t height() const {
+    return GetField<uint32_t>(VT_HEIGHT, 0);
+  }
+  bool Verify(flatbuffers::Verifier &verifier) const {
+    return VerifyTableStart(verifier) &&
+           VerifyField<uint32_t>(verifier, VT_WIDTH) &&
+           VerifyField<uint32_t>(verifier, VT_HEIGHT) &&
+           verifier.EndTable();
+  }
+};
+
+struct CommanderGetSurfaceInfoResponseBuilder {
+  flatbuffers::FlatBufferBuilder &fbb_;
+  flatbuffers::uoffset_t start_;
+  void add_width(uint32_t width) {
+    fbb_.AddElement<uint32_t>(CommanderGetSurfaceInfoResponse::VT_WIDTH, width, 0);
+  }
+  void add_height(uint32_t height) {
+    fbb_.AddElement<uint32_t>(CommanderGetSurfaceInfoResponse::VT_HEIGHT, height, 0);
+  }
+  explicit CommanderGetSurfaceInfoResponseBuilder(flatbuffers::FlatBufferBuilder &_fbb)
+        : fbb_(_fbb) {
+    start_ = fbb_.StartTable();
+  }
+  CommanderGetSurfaceInfoResponseBuilder &operator=(const CommanderGetSurfaceInfoResponseBuilder &);
+  flatbuffers::Offset<CommanderGetSurfaceInfoResponse> Finish() {
+    const auto end = fbb_.EndTable(start_);
+    auto o = flatbuffers::Offset<CommanderGetSurfaceInfoResponse>(end);
+    return o;
+  }
+};
+
+inline flatbuffers::Offset<CommanderGetSurfaceInfoResponse> CreateCommanderGetSurfaceInfoResponse(
+    flatbuffers::FlatBufferBuilder &_fbb,
+    uint32_t width = 0,
+    uint32_t height = 0) {
+  CommanderGetSurfaceInfoResponseBuilder builder_(_fbb);
+  builder_.add_height(height);
+  builder_.add_width(width);
+  return builder_.Finish();
+}
+
+struct CommanderGetSurfaceResponse FLATBUFFERS_FINAL_CLASS : private flatbuffers::Table {
+  enum {
+    VT_FORMAT = 4,
+    VT_BUFFER = 6
+  };
+  SurfaceImageFormat format() const {
+    return static_cast<SurfaceImageFormat>(GetField<uint16_t>(VT_FORMAT, 0));
+  }
+  const flatbuffers::Vector<uint8_t> *buffer() const {
+    return GetPointer<const flatbuffers::Vector<uint8_t> *>(VT_BUFFER);
+  }
+  bool Verify(flatbuffers::Verifier &verifier) const {
+    return VerifyTableStart(verifier) &&
+           VerifyField<uint16_t>(verifier, VT_FORMAT) &&
+           VerifyOffset(verifier, VT_BUFFER) &&
+           verifier.Verify(buffer()) &&
+           verifier.EndTable();
+  }
+};
+
+struct CommanderGetSurfaceResponseBuilder {
+  flatbuffers::FlatBufferBuilder &fbb_;
+  flatbuffers::uoffset_t start_;
+  void add_format(SurfaceImageFormat format) {
+    fbb_.AddElement<uint16_t>(CommanderGetSurfaceResponse::VT_FORMAT, static_cast<uint16_t>(format), 0);
+  }
+  void add_buffer(flatbuffers::Offset<flatbuffers::Vector<uint8_t>> buffer) {
+    fbb_.AddOffset(CommanderGetSurfaceResponse::VT_BUFFER, buffer);
+  }
+  explicit CommanderGetSurfaceResponseBuilder(flatbuffers::FlatBufferBuilder &_fbb)
+        : fbb_(_fbb) {
+    start_ = fbb_.StartTable();
+  }
+  CommanderGetSurfaceResponseBuilder &operator=(const CommanderGetSurfaceResponseBuilder &);
+  flatbuffers::Offset<CommanderGetSurfaceResponse> Finish() {
+    const auto end = fbb_.EndTable(start_);
+    auto o = flatbuffers::Offset<CommanderGetSurfaceResponse>(end);
+    return o;
+  }
+};
+
+inline flatbuffers::Offset<CommanderGetSurfaceResponse> CreateCommanderGetSurfaceResponse(
+    flatbuffers::FlatBufferBuilder &_fbb,
+    SurfaceImageFormat format = SurfaceImageFormat_Png,
+    flatbuffers::Offset<flatbuffers::Vector<uint8_t>> buffer = 0) {
+  CommanderGetSurfaceResponseBuilder builder_(_fbb);
+  builder_.add_buffer(buffer);
+  builder_.add_format(format);
+  return builder_.Finish();
+}
+
+inline flatbuffers::Offset<CommanderGetSurfaceResponse> CreateCommanderGetSurfaceResponseDirect(
+    flatbuffers::FlatBufferBuilder &_fbb,
+    SurfaceImageFormat format = SurfaceImageFormat_Png,
+    const std::vector<uint8_t> *buffer = nullptr) {
+  return Dcdr::Interconnect::DcdrFlatBuffers::CreateCommanderGetSurfaceResponse(
+      _fbb,
+      format,
+      buffer ? _fbb.CreateVector<uint8_t>(*buffer) : 0);
+}
+
+struct CommanderResponse FLATBUFFERS_FINAL_CLASS : private flatbuffers::Table {
+  enum {
+    VT_RESPONSEDATA_TYPE = 4,
+    VT_RESPONSEDATA = 6
+  };
+  CommanderResponseData responseData_type() const {
+    return static_cast<CommanderResponseData>(GetField<uint8_t>(VT_RESPONSEDATA_TYPE, 0));
+  }
+  const void *responseData() const {
+    return GetPointer<const void *>(VT_RESPONSEDATA);
+  }
+  template<typename T> const T *responseData_as() const;
+  const CommanderGetSurfaceInfoResponse *responseData_as_CommanderGetSurfaceInfoResponse() const {
+    return responseData_type() == CommanderResponseData_CommanderGetSurfaceInfoResponse ? static_cast<const CommanderGetSurfaceInfoResponse *>(responseData()) : nullptr;
+  }
+  const CommanderGetSurfaceResponse *responseData_as_CommanderGetSurfaceResponse() const {
+    return responseData_type() == CommanderResponseData_CommanderGetSurfaceResponse ? static_cast<const CommanderGetSurfaceResponse *>(responseData()) : nullptr;
+  }
+  bool Verify(flatbuffers::Verifier &verifier) const {
+    return VerifyTableStart(verifier) &&
+           VerifyField<uint8_t>(verifier, VT_RESPONSEDATA_TYPE) &&
+           VerifyOffset(verifier, VT_RESPONSEDATA) &&
+           VerifyCommanderResponseData(verifier, responseData(), responseData_type()) &&
+           verifier.EndTable();
+  }
+};
+
+template<> inline const CommanderGetSurfaceInfoResponse *CommanderResponse::responseData_as<CommanderGetSurfaceInfoResponse>() const {
+  return responseData_as_CommanderGetSurfaceInfoResponse();
+}
+
+template<> inline const CommanderGetSurfaceResponse *CommanderResponse::responseData_as<CommanderGetSurfaceResponse>() const {
+  return responseData_as_CommanderGetSurfaceResponse();
+}
+
+struct CommanderResponseBuilder {
+  flatbuffers::FlatBufferBuilder &fbb_;
+  flatbuffers::uoffset_t start_;
+  void add_responseData_type(CommanderResponseData responseData_type) {
+    fbb_.AddElement<uint8_t>(CommanderResponse::VT_RESPONSEDATA_TYPE, static_cast<uint8_t>(responseData_type), 0);
+  }
+  void add_responseData(flatbuffers::Offset<void> responseData) {
+    fbb_.AddOffset(CommanderResponse::VT_RESPONSEDATA, responseData);
+  }
+  explicit CommanderResponseBuilder(flatbuffers::FlatBufferBuilder &_fbb)
+        : fbb_(_fbb) {
+    start_ = fbb_.StartTable();
+  }
+  CommanderResponseBuilder &operator=(const CommanderResponseBuilder &);
+  flatbuffers::Offset<CommanderResponse> Finish() {
+    const auto end = fbb_.EndTable(start_);
+    auto o = flatbuffers::Offset<CommanderResponse>(end);
+    return o;
+  }
+};
+
+inline flatbuffers::Offset<CommanderResponse> CreateCommanderResponse(
+    flatbuffers::FlatBufferBuilder &_fbb,
+    CommanderResponseData responseData_type = CommanderResponseData_NONE,
+    flatbuffers::Offset<void> responseData = 0) {
+  CommanderResponseBuilder builder_(_fbb);
+  builder_.add_responseData(responseData);
+  builder_.add_responseData_type(responseData_type);
+  return builder_.Finish();
+}
+
+struct Parcel FLATBUFFERS_FINAL_CLASS : private flatbuffers::Table {
+  enum {
+    VT_PARCELDATA_TYPE = 4,
+    VT_PARCELDATA = 6
+  };
+  ParcelData parcelData_type() const {
+    return static_cast<ParcelData>(GetField<uint8_t>(VT_PARCELDATA_TYPE, 0));
+  }
+  const void *parcelData() const {
+    return GetPointer<const void *>(VT_PARCELDATA);
+  }
+  template<typename T> const T *parcelData_as() const;
+  const WorkerRequest *parcelData_as_WorkerRequest() const {
+    return parcelData_type() == ParcelData_WorkerRequest ? static_cast<const WorkerRequest *>(parcelData()) : nullptr;
+  }
+  const WorkerResponse *parcelData_as_WorkerResponse() const {
+    return parcelData_type() == ParcelData_WorkerResponse ? static_cast<const WorkerResponse *>(parcelData()) : nullptr;
+  }
+  const CommanderRequest *parcelData_as_CommanderRequest() const {
+    return parcelData_type() == ParcelData_CommanderRequest ? static_cast<const CommanderRequest *>(parcelData()) : nullptr;
+  }
+  const CommanderResponse *parcelData_as_CommanderResponse() const {
+    return parcelData_type() == ParcelData_CommanderResponse ? static_cast<const CommanderResponse *>(parcelData()) : nullptr;
+  }
+  bool Verify(flatbuffers::Verifier &verifier) const {
+    return VerifyTableStart(verifier) &&
+           VerifyField<uint8_t>(verifier, VT_PARCELDATA_TYPE) &&
+           VerifyOffset(verifier, VT_PARCELDATA) &&
+           VerifyParcelData(verifier, parcelData(), parcelData_type()) &&
+           verifier.EndTable();
+  }
+};
+
+template<> inline const WorkerRequest *Parcel::parcelData_as<WorkerRequest>() const {
+  return parcelData_as_WorkerRequest();
+}
+
+template<> inline const WorkerResponse *Parcel::parcelData_as<WorkerResponse>() const {
+  return parcelData_as_WorkerResponse();
+}
+
+template<> inline const CommanderRequest *Parcel::parcelData_as<CommanderRequest>() const {
+  return parcelData_as_CommanderRequest();
+}
+
+template<> inline const CommanderResponse *Parcel::parcelData_as<CommanderResponse>() const {
+  return parcelData_as_CommanderResponse();
+}
+
+struct ParcelBuilder {
+  flatbuffers::FlatBufferBuilder &fbb_;
+  flatbuffers::uoffset_t start_;
+  void add_parcelData_type(ParcelData parcelData_type) {
+    fbb_.AddElement<uint8_t>(Parcel::VT_PARCELDATA_TYPE, static_cast<uint8_t>(parcelData_type), 0);
+  }
+  void add_parcelData(flatbuffers::Offset<void> parcelData) {
+    fbb_.AddOffset(Parcel::VT_PARCELDATA, parcelData);
+  }
+  explicit ParcelBuilder(flatbuffers::FlatBufferBuilder &_fbb)
+        : fbb_(_fbb) {
+    start_ = fbb_.StartTable();
+  }
+  ParcelBuilder &operator=(const ParcelBuilder &);
+  flatbuffers::Offset<Parcel> Finish() {
+    const auto end = fbb_.EndTable(start_);
+    auto o = flatbuffers::Offset<Parcel>(end);
+    return o;
+  }
+};
+
+inline flatbuffers::Offset<Parcel> CreateParcel(
+    flatbuffers::FlatBufferBuilder &_fbb,
+    ParcelData parcelData_type = ParcelData_NONE,
+    flatbuffers::Offset<void> parcelData = 0) {
+  ParcelBuilder builder_(_fbb);
+  builder_.add_parcelData(parcelData);
+  builder_.add_parcelData_type(parcelData_type);
+  return builder_.Finish();
 }
 
 inline bool VerifyWorkerRequestData(flatbuffers::Verifier &verifier, const void *obj, WorkerRequestData type) {
@@ -1284,28 +1861,28 @@ inline bool VerifyWorkerRequestData(flatbuffers::Verifier &verifier, const void 
     case WorkerRequestData_NONE: {
       return true;
     }
-    case WorkerRequestData_ConnectRequestData: {
-      auto ptr = reinterpret_cast<const ConnectRequestData *>(obj);
+    case WorkerRequestData_WorkerConnectRequest: {
+      auto ptr = reinterpret_cast<const WorkerConnectRequest *>(obj);
       return verifier.VerifyTable(ptr);
     }
-    case WorkerRequestData_DisconnectRequestData: {
-      auto ptr = reinterpret_cast<const DisconnectRequestData *>(obj);
+    case WorkerRequestData_WorkerDisconnectRequest: {
+      auto ptr = reinterpret_cast<const WorkerDisconnectRequest *>(obj);
       return verifier.VerifyTable(ptr);
     }
-    case WorkerRequestData_GetSceneInfoRequestData: {
-      auto ptr = reinterpret_cast<const GetSceneInfoRequestData *>(obj);
+    case WorkerRequestData_WorkerGetSceneInfoRequest: {
+      auto ptr = reinterpret_cast<const WorkerGetSceneInfoRequest *>(obj);
       return verifier.VerifyTable(ptr);
     }
-    case WorkerRequestData_VerifySceneRequestData: {
-      auto ptr = reinterpret_cast<const VerifySceneRequestData *>(obj);
+    case WorkerRequestData_WorkerVerifySceneRequest: {
+      auto ptr = reinterpret_cast<const WorkerVerifySceneRequest *>(obj);
       return verifier.VerifyTable(ptr);
     }
-    case WorkerRequestData_GetWorkScopeRequestData: {
-      auto ptr = reinterpret_cast<const GetWorkScopeRequestData *>(obj);
+    case WorkerRequestData_WorkerGetWorkScopeRequest: {
+      auto ptr = reinterpret_cast<const WorkerGetWorkScopeRequest *>(obj);
       return verifier.VerifyTable(ptr);
     }
-    case WorkerRequestData_PublishArtifactsRequestData: {
-      auto ptr = reinterpret_cast<const PublishArtifactsRequestData *>(obj);
+    case WorkerRequestData_WorkerPublishArtifactsRequest: {
+      auto ptr = reinterpret_cast<const WorkerPublishArtifactsRequest *>(obj);
       return verifier.VerifyTable(ptr);
     }
     default: return false;
@@ -1323,48 +1900,140 @@ inline bool VerifyWorkerRequestDataVector(flatbuffers::Verifier &verifier, const
   return true;
 }
 
-inline bool VerifyResponseData(flatbuffers::Verifier &verifier, const void *obj, ResponseData type) {
+inline bool VerifyWorkerResponseData(flatbuffers::Verifier &verifier, const void *obj, WorkerResponseData type) {
   switch (type) {
-    case ResponseData_NONE: {
+    case WorkerResponseData_NONE: {
       return true;
     }
-    case ResponseData_ErrorResponseData: {
-      auto ptr = reinterpret_cast<const ErrorResponseData *>(obj);
+    case WorkerResponseData_WorkerErrorResponse: {
+      auto ptr = reinterpret_cast<const WorkerErrorResponse *>(obj);
       return verifier.VerifyTable(ptr);
     }
-    case ResponseData_ConnectResponseData: {
-      auto ptr = reinterpret_cast<const ConnectResponseData *>(obj);
+    case WorkerResponseData_WorkerConnectResponse: {
+      auto ptr = reinterpret_cast<const WorkerConnectResponse *>(obj);
       return verifier.VerifyTable(ptr);
     }
-    case ResponseData_DisconnectResponseData: {
-      auto ptr = reinterpret_cast<const DisconnectResponseData *>(obj);
+    case WorkerResponseData_WorkerDisconnectResponse: {
+      auto ptr = reinterpret_cast<const WorkerDisconnectResponse *>(obj);
       return verifier.VerifyTable(ptr);
     }
-    case ResponseData_GetSceneInfoResponseData: {
-      auto ptr = reinterpret_cast<const GetSceneInfoResponseData *>(obj);
+    case WorkerResponseData_WorkerGetSceneInfoResponse: {
+      auto ptr = reinterpret_cast<const WorkerGetSceneInfoResponse *>(obj);
       return verifier.VerifyTable(ptr);
     }
-    case ResponseData_VerifySceneResponseData: {
-      auto ptr = reinterpret_cast<const VerifySceneResponseData *>(obj);
+    case WorkerResponseData_WorkerVerifySceneResponse: {
+      auto ptr = reinterpret_cast<const WorkerVerifySceneResponse *>(obj);
       return verifier.VerifyTable(ptr);
     }
-    case ResponseData_GetWorkScopeResponseData: {
-      auto ptr = reinterpret_cast<const GetWorkScopeResponseData *>(obj);
+    case WorkerResponseData_WorkerGetWorkScopeResponse: {
+      auto ptr = reinterpret_cast<const WorkerGetWorkScopeResponse *>(obj);
       return verifier.VerifyTable(ptr);
     }
-    case ResponseData_PublishArtifactsResponseData: {
-      auto ptr = reinterpret_cast<const PublishArtifactsResponseData *>(obj);
+    case WorkerResponseData_WorkerPublishArtifactsResponse: {
+      auto ptr = reinterpret_cast<const WorkerPublishArtifactsResponse *>(obj);
       return verifier.VerifyTable(ptr);
     }
     default: return false;
   }
 }
 
-inline bool VerifyResponseDataVector(flatbuffers::Verifier &verifier, const flatbuffers::Vector<flatbuffers::Offset<void>> *values, const flatbuffers::Vector<uint8_t> *types) {
+inline bool VerifyWorkerResponseDataVector(flatbuffers::Verifier &verifier, const flatbuffers::Vector<flatbuffers::Offset<void>> *values, const flatbuffers::Vector<uint8_t> *types) {
   if (values->size() != types->size()) return false;
   for (flatbuffers::uoffset_t i = 0; i < values->size(); ++i) {
-    if (!VerifyResponseData(
-        verifier,  values->Get(i), types->GetEnum<ResponseData>(i))) {
+    if (!VerifyWorkerResponseData(
+        verifier,  values->Get(i), types->GetEnum<WorkerResponseData>(i))) {
+      return false;
+    }
+  }
+  return true;
+}
+
+inline bool VerifyCommanderRequestData(flatbuffers::Verifier &verifier, const void *obj, CommanderRequestData type) {
+  switch (type) {
+    case CommanderRequestData_NONE: {
+      return true;
+    }
+    case CommanderRequestData_CommanderGetSurfaceInfoRequest: {
+      auto ptr = reinterpret_cast<const CommanderGetSurfaceInfoRequest *>(obj);
+      return verifier.VerifyTable(ptr);
+    }
+    case CommanderRequestData_CommanderGetSurfaceRequest: {
+      auto ptr = reinterpret_cast<const CommanderGetSurfaceRequest *>(obj);
+      return verifier.VerifyTable(ptr);
+    }
+    default: return false;
+  }
+}
+
+inline bool VerifyCommanderRequestDataVector(flatbuffers::Verifier &verifier, const flatbuffers::Vector<flatbuffers::Offset<void>> *values, const flatbuffers::Vector<uint8_t> *types) {
+  if (values->size() != types->size()) return false;
+  for (flatbuffers::uoffset_t i = 0; i < values->size(); ++i) {
+    if (!VerifyCommanderRequestData(
+        verifier,  values->Get(i), types->GetEnum<CommanderRequestData>(i))) {
+      return false;
+    }
+  }
+  return true;
+}
+
+inline bool VerifyCommanderResponseData(flatbuffers::Verifier &verifier, const void *obj, CommanderResponseData type) {
+  switch (type) {
+    case CommanderResponseData_NONE: {
+      return true;
+    }
+    case CommanderResponseData_CommanderGetSurfaceInfoResponse: {
+      auto ptr = reinterpret_cast<const CommanderGetSurfaceInfoResponse *>(obj);
+      return verifier.VerifyTable(ptr);
+    }
+    case CommanderResponseData_CommanderGetSurfaceResponse: {
+      auto ptr = reinterpret_cast<const CommanderGetSurfaceResponse *>(obj);
+      return verifier.VerifyTable(ptr);
+    }
+    default: return false;
+  }
+}
+
+inline bool VerifyCommanderResponseDataVector(flatbuffers::Verifier &verifier, const flatbuffers::Vector<flatbuffers::Offset<void>> *values, const flatbuffers::Vector<uint8_t> *types) {
+  if (values->size() != types->size()) return false;
+  for (flatbuffers::uoffset_t i = 0; i < values->size(); ++i) {
+    if (!VerifyCommanderResponseData(
+        verifier,  values->Get(i), types->GetEnum<CommanderResponseData>(i))) {
+      return false;
+    }
+  }
+  return true;
+}
+
+inline bool VerifyParcelData(flatbuffers::Verifier &verifier, const void *obj, ParcelData type) {
+  switch (type) {
+    case ParcelData_NONE: {
+      return true;
+    }
+    case ParcelData_WorkerRequest: {
+      auto ptr = reinterpret_cast<const WorkerRequest *>(obj);
+      return verifier.VerifyTable(ptr);
+    }
+    case ParcelData_WorkerResponse: {
+      auto ptr = reinterpret_cast<const WorkerResponse *>(obj);
+      return verifier.VerifyTable(ptr);
+    }
+    case ParcelData_CommanderRequest: {
+      auto ptr = reinterpret_cast<const CommanderRequest *>(obj);
+      return verifier.VerifyTable(ptr);
+    }
+    case ParcelData_CommanderResponse: {
+      auto ptr = reinterpret_cast<const CommanderResponse *>(obj);
+      return verifier.VerifyTable(ptr);
+    }
+    default: return false;
+  }
+}
+
+inline bool VerifyParcelDataVector(flatbuffers::Verifier &verifier, const flatbuffers::Vector<flatbuffers::Offset<void>> *values, const flatbuffers::Vector<uint8_t> *types) {
+  if (values->size() != types->size()) return false;
+  for (flatbuffers::uoffset_t i = 0; i < values->size(); ++i) {
+    if (!VerifyParcelData(
+        verifier,  values->Get(i), types->GetEnum<ParcelData>(i))) {
       return false;
     }
   }

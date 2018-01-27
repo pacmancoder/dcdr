@@ -1,8 +1,5 @@
 #include <dcdr/renderer/Chunk.h>
 
-#include <algorithm>
-
-
 using namespace Dcdr;
 using namespace Dcdr::Renderer;
 
