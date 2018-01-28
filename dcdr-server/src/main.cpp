@@ -11,7 +11,7 @@ using namespace Dcdr::Logging;
 using namespace Dcdr::Server;
 using namespace Dcdr::Interconnect;
 
-int main(int argc, char* argv[])
+int main(/* int argc, char* argv[] */)
 {
 
     Logger::get_instance().add_log_writer(std::unique_ptr<ILogWriter>(new StdoutLogWriter()));

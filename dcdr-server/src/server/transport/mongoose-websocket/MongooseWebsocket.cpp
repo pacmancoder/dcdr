@@ -92,7 +92,8 @@ namespace
             case WebsocketEvent::Control:
             {
                 auto controlMessage = reinterpret_cast<websocket_message*>(data);
-                if (controlMessage->flags & WEBSOCKET_OP_PING)
+
+                if (controlMessage->flags == WEBSOCKET_OP_PING)
                 {
                     log_info(std::string("[Server][MongooseWebsocket] Ping  from ")
                                      .append(mongoose_get_connection_address(connection))
@@ -135,6 +136,10 @@ namespace
         server->workerThread_ = std::thread();
         server->serverInterrupted_ = false;
 
+        server->core_ = core;
+        server->serizlizer_ = serizlizer;
+        server->deserizlizer_ = deserizlizer;
+
         mg_mgr_init(&server->mongoose_manager_, server.get());
 
         auto connection = mg_bind(
@@ -155,13 +160,19 @@ namespace
 
 void MongooseWebsocket::MongooseWebsocketImpl::process_frame(mg_connection* connection, websocket_message* message)
 {
+    if (!(message->flags & WEBSOCKET_OP_BINARY))
+    {
+        log_warning("[Server][Mongoose] Wrong WebSocket frame type");
+        return;
+    }
+
     auto requestParcel = deserizlizer_->deserialize(std::vector<uint8_t>(
-            static_cast<uint8_t*>(message->data),
-            static_cast<uint8_t*>(message->data + message->size)));
+            static_cast<const uint8_t*>(message->data),
+            static_cast<const uint8_t*>(message->data + message->size)));
 
     if (requestParcel == nullptr)
     {
-        log_error("[Server][Mongoose] Can't deserialize message");
+        log_error("[Server][Mongoose] Can't deserialize - parcel not supported");
         return;
     }
 

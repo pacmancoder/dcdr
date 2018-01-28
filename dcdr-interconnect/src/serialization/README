@@ -1,0 +1,2 @@
+This folder should contain FlatBuffers.h file.
+It can be generated with flatc using gen.sh script in res/flatbuffers_schema folder

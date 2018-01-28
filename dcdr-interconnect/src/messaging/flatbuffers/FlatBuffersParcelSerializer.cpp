@@ -1,5 +1,6 @@
 #include <dcdr/messaging/flatbuffers/FlatBuffersParcelSerializer.h>
 
+#include <dcdr/logging/Logger.h>
 #include <dcdr/messaging/worker/WorkerConnectRequest.h>
 #include <dcdr/messaging/commander/CommanderGetSurfaceInfoResponse.h>
 #include <dcdr/messaging/commander/CommanderGetSurfaceInfoRequest.h>
@@ -11,6 +12,7 @@
 #include <vector>
 #include <iostream>
 
+using namespace Dcdr::Logging;
 using namespace Dcdr::Interconnect;
 
 namespace
@@ -53,10 +55,11 @@ IParcel::SerializedParcel FlatBuffersParcelSerializer::serialize(const WorkerCon
     requestBuilder.add_requestData_type(DcdrFlatBuffers::WorkerRequestData_WorkerConnectRequest);
     requestBuilder.add_requestData(requestDataFlatBuffer.Union());
 
+    log_debug("[Interconnect][FlatBuffers] WorkerConnectRequest parcel was serialized");
     return flatbuffer_to_serialized_parcel(flatBuffersBuilder, requestBuilder.Finish());
 }
 
-IParcel::SerializedParcel FlatBuffersParcelSerializer::serialize(const CommanderGetSurfaceInfoRequest& parcel)
+IParcel::SerializedParcel FlatBuffersParcelSerializer::serialize(const CommanderGetSurfaceInfoRequest&)
 {
     flatbuffers::FlatBufferBuilder flatBuffersBuilder(DEFAULT_FLATBUFFER_BUILDER_SIZE);
 
@@ -67,10 +70,11 @@ IParcel::SerializedParcel FlatBuffersParcelSerializer::serialize(const Commander
     requestBuilder.add_requestData_type(DcdrFlatBuffers::CommanderRequestData_CommanderGetSurfaceInfoRequest);
     requestBuilder.add_requestData(requestDataFlatBuffer.Union());
 
+    log_debug("[Interconnect][FlatBuffers] CommanderGetSurfaceInfoRequest parcel was serialized");
     return flatbuffer_to_serialized_parcel(flatBuffersBuilder, requestBuilder.Finish());
 }
 
-IParcel::SerializedParcel FlatBuffersParcelSerializer::serialize(const CommanderGetSurfaceRequest& parcel)
+IParcel::SerializedParcel FlatBuffersParcelSerializer::serialize(const CommanderGetSurfaceRequest&)
 {
     flatbuffers::FlatBufferBuilder flatBuffersBuilder(DEFAULT_FLATBUFFER_BUILDER_SIZE);
 
@@ -81,6 +85,7 @@ IParcel::SerializedParcel FlatBuffersParcelSerializer::serialize(const Commander
     requestBuilder.add_requestData_type(DcdrFlatBuffers::CommanderRequestData_CommanderGetSurfaceRequest);
     requestBuilder.add_requestData(requestDataFlatBuffer.Union());
 
+    log_debug("[Interconnect][FlatBuffers] CommanderGetSurfaceRequest parcel was serialized");
     return flatbuffer_to_serialized_parcel(flatBuffersBuilder, requestBuilder.Finish());
 }
 
@@ -97,6 +102,7 @@ IParcel::SerializedParcel FlatBuffersParcelSerializer::serialize(const Commander
     responseBuilder.add_responseData_type(DcdrFlatBuffers::CommanderResponseData_CommanderGetSurfaceInfoResponse);
     responseBuilder.add_responseData(responseDataFlatBuffer.Union());
 
+    log_debug("[Interconnect][FlatBuffers] CommanderGetSurfaceInfoResponse parcel was serialized");
     return flatbuffer_to_serialized_parcel(flatBuffersBuilder, responseBuilder.Finish());
 }
 
@@ -115,5 +121,6 @@ IParcel::SerializedParcel FlatBuffersParcelSerializer::serialize(const Commander
     responseBuilder.add_responseData_type(DcdrFlatBuffers::CommanderResponseData_CommanderGetSurfaceResponse);
     responseBuilder.add_responseData(responseDataFlatBuffer.Union());
 
+    log_debug("[Interconnect][FlatBuffers] CommanderGetSurfaceResponse parcel was serialized");
     return flatbuffer_to_serialized_parcel(flatBuffersBuilder, responseBuilder.Finish());
 }

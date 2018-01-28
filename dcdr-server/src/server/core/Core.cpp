@@ -1,7 +1,10 @@
 #include <dcdr/server/core/Core.h>
 
 #include <iostream>
+#include <fstream>
+#include <iterator>
 
+#include <dcdr/logging/Logger.h>
 #include <dcdr/messaging/commander/ACommanderRequestParcelDispatcher.h>
 #include <dcdr/messaging/commander/CommanderGetSurfaceInfoRequest.h>
 #include <dcdr/messaging/commander/CommanderGetSurfaceInfoResponse.h>
@@ -10,6 +13,7 @@
 
 #include <future>
 
+using namespace Dcdr::Logging;
 using namespace Dcdr::Server;
 using namespace Dcdr::Interconnect;
 
@@ -25,7 +29,11 @@ namespace
 
 class Core::CoreCommanderRequestDispatcher : public ACommanderRequestParcelDispatcher
 {
-    IParcel::ParcelHandle dispatch(const CommanderGetSurfaceInfoRequest& parcel) override
+public:
+    CoreCommanderRequestDispatcher() :
+            ACommanderRequestParcelDispatcher() {}
+
+    IParcel::ParcelHandle dispatch(const CommanderGetSurfaceInfoRequest&) override
     {
         auto response = std::make_unique<CommanderGetSurfaceInfoResponse>();
         response->set_width(1920);
@@ -34,19 +42,24 @@ class Core::CoreCommanderRequestDispatcher : public ACommanderRequestParcelDispa
         return make_parcel_handle(std::move(response));
     }
 
-    IParcel::ParcelHandle dispatch(const CommanderGetSurfaceRequest& parcel) override
+    IParcel::ParcelHandle dispatch(const CommanderGetSurfaceRequest&) override
     {
         auto response = std::make_unique<CommanderGetSurfaceResponse>();
 
+        std::ifstream imageStream("../../res/images/test_image.jpg", std::ios::binary);
+        CommanderGetSurfaceResponse::ImageBuffer buffer((std::istreambuf_iterator<char>(imageStream)),
+                                                        std::istreambuf_iterator<char>());
         response->set_image(
                 CommanderGetSurfaceResponse::ImageFormat::Png,
-                CommanderGetSurfaceResponse::ImageBuffer{1, 6, 1, 3});
+                std::move(buffer));
 
         return make_parcel_handle(std::move(response));
     }
 };
 
-Core::Core() : commanderRequestDispatcher_() {}
+Core::Core() :
+        AParcelDispatcher(),
+        commanderRequestDispatcher_(new Core::CoreCommanderRequestDispatcher()) {}
 
 IParcel::ParcelHandle Core::dispatch(const ACommanderRequestParcel& parcel)
 {

@@ -1,0 +1,36 @@
+
+.TopContainer
+{
+    height: 480px;
+}
+
+.DefaultContainer
+{
+    border-radius: 25px;
+    padding: 30px;
+    box-sizing: border-box;
+    margin: 0px; 
+
+}
+
+#Image
+{
+}
+
+.ImageContainer
+{
+    vertical-align: top;
+    display: inline-block;
+    background-color: aliceblue;
+    float: left;
+    width: 75%;
+}
+.ImageInfoContainer
+{
+    vertical-align: top;        
+    display: inline-block;
+    background-color: antiquewhite;
+    width: 25%;
+    float: right;
+    height: 100%;
+}
