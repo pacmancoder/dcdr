@@ -145,7 +145,7 @@ namespace
     };
 }
 
-IParcel::ParcelPtr FlatBuffersParcelDeserializer::deserialize(IParcel::SerializedParcel& serializedParcel)
+IParcel::ParcelPtr FlatBuffersParcelDeserializer::deserialize(IParcel::SerializedParcel serializedParcel)
 {
     auto requestFlatBuffer = flatbuffers::GetRoot<DcdrFlatBuffers::Parcel>(serializedParcel.data());
 

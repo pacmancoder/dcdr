@@ -24,7 +24,7 @@ namespace Dcdr::Interconnect
         const ImageBuffer& get_image_buffer() const;
 
     public:
-        SerializedParcel serialize(AParcelSerializer& serializer) override;
+        SerializedParcel serialize(AParcelSerializer& serializer) const override;
 
     private:
         ImageFormat imageFormat_;

@@ -17,7 +17,7 @@ namespace Dcdr::Interconnect
         void set_token(const Token& token);
         const Token& get_token() const;
 
-        SerializedParcel serialize(AParcelSerializer& dispatcher) override;
+        SerializedParcel serialize(AParcelSerializer& dispatcher) const override;
 
     private:
         Token token_;

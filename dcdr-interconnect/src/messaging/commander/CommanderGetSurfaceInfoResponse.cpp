@@ -10,7 +10,7 @@ uint32_t CommanderGetSurfaceInfoResponse::get_width() const { return width_; }
 uint32_t CommanderGetSurfaceInfoResponse::get_height() const { return height_; }
 
 
-IParcel::SerializedParcel CommanderGetSurfaceInfoResponse::serialize(AParcelSerializer& serializer)
+IParcel::SerializedParcel CommanderGetSurfaceInfoResponse::serialize(AParcelSerializer& serializer) const
 {
     return serializer.serialize(*this);
 }

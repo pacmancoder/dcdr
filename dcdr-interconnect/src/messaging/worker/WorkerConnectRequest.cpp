@@ -12,7 +12,7 @@ WorkerConnectRequest::WorkerConnectRequest() :
     std::fill(token_.begin(), token_.end(), 0);
 }
 
-IParcel::SerializedParcel WorkerConnectRequest::serialize(AParcelSerializer& dispatcher)
+IParcel::SerializedParcel WorkerConnectRequest::serialize(AParcelSerializer& dispatcher) const
 {
     return dispatcher.serialize(*this);
 }

@@ -24,7 +24,7 @@ const CommanderGetSurfaceResponse::ImageBuffer& CommanderGetSurfaceResponse::get
     return imageBuffer_;
 }
 
-IParcel::SerializedParcel CommanderGetSurfaceResponse::serialize(AParcelSerializer& serializer)
+IParcel::SerializedParcel CommanderGetSurfaceResponse::serialize(AParcelSerializer& serializer) const
 {
     return serializer.serialize(*this);
 }

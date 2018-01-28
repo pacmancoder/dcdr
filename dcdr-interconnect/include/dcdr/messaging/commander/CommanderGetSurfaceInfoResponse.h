@@ -16,7 +16,7 @@ namespace Dcdr::Interconnect
         uint32_t get_height() const;
 
     public:
-        SerializedParcel serialize(AParcelSerializer& serializer) override;
+        SerializedParcel serialize(AParcelSerializer& serializer) const override;
 
     private:
         uint32_t width_;

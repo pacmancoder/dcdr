@@ -22,7 +22,7 @@ namespace Dcdr::Interconnect
         // === Worker parcels ===
         virtual IParcel::SerializedParcel serialize(const WorkerConnectRequest& parcel);
 
-        // === Commander parcels ===
+        // === Core parcels ===
         virtual IParcel::SerializedParcel serialize(const CommanderGetSurfaceRequest& parcel);
         virtual IParcel::SerializedParcel serialize(const CommanderGetSurfaceInfoRequest& parcel);
         virtual IParcel::SerializedParcel serialize(const CommanderGetSurfaceInfoResponse& parcel);
@@ -31,7 +31,7 @@ namespace Dcdr::Interconnect
         virtual ~AParcelSerializer() = default;
 
     protected:
-        IParcel::SerializedParcel serialize_not_supported();
+        virtual IParcel::SerializedParcel serialize_not_supported();
 
     };
 }

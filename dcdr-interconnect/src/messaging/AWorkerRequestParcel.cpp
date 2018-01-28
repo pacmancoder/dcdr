@@ -1,11 +1,13 @@
 #include <dcdr/messaging/worker/AWorkerRequestParcel.h>
 
 #include <algorithm>
+
 #include <dcdr/messaging/AParcelDispatcher.h>
+#include <dcdr/messaging/AParcelSerializer.h>
 
 using namespace Dcdr::Interconnect;
 
-IParcel::ParcelHandle AWorkerRequestParcel::dispatch(AParcelDispatcher& dispatcher)
+IParcel::ParcelHandle AWorkerRequestParcel::dispatch(AParcelDispatcher& dispatcher) const
 {
     return dispatcher.dispatch(*this);
 }

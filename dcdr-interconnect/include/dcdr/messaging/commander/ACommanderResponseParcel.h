@@ -11,7 +11,7 @@ namespace Dcdr::Interconnect
         using CommanderResponseParcelPtr = std::unique_ptr<ACommanderResponseParcel>;
 
     public:
-        ParcelHandle dispatch(AParcelDispatcher& dispatcher) override;
+        ParcelHandle dispatch(AParcelDispatcher& dispatcher) const override;
 
     };
 }

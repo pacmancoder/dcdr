@@ -10,7 +10,7 @@ namespace Dcdr::Interconnect
     class FlatBuffersParcelDeserializer : public AParcelDeserializer
     {
     public:
-        IParcel::ParcelPtr deserialize(IParcel::SerializedParcel& serializedParcel) override;
+        IParcel::ParcelPtr deserialize(IParcel::SerializedParcel serializedParcel) override;
 
     };
 }
