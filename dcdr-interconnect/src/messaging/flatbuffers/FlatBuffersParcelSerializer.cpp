@@ -7,7 +7,7 @@
 #include <dcdr/messaging/commander/CommanderGetSurfaceResponse.h>
 #include <dcdr/messaging/commander/CommanderGetSurfaceRequest.h>
 
-#include <serialization/FlatBuffers.h>
+#include <flatbuffers-generated/DcdrFlatBuffers.h>
 
 #include <vector>
 #include <iostream>

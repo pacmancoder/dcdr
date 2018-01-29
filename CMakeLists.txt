@@ -33,6 +33,7 @@ add_subdirectory(dcdr-pathtracer)
 add_subdirectory(dcdr-worker)
 add_subdirectory(dcdr-interconnect)
 add_subdirectory(dcdr-server)
+add_subdirectory(dcdr-webui)
 
 # Tests
 add_subdirectory(tests)

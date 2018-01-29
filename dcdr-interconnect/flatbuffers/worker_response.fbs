@@ -1,0 +1,44 @@
+namespace DcdrFlatBuffers;
+
+table WorkerErrorResponse
+{
+    cause: string;
+}
+
+table WorkerConnectResponse
+{
+    connectionId: [ubyte];
+}
+
+table WorkerDisconnectResponse {}
+
+table WorkerGetSceneInfoResponse
+{
+    sceneId: string;
+}
+
+table WorkerVerifySceneResponse {}
+
+table WorkerGetWorkScopeResponse
+{
+    tasks: [ChunkTask];
+}
+
+table WorkerPublishArtifactsResponse {}
+
+union WorkerResponseData
+{
+    WorkerErrorResponse,
+    WorkerConnectResponse,
+    WorkerDisconnectResponse,
+    WorkerGetSceneInfoResponse,
+    WorkerVerifySceneResponse,
+    WorkerGetWorkScopeResponse,
+    WorkerPublishArtifactsResponse,
+}
+
+table WorkerResponse
+{
+    session: [ubyte];
+    responseData: WorkerResponseData;
+}

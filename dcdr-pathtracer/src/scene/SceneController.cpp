@@ -57,7 +57,7 @@ SceneObjectPtr SceneController::SceneController::intersect(const Ray& ray, Inter
     return nullptr;
 }
 
-Utils::ConstIteratorPtr<ISceneObject> SceneController::SceneController::get_objects_iterator(const Ray& ray) const
+Utils::ConstIteratorPtr<ISceneObject> SceneController::SceneController::get_objects_iterator(const Ray&) const
 {
     return ConstIteratorPtr<ISceneObject>(new SceneObjectsIterator(*this));
 }

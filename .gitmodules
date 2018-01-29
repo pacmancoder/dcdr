@@ -10,3 +10,6 @@
 [submodule "libs/microtar/microtar-git"]
 	path = libs/microtar/microtar-git
 	url = https://github.com/rxi/microtar.git
+[submodule "libs/lodepng/lodepng-git"]
+	path = libs/lodepng/lodepng-git
+	url = https://github.com/lvandeve/lodepng.git

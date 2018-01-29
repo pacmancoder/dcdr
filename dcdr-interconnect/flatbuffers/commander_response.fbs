@@ -1,0 +1,31 @@
+namespace DcdrFlatBuffers;
+
+table CommanderGetSurfaceInfoResponse
+{
+    width: uint32;
+    height: uint32;
+}
+
+enum SurfaceImageFormat : uint16
+{
+    Png,
+    Unknown,
+}
+
+table CommanderGetSurfaceResponse
+{
+    format: SurfaceImageFormat;
+    buffer: [ubyte];
+}
+
+
+union CommanderResponseData
+{
+    CommanderGetSurfaceInfoResponse,
+    CommanderGetSurfaceResponse,
+}
+
+table CommanderResponse
+{
+    responseData : CommanderResponseData;
+}

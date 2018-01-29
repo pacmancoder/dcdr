@@ -1,7 +1,7 @@
 #include <dcdr/messaging/flatbuffers/FlatBuffersParcelDeserializer.h>
 
 #include <algorithm>
-#include <serialization/FlatBuffers.h>
+#include <flatbuffers-generated/DcdrFlatBuffers.h>
 #include <dcdr/logging/Logger.h>
 #include <dcdr/messaging/InterconnectExceptions.h>
 #include <dcdr/messaging/worker/AWorkerRequestParcel.h>

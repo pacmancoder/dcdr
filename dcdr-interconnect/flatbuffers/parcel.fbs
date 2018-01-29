@@ -1,0 +1,14 @@
+namespace DcdrFlatBuffers;
+
+union ParcelData
+{
+    WorkerRequest,
+    WorkerResponse,
+    CommanderRequest,
+    CommanderResponse,
+}
+
+table Parcel
+{
+    parcelData: ParcelData;
+}

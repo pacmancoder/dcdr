@@ -1,0 +1,41 @@
+namespace DcdrFlatBuffers;
+
+table WorkerConnectRequest
+{
+    token: [ubyte];
+}
+
+table WorkerDisconnectRequest {}
+
+table WorkerGetSceneInfoRequest {}
+
+table WorkerVerifySceneRequest
+{
+    sceneMD5: string;
+}
+
+table WorkerGetWorkScopeRequest 
+{
+    threadsAvailable: ushort;
+}
+
+table WorkerPublishArtifactsRequest
+{
+    chunks: [Chunk];
+}
+
+union WorkerRequestData
+{
+    WorkerConnectRequest,
+    WorkerDisconnectRequest,
+    WorkerGetSceneInfoRequest,
+    WorkerVerifySceneRequest,
+    WorkerGetWorkScopeRequest,
+    WorkerPublishArtifactsRequest,
+}
+
+table WorkerRequest
+{
+    session: [ubyte];
+    requestData: WorkerRequestData;
+}

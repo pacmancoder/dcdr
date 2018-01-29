@@ -1,0 +1,15 @@
+namespace DcdrFlatBuffers;
+
+table CommanderGetSurfaceInfoRequest {}
+table CommanderGetSurfaceRequest {}
+
+union CommanderRequestData
+{
+    CommanderGetSurfaceInfoRequest,
+    CommanderGetSurfaceRequest,
+}
+
+table CommanderRequest
+{
+    requestData: CommanderRequestData;
+}
