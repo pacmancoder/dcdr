@@ -2,22 +2,22 @@ init_socket();
 
 var socket;
 
-//Dcdr.Interconnect.DcdrFlatBuffers.CommanderRequestData.CommanderGetSurfaceInfoRequest
+//DcdrFlatBuffers.CommanderRequestData.CommanderGetSurfaceInfoRequest
 function send_commander_request(requestBuilder)
 {
     var builder = new flatbuffers.Builder(64);
 
     var request = requestBuilder(builder);
 
-    Dcdr.Interconnect.DcdrFlatBuffers.CommanderRequest.startCommanderRequest(builder);
-    Dcdr.Interconnect.DcdrFlatBuffers.CommanderRequest.addRequestDataType(builder, request.type)
-    Dcdr.Interconnect.DcdrFlatBuffers.CommanderRequest.addRequestData(builder, request.value);    
-    var commanderRequest = Dcdr.Interconnect.DcdrFlatBuffers.CommanderRequest.endCommanderRequest(builder);
+    DcdrFlatBuffers.CommanderRequest.startCommanderRequest(builder);
+    DcdrFlatBuffers.CommanderRequest.addRequestDataType(builder, request.type)
+    DcdrFlatBuffers.CommanderRequest.addRequestData(builder, request.value);    
+    var commanderRequest = DcdrFlatBuffers.CommanderRequest.endCommanderRequest(builder);
 
-    Dcdr.Interconnect.DcdrFlatBuffers.Parcel.startParcel(builder);
-    Dcdr.Interconnect.DcdrFlatBuffers.Parcel.addParcelDataType(builder, Dcdr.Interconnect.DcdrFlatBuffers.ParcelData.CommanderRequest)
-    Dcdr.Interconnect.DcdrFlatBuffers.Parcel.addParcelData(builder, commanderRequest);    
-    var parcel = Dcdr.Interconnect.DcdrFlatBuffers.Parcel.endParcel(builder);
+    DcdrFlatBuffers.Parcel.startParcel(builder);
+    DcdrFlatBuffers.Parcel.addParcelDataType(builder, DcdrFlatBuffers.ParcelData.CommanderRequest)
+    DcdrFlatBuffers.Parcel.addParcelData(builder, commanderRequest);    
+    var parcel = DcdrFlatBuffers.Parcel.endParcel(builder);
 
     builder.finish(parcel);
 
@@ -31,14 +31,14 @@ function send_commander_request(requestBuilder)
 function send_image_info_request()
 {
     send_commander_request(function(flatBufferBuilder) {
-        Dcdr.Interconnect.DcdrFlatBuffers.CommanderGetSurfaceInfoRequest
+        DcdrFlatBuffers.CommanderGetSurfaceInfoRequest
             .startCommanderGetSurfaceInfoRequest(flatBufferBuilder);
-        var getSurfaceInfoRequest = Dcdr.Interconnect.DcdrFlatBuffers.CommanderGetSurfaceInfoRequest
+        var getSurfaceInfoRequest = DcdrFlatBuffers.CommanderGetSurfaceInfoRequest
             .endCommanderGetSurfaceInfoRequest(flatBufferBuilder);
 
         return {
             value: getSurfaceInfoRequest,
-            type: Dcdr.Interconnect.DcdrFlatBuffers.CommanderRequestData.CommanderGetSurfaceInfoRequest,
+            type: DcdrFlatBuffers.CommanderRequestData.CommanderGetSurfaceInfoRequest,
         }
     })
 }
@@ -46,14 +46,14 @@ function send_image_info_request()
 function send_image_request()
 {
     send_commander_request(function(flatBufferBuilder) {
-        Dcdr.Interconnect.DcdrFlatBuffers.CommanderGetSurfaceRequest
+        DcdrFlatBuffers.CommanderGetSurfaceRequest
             .startCommanderGetSurfaceRequest(flatBufferBuilder);
-        var getSurfaceRequest = Dcdr.Interconnect.DcdrFlatBuffers.CommanderGetSurfaceRequest
+        var getSurfaceRequest = DcdrFlatBuffers.CommanderGetSurfaceRequest
             .endCommanderGetSurfaceRequest(flatBufferBuilder);
 
         return {
             value: getSurfaceRequest,
-            type: Dcdr.Interconnect.DcdrFlatBuffers.CommanderRequestData.CommanderGetSurfaceRequest,
+            type: DcdrFlatBuffers.CommanderRequestData.CommanderGetSurfaceRequest,
         }
     })
 }
@@ -99,20 +99,20 @@ function process_commander_get_image_response(image)
 
 function process_commander_response(response)
 {
-    if (response.responseDataType() == Dcdr.Interconnect.DcdrFlatBuffers.CommanderResponseData.CommanderGetSurfaceInfoResponse)
+    if (response.responseDataType() == DcdrFlatBuffers.CommanderResponseData.CommanderGetSurfaceInfoResponse)
     {
-        process_commander_get_image_info_response(response.responseData(new Dcdr.Interconnect.DcdrFlatBuffers.CommanderGetSurfaceInfoResponse()));
-    } else if (response.responseDataType() == Dcdr.Interconnect.DcdrFlatBuffers.CommanderResponseData.CommanderGetSurfaceResponse)
+        process_commander_get_image_info_response(response.responseData(new DcdrFlatBuffers.CommanderGetSurfaceInfoResponse()));
+    } else if (response.responseDataType() == DcdrFlatBuffers.CommanderResponseData.CommanderGetSurfaceResponse)
     {
-        process_commander_get_image_response(response.responseData(new Dcdr.Interconnect.DcdrFlatBuffers.CommanderGetSurfaceResponse()));
+        process_commander_get_image_response(response.responseData(new DcdrFlatBuffers.CommanderGetSurfaceResponse()));
     }
 }
 
 function process_parcel(parcel)
 {
-    if (parcel.parcelDataType() == Dcdr.Interconnect.DcdrFlatBuffers.ParcelData.CommanderResponse)
+    if (parcel.parcelDataType() == DcdrFlatBuffers.ParcelData.CommanderResponse)
     {
-        process_commander_response(parcel.parcelData(new Dcdr.Interconnect.DcdrFlatBuffers.CommanderResponse()));
+        process_commander_response(parcel.parcelData(new DcdrFlatBuffers.CommanderResponse()));
     }
 }
 
@@ -122,7 +122,7 @@ function process_message(message)
     fileReader.onload  = function(progressEvent) {
         rawArray  = new Uint8Array(this.result);
         flatBuffer = new flatbuffers.ByteBuffer(rawArray);
-        process_parcel(Dcdr.Interconnect.DcdrFlatBuffers.Parcel.getRootAsParcel(flatBuffer));
+        process_parcel(DcdrFlatBuffers.Parcel.getRootAsParcel(flatBuffer));
     };
     fileReader.readAsArrayBuffer(message.data);
 }
