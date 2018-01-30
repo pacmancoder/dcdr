@@ -8,15 +8,18 @@ project(dcdr-suite)
 set(CMAKE_CXX_STANDARD 17)
 
 if(MSVC)
-    set(CMAKE_CXX_FLAGS "/W4 /WX /std:c++latest")
+    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} /W4 /WX /std:c++latest")
 else()
-    set(CMAKE_CXX_FLAGS "-std=c++1z -Wall -Wextra -Werror -g")
+    set(CMAKE_CXX_FLAGS "-std=c++1z -Wall -Wextra -Werror")
 endif()
 
-IF(CMAKE_COMPILER_IS_GNUCC)
-    set(CMAKE_CXX_FLAGS_DEBUG "${CMAKE_CXX_FLAGS_DEBUG} -O0")
-    set(CMAKE_C_FLAGS_DEBUG "${CMAKE_C_FLAGS_DEBUG} -O0")
-ENDIF(CMAKE_COMPILER_IS_GNUCC)
+if(CMAKE_BUILD_TYPE STREQUAL "Debug")
+
+    if(CMAKE_COMPILER_IS_GNUCC)
+        set(CMAKE_CXX_FLAGS_DEBUG "${CMAKE_CXX_FLAGS_DEBUG} -O0")
+    endif(CMAKE_COMPILER_IS_GNUCC)
+
+endif()
 
 # Output binnaries and shared libraries to the same folder
 set (CMAKE_LIBRARY_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/bin)

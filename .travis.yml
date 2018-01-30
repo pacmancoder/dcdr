@@ -1,0 +1,11 @@
+language: cpp
+dist: trusty
+compiler: 
+  - gcc
+script:
+  - mkdir build-release && cd build-release
+  - cmake -DCMAKE_BUILD_TYPE=Release ..
+  - make -j2
+  - mkdir ../build-test && cd ../build-test
+  - cmake -DCMAKE_BUILD_TYPE=Debug .. && cd tests
+  - make -j2 && ctest -V
