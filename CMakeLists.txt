@@ -10,7 +10,7 @@ set(CMAKE_CXX_STANDARD 17)
 if(MSVC)
     set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} /W4 /WX /std:c++latest")
 else()
-    set(CMAKE_CXX_FLAGS "-std=c++1z -Wall -Wextra -Werror")
+    set(CMAKE_CXX_FLAGS "-Wall -Wextra -Werror")
 endif()
 
 if(CMAKE_BUILD_TYPE STREQUAL "Debug")
