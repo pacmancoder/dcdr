@@ -27,7 +27,8 @@ set(SOURCE_FILES ${DCDR_PATHTRACER_INCLUDES} ${DCDR_PATHTRACER_SOURCES})
 
 include_directories(${PROJECT_SOURCE_DIR}/src)
 
-add_library(${PROJECT_NAME} SHARED ${SOURCE_FILES})
+# ToDo: Link dynamic, use generate_export_header
+add_library(${PROJECT_NAME} STATIC ${SOURCE_FILES})
 
 target_link_libraries(${PROJECT_NAME} PRIVATE umath)
 target_link_libraries(${PROJECT_NAME} PRIVATE dcdr-common)

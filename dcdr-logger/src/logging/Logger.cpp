@@ -10,13 +10,13 @@ Logger& Logger::get_instance()
 
 void Logger::add_log_writer(std::unique_ptr<ILogWriter> logWriter)
 {
-    std::lock_guard lock_guard(log_mutex_);
+    std::lock_guard<std::mutex> lock_guard(log_mutex_);
 
     log_writers_.push_back(std::move(logWriter));
 }
 void Logger::log(ILogWriter::MessageType messageType, const std::string& message)
 {
-    std::lock_guard lock_guard(log_mutex_);
+    std::lock_guard<std::mutex> lock_guard(log_mutex_);
 
     for (auto& log_writer : log_writers_)
     {

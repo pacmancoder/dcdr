@@ -4,7 +4,7 @@
 
 using namespace UMath;
 
-const float defaultApproxDelta = 0.000001;
+const float defaultApproxDelta = 0.000001f;
 
 TEST_F(UmathTest, Vec3Constructors)
 {

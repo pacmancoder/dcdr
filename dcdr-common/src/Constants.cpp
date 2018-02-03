@@ -12,6 +12,6 @@ namespace Dcdr::Constants::Position
 
 namespace Dcdr::Constants::Math
 {
-    Types::Real Epsilon(0.00001);
-    Types::Real Pi(3.141592);
+    Types::Real Epsilon(0.00001f);
+    Types::Real Pi(3.141592f);
 }

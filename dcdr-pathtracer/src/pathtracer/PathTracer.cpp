@@ -27,7 +27,7 @@ Dcdr::Types::Color Dcdr::PathTracing::PathTracer::render_sample(Dcdr::Types::Off
     Types::Real u = rng.generate_real(0, 1);
     Types::Real v = rng.generate_real(0, 1);
 
-    Tracing::Ray ray = camera.cast_ray(x, y, surface_width_, surface_height_, u, v, rng);
+    Tracing::Ray ray = camera.cast_ray(Types::Real(x), Types::Real(y), Types::Size(surface_width_), Types::Size(surface_height_), u, v, rng);
 
     for(ConstIteratorPtr<ISceneObject> it = scene_->get_objects_iterator(ray); it->can_advance(); it->advance())
     {

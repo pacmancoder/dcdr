@@ -16,7 +16,7 @@ TEST_F(UmathTest, Mat4Constructors)
             ASSERT_EQ(mi.data[i][j], (i == j) ? 1 : 0);
 
     float buffer[UMat4f::ELEMENTS];
-    for (size_t i = 0; i < UMat4f::ELEMENTS; i++) buffer[i] = i;
+    for (size_t i = 0; i < UMat4f::ELEMENTS; i++) buffer[i] = static_cast<float>(i);
 
     UMat4f mb = UMat4f::from_buffer(buffer);
     for (size_t i = 0; i < UMat4f::ELEMENTS; ++i)

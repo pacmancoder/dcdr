@@ -2,28 +2,33 @@ cmake_minimum_required(VERSION 3.8)
 
 project(dcdr-suite)
 
-
-# TODO: make flags setting look pretty
-
-set(CMAKE_CXX_STANDARD 17)
-
+# Common flags
 if(MSVC)
-    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} /W4 /WX /std:c++latest")
+	add_definitions(/W4 /WX /std:c++latest)
 else()
-    set(CMAKE_CXX_FLAGS "-Wall -Wextra -Werror")
+	add_definitions(-Wall -Wextra -Werror)
 endif()
+
 
 if(CMAKE_BUILD_TYPE STREQUAL "Debug")
-
+# Debug flags
     if(CMAKE_COMPILER_IS_GNUCC)
-        set(CMAKE_CXX_FLAGS_DEBUG "${CMAKE_CXX_FLAGS_DEBUG} -O0")
+		add_definitions(-O0)
     endif(CMAKE_COMPILER_IS_GNUCC)
-
+else()
+# Release flags
 endif()
 
-# Output binnaries and shared libraries to the same folder
-set (CMAKE_LIBRARY_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/bin)
-set (CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/bin)
+# Output binaries and shared libraries to the same folder
+
+set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/bin)
+set(CMAKE_LIBRARY_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/bin)
+
+set(CMAKE_RUNTIME_OUTPUT_DIRECTORY_DEBUG   ${CMAKE_BINARY_DIR}/bin)
+set(CMAKE_RUNTIME_OUTPUT_DIRECTORY_RELEASE ${CMAKE_BINARY_DIR}/bin)
+set(CMAKE_LIBRARY_OUTPUT_DIRECTORY_DEBUG   ${CMAKE_BINARY_DIR}/bin)
+set(CMAKE_LIBRARY_OUTPUT_DIRECTORY_RELEASE ${CMAKE_BINARY_DIR}/bin)
+
 
 # Third-party libraries
 add_subdirectory(libs)

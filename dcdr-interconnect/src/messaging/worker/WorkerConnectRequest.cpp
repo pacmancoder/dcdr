@@ -9,7 +9,7 @@ WorkerConnectRequest::WorkerConnectRequest() :
         AWorkerRequestParcel(),
         token_()
 {
-    std::fill(token_.begin(), token_.end(), 0);
+    std::fill(token_.begin(), token_.end(), uint8_t(0));
 }
 
 IParcel::SerializedParcel WorkerConnectRequest::serialize(AParcelSerializer& dispatcher) const

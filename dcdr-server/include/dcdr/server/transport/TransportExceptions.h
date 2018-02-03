@@ -4,7 +4,7 @@
 
 namespace Dcdr::Server
 {
-    class WebServerException : DcdrException
+    class WebServerException : public DcdrException
     {
     public:
         WebServerException(const std::string& kind, const std::string& msg) :

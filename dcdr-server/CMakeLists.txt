@@ -42,4 +42,7 @@ target_link_libraries(${PROJECT_NAME} PRIVATE mongoose)
 target_link_libraries(${PROJECT_NAME} PRIVATE dcdr-common)
 target_link_libraries(${PROJECT_NAME} PRIVATE dcdr-logger)
 target_link_libraries(${PROJECT_NAME} PRIVATE dcdr-interconnect)
-target_link_libraries(${PROJECT_NAME} PRIVATE pthread)
+
+if (NOT WIN32)
+	target_link_libraries(${PROJECT_NAME} PRIVATE pthread)
+endif()

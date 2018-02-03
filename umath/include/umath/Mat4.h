@@ -16,6 +16,10 @@ namespace UMath
         static const size_t ROW_ELEMENTS = 4;
         static const size_t COL_ELEMENTS = 4;
 
+#ifdef _MSC_VER
+#pragma warning(disable : 4201)
+#endif
+
         struct
         {
             T a11, a12, a13, a14,
@@ -23,6 +27,11 @@ namespace UMath
                     a31, a32, a33, a34,
                     a41, a42, a43, a44;
         };
+
+#ifdef _MSC_VER
+#pragma warning(default : 4201)
+#endif
+
         T data[COL_ELEMENTS][ROW_ELEMENTS];
 
     private:

@@ -15,7 +15,7 @@ IParcel::ParcelHandle AWorkerRequestParcel::dispatch(AParcelDispatcher& dispatch
 AWorkerRequestParcel::AWorkerRequestParcel() :
         sessionID_()
 {
-    std::fill(sessionID_.begin(), sessionID_.end(), 0);
+    std::fill(sessionID_.begin(), sessionID_.end(), uint8_t(0));
 }
 
 void AWorkerRequestParcel::set_session_id(const SessionID& sessionID)

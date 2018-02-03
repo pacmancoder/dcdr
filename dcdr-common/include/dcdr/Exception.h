@@ -5,7 +5,7 @@
 
 namespace Dcdr
 {
-    class DcdrException : std::exception
+    class DcdrException : public std::exception
     {
     public:
         DcdrException(const std::string& subsystem, const std::string& kind, const std::string& message) :

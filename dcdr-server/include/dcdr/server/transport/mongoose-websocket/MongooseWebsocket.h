@@ -17,7 +17,7 @@ namespace Dcdr::Server
     class MongooseWebsocket : public ITransport
     {
     public:
-        class MongooseWebsocketImpl;
+        struct MongooseWebsocketImpl;
 
     public:
         using ParcelSerizlizerPtr = std::shared_ptr<Interconnect::AParcelSerializer>;

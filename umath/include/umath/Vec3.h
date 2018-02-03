@@ -11,21 +11,29 @@ namespace UMath
     public:
         static const size_t ELEMENTS = 3;
 
+#ifdef _MSC_VER
+#pragma warning(disable : 4201)
+#endif
+
         struct
         {
             T x, y, z;
         };
+
         struct
         {
             T r, g, b;
         };
+
+#ifdef _MSC_VER
+#pragma warning(default : 4201)
+#endif
+
         T data[ELEMENTS];
 
-        UVec3(T x_, T y_, T z_) : x(x_), y(y_), z(z_)
-        {}
+        UVec3(T x_, T y_, T z_) : x(x_), y(y_), z(z_) {}
 
-        explicit UVec3(T c) : UVec3(c, c, c)
-        {}
+        explicit UVec3(T c) : UVec3(c, c, c) {}
 
         UVec3() : UVec3(0)
         {};

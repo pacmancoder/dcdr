@@ -1,6 +1,3 @@
-[submodule "libs/gtest-1.8.0"]
-	path = libs/gtest-1.8.0
-	url = https://github.com/google/googletest
 [submodule "libs/flatbuffers-git"]
 	path = libs/flatbuffers-git
 	url = https://github.com/google/flatbuffers.git
@@ -13,3 +10,6 @@
 [submodule "libs/lodepng/lodepng-git"]
 	path = libs/lodepng/lodepng-git
 	url = https://github.com/lvandeve/lodepng.git
+[submodule "libs/gtest-git"]
+	path = libs/gtest-git
+	url = https://github.com/google/googletest.git

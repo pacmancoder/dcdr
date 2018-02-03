@@ -1,5 +1,11 @@
 project(mongoose)
 
+if(MSVC)
+	remove_definitions(/WX)
+else()
+	remove_definitions(-Werror)
+endif()
+
 SET(MONGOOSE_DIR mongoose-git)
 
 SET(MONGOOSE_SOURCES

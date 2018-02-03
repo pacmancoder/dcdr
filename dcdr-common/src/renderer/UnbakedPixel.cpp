@@ -14,7 +14,7 @@ void UnbakedPixel::add_sample(const Types::Vec3& sample)
 {
     samples_++;
     auto previousValue = color_;
-    color_ += (sample - color_) / samples_;
+    color_ += (sample - color_) / static_cast<Types::Real>(samples_);
     variance_ += (sample - previousValue) * (sample - color_);
 }
 
@@ -36,7 +36,7 @@ Types::Vec3 UnbakedPixel::get_color() const
 Types::Vec3 UnbakedPixel::get_variance() const
 {
     if (samples_ < 2) return Constants::Color::Black;
-    return variance_ / (samples_ - 1);
+    return variance_ / (static_cast<Types::Real>(samples_) - 1);
 }
 
 Types::Vec3 UnbakedPixel::get_standard_derivation() const

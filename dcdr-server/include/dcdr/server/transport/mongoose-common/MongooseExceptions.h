@@ -4,7 +4,7 @@
 
 namespace Dcdr::Server
 {
-    class MongooseException : WebServerException
+    class MongooseException : public WebServerException
     {
     public:
         explicit MongooseException(const std::string& msg) :
