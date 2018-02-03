@@ -1,4 +1,4 @@
-init_socket();
+//init_socket();
 
 var socket;
 

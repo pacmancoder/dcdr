@@ -1,36 +1,268 @@
 
-.TopContainer
+html
 {
-    height: 480px;
-}
-
-.DefaultContainer
-{
-    border-radius: 25px;
-    padding: 30px;
-    box-sizing: border-box;
-    margin: 0px; 
-
-}
-
-#Image
-{
-}
-
-.ImageContainer
-{
-    vertical-align: top;
-    display: inline-block;
-    background-color: aliceblue;
-    float: left;
-    width: 75%;
-}
-.ImageInfoContainer
-{
-    vertical-align: top;        
-    display: inline-block;
-    background-color: antiquewhite;
-    width: 25%;
-    float: right;
+    position: relative;
     height: 100%;
+}
+
+body
+{
+    height: 100%;
+    font-size: 0px;
+    margin: 0;
+    background-color: #DDDDDD;
+}
+
+#body-flex-container
+{
+    margin: 0;
+    padding: 0;
+    height: 100%;
+    font-size: 0;
+}
+
+.column-container
+{    
+    vertical-align: text-top;
+    font-size: 14pt;
+    display: inline-block;
+    height: 100%;
+    padding: 15px;
+    box-sizing: border-box;
+}
+
+#left-column-container
+{
+    width: 40%;
+}
+
+#middle-column-container
+{
+    width: 30%;
+}
+
+#right-column-container
+{
+    width: 30%;
+}
+
+.content-container
+{
+    margin-bottom: 10px;
+    padding: 10px;
+    background-color: #999999;
+    border-radius: 5px;
+    border: #BBBBBB solid 3px;
+    max-width: 100%;
+    color: white;
+}
+
+.header
+{
+    text-align: center;
+    font-size: larger;
+    font-weight: bold;
+    color: white;
+}
+
+.subheader
+{
+    margin-bottom: 10px;
+    padding-left: 8pt;
+    text-align: left;
+    font-size: large;
+    font-weight: bold;
+    border-bottom: #EEEEEE solid thin;
+    color: white;
+}
+
+.extended-list
+{
+    margin-left: 10px;
+    margin-right: 10px;
+    padding: 5px;
+    background-color: #E8E8E8;
+    border-radius: 5px;
+    border: white solid 2px;
+    height: 200px;
+    overflow: auto;
+}
+
+.extended-list-item
+{
+    background-color: #AAAAAA;
+    padding: 5px;
+    margin-bottom: 10px;
+    border-radius: 3px;
+    font-size: 14pt;
+}
+
+.extended-list-item:hover
+{
+    background-color: #989898;
+}
+
+.extended-list-item:active
+{
+    background-color: #888888;
+}
+
+.status-led
+{
+    min-height: 100%;
+    border-radius: 5px;
+    margin-right: 10px;
+}
+
+.status-led-ok
+{
+    background-color: darkgreen;
+}
+
+.status-led-warning
+{
+    background-color: gold;
+}
+
+.status-led-error
+{
+    background-color: darkred;
+}
+
+.status-led-unknown
+{
+    background-color: whitesmoke;
+}
+
+#preview-canvas-container
+{
+    max-width: 100%;
+    padding-top: 75%;
+    position: relative;
+}
+
+#preview-canvas
+{
+    position: absolute;
+    top: 0;
+    left: 0;
+    bottom: 0;
+    right: 0;
+    width: 100%;
+}
+
+#preview
+{    
+    max-width: 95%;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    position: relative;
+    display: block;
+    background-color: black;
+}
+
+#status-container
+{
+    height: 40%;
+}
+
+.info-list
+{
+    margin-left: 10px;
+    margin-right: 10px;
+    padding: 5px;
+    background-color: #E8E8E8;
+    border-radius: 5px;
+    border: white solid 2px;
+    height: 200px;
+    overflow: auto;
+}
+
+.info-list-item
+{
+    padding: 0;
+    width: 100%;
+    overflow-x: hidden;
+}
+
+.info-list-item-part
+{
+    box-sizing: border-box;
+    padding-left: 10px;
+    display: inline-block;
+    font-size: small;
+    overflow-x: hidden;
+    border-bottom: #888888 dotted thin;
+    color: #333333;
+}
+
+.info-list-item-left
+{
+    width: 50%;
+    border-right: #888888 solid thin;
+}
+
+.info-list-item-right
+{
+    width: 45%;
+}
+
+
+.control-button:hover
+{
+    background-color: #CCCCCC;
+}
+
+.control-button:active
+{
+    background-color: #BBBBBB;
+}
+
+
+.control-button
+{
+    text-align: center;
+    box-sizing: border-box;
+    padding: 5px;
+    margin: 5px;
+    display: inline-block;
+    width: 45%;
+    background-color: #DDDDDD;
+    color: #333333;
+}
+
+.control-button-big
+{
+    width: 95%;
+}
+
+.medium-text
+{
+    font-size: medium;
+}
+
+.control-label
+{
+    display: inline-block;
+    width: 30%;
+    color: white;
+}
+
+.control-element
+{
+    box-sizing: border-box;
+    display: inline-block;
+    width: 40%;
+    height: 40px;
+}
+
+.control-row
+{
+    padding-bottom: 5px;
+}
+
+.control-info
+{
+    color: white;
 }
