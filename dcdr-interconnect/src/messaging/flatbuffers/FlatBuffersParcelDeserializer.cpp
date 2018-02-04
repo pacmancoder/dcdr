@@ -8,9 +8,7 @@
 #include <dcdr/messaging/worker/WorkerConnectRequest.h>
 #include <dcdr/messaging/commander/ACommanderRequestParcel.h>
 #include <dcdr/messaging/commander/ACommanderResponseParcel.h>
-#include <dcdr/messaging/commander/CommanderGetSurfaceRequest.h>
 #include <dcdr/messaging/commander/CommanderGetSurfaceResponse.h>
-#include <dcdr/messaging/commander/CommanderGetSurfaceInfoRequest.h>
 #include <dcdr/messaging/commander/CommanderGetSurfaceInfoResponse.h>
 
 using namespace Dcdr::Logging;
@@ -35,7 +33,7 @@ namespace
         log_debug("[Interconnect][FlatBuffers] Parcel was deserialized to WorkerConnectRequest");
         return std::move(parcel);
     }
-
+    /*
     ACommanderRequestParcel::CommanderRequestParcelPtr deserialize_commander_get_surface_info_request(
             const DcdrFlatBuffers::CommanderGetSurfaceInfoRequest*)
     {
@@ -74,7 +72,7 @@ namespace
         log_debug("[Interconnect][FlatBuffers] Parcel was deserialized to CommanderGetSurfaceResponse");
         return std::move(parcel);
     }
-
+    */
     AWorkerRequestParcel::WorkerRequestParcelPtr deserialize_worker_request(
             const DcdrFlatBuffers::WorkerRequest* workerRequest)
     {
@@ -107,8 +105,8 @@ namespace
 
         log_debug("[Interconnect][FlatBuffers] Parcel was deserialized to WorkerConnectRequest");
         return std::move(parcel);
-    };
-
+    }
+/*
     ACommanderRequestParcel::CommanderRequestParcelPtr deserialize_commander_request(
             const DcdrFlatBuffers::CommanderRequest* commanderRequest)
     {
@@ -129,7 +127,7 @@ namespace
                 return nullptr;
             }
         }
-    };
+    }
 
     ACommanderResponseParcel::CommanderResponseParcelPtr deserialize_commander_response(
             const DcdrFlatBuffers::CommanderResponse* commanderResponse)
@@ -151,7 +149,8 @@ namespace
                 return nullptr;
             }
         }
-    };
+    }
+    */
 }
 
 #include <iostream>
@@ -166,6 +165,7 @@ IParcel::ParcelPtr FlatBuffersParcelDeserializer::deserialize(IParcel::Serialize
         {
             return deserialize_worker_request(requestFlatBuffer->parcelData_as_WorkerRequest());
         }
+        /*
         case DcdrFlatBuffers::ParcelData_CommanderRequest:
         {
             return deserialize_commander_request(requestFlatBuffer->parcelData_as_CommanderRequest());
@@ -174,6 +174,7 @@ IParcel::ParcelPtr FlatBuffersParcelDeserializer::deserialize(IParcel::Serialize
         {
             return deserialize_commander_response(requestFlatBuffer->parcelData_as_CommanderResponse());
         }
+        */
         default:
         {
             log_warning(std::string("[Interconnect][Flatbuffers] Frame with type ").append(std::to_string(requestFlatBuffer->parcelData_type())).append(" not supported"));

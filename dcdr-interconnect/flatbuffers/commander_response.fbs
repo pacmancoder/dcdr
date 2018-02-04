@@ -1,28 +1,99 @@
 namespace DcdrFlatBuffers;
 
-table CommanderGetSurfaceInfoResponse
+table Job
 {
-    width: uint32;
-    height: uint32;
+    id: uint32;
+    name: string;
+    state: JobState;
 }
 
-enum SurfaceImageFormat : uint16
+table CommanderGetJobListResponse
 {
-    Png,
-    Unknown,
+    jobs: [Job];
 }
 
-table CommanderGetSurfaceResponse
+table PropertyPair
 {
-    format: SurfaceImageFormat;
-    buffer: [ubyte];
+    name: string;
+    value: string;
 }
 
+table CommanderGetJobInfoResponse
+{
+    properties: [PropertyPair];
+}
+
+table CommanderGetJobPreviewResponse
+{
+    data: [uint8];
+}
+
+table CommanderGetJobArtifactResponse
+{
+    data: [uint8];
+}
+
+table Scene
+{
+    id: uint32;
+    name: string;
+    nativeWidth: uint16;
+    nativeHeight: uint16;
+}
+
+table CommanderGetSceneListReponse
+{
+    scenes: [Scene];
+}
+
+table CommanderDoSceneListUpdateResponse {}
+
+table Node
+{
+    id: uint32;
+    name: string;
+    state: NodeState;
+}
+
+table CommanderGetNodeListResponse
+{
+    nodes: [Node];
+}
+
+table CommanderGetNodeInfoResponse
+{
+    properties: [PropertyPair];
+}
+
+table CommanderDoNodeListUpdateResponse {}
+
+enum CommanderError : uint16
+{
+    JobNotExist,
+    NodeNotExist,
+}
+
+table CommanderDoShowErrorResponse
+{
+    error: CommanderError;
+    message: string;
+}
 
 union CommanderResponseData
 {
-    CommanderGetSurfaceInfoResponse,
-    CommanderGetSurfaceResponse,
+    // jobs
+    CommanderGetJobListResponse,
+    CommanderGetJobInfoResponse,
+    CommanderGetJobPreviewResponse,
+    CommanderGetJobArtifactResponse,
+    CommanderGetSceneListReponse,
+    CommanderDoSceneListUpdateResponse,
+    // nodes
+    CommanderGetNodeListResponse,
+    CommanderGetNodeInfoResponse,
+    CommanderDoNodeListUpdateResponse,
+    // common
+    CommanderDoShowErrorResponse
 }
 
 table CommanderResponse
