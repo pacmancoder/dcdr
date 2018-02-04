@@ -4,7 +4,7 @@ using namespace Dcdr::Interconnect;
 
 
 // Definition generator to avoid boilerplate code
-#define SERIALIZATION_NOT_IMPLEMENTED(__TARGET_CLASS__) \
+#define IMPLEMENT_DEFAULT_SERIALIZATION(__TARGET_CLASS__) \
     IParcel::SerializedParcel AParcelSerializer::serialize(const __TARGET_CLASS__&)\
     {\
         return serialize_not_supported();\
@@ -14,9 +14,18 @@ using namespace Dcdr::Interconnect;
 // default behavior - return empty parcel serialization
 IParcel::SerializedParcel AParcelSerializer::serialize_not_supported() { return IParcel::SerializedParcel(); }
 
-SERIALIZATION_NOT_IMPLEMENTED(WorkerConnectRequest);
+IMPLEMENT_DEFAULT_SERIALIZATION(WorkerConnectRequest);
 
-SERIALIZATION_NOT_IMPLEMENTED(CommanderGetSurfaceRequest)
-SERIALIZATION_NOT_IMPLEMENTED(CommanderGetSurfaceInfoRequest)
-SERIALIZATION_NOT_IMPLEMENTED(CommanderGetSurfaceResponse)
-SERIALIZATION_NOT_IMPLEMENTED(CommanderGetSurfaceInfoResponse)
+IMPLEMENT_DEFAULT_SERIALIZATION(CommanderGetJobListRequest)
+IMPLEMENT_DEFAULT_SERIALIZATION(CommanderGetJobInfoRequest)
+IMPLEMENT_DEFAULT_SERIALIZATION(CommanderGetJobPreviewRequest)
+IMPLEMENT_DEFAULT_SERIALIZATION(CommanderGetJobArtifactRequest)
+IMPLEMENT_DEFAULT_SERIALIZATION(CommanderSetJobStateRequest)
+IMPLEMENT_DEFAULT_SERIALIZATION(CommanderAddJobRequest)
+IMPLEMENT_DEFAULT_SERIALIZATION(CommanderGetSceneListRequest)
+IMPLEMENT_DEFAULT_SERIALIZATION(CommanderGetNodeListRequest)
+IMPLEMENT_DEFAULT_SERIALIZATION(CommanderGetNodeInfoRequest)
+IMPLEMENT_DEFAULT_SERIALIZATION(CommanderSetNodeStateRequest)
+
+IMPLEMENT_DEFAULT_SERIALIZATION(CommanderGetSurfaceResponse)
+IMPLEMENT_DEFAULT_SERIALIZATION(CommanderGetSurfaceInfoResponse)

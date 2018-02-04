@@ -1,12 +1,80 @@
 namespace DcdrFlatBuffers;
 
-table CommanderGetSurfaceInfoRequest {}
-table CommanderGetSurfaceRequest {}
+table CommanderGetJobListRequest {}
+
+table CommanderGetJobInfoRequest 
+{
+    jobId: uint32;
+}
+
+table CommanderGetJobPreviewRequest 
+{
+    jobId: uint32;
+    mipmapLevel: uint8;    
+}
+
+table CommanderGetJobArtifactRequest
+{
+    jobId: uint32;
+    data: [uint8];
+}
+
+enum JobState : uint8
+{
+    InProgress,
+    Stopped,
+    Removed,
+}
+
+table CommanderSetJobStateRequest
+{
+    jobId: uint32;
+    state: JobState;
+}
+
+table CommanderAddJobRequest
+{
+    sceneId: uint32;
+    scale: float32;
+}
+
+table CommanderGetSceneListRequest {}
+
+table CommanderGetNodeListRequest {}
+
+table CommanderGetNodeInfoRequest 
+{
+    nodeId: uint32;
+}
+
+enum NodeState : uint8
+{
+    Active,
+    Disabled,
+    Malfunctioned,
+    Offline,
+}
+
+table CommanderSetNodeStateRequest 
+{
+    nodeId: uint32;
+    state: NodeState;
+}
 
 union CommanderRequestData
 {
-    CommanderGetSurfaceInfoRequest,
-    CommanderGetSurfaceRequest,
+    // jobs
+    CommanderGetJobListRequest,
+    CommanderGetJobInfoRequest,
+    CommanderGetJobPreviewRequest,
+    CommanderGetJobArtifactRequest,
+    CommanderSetJobStateRequest,
+    CommanderAddJobRequest,
+    CommanderGetSceneListRequest,
+    // nodes
+    CommanderGetNodeListRequest,
+    CommanderGetNodeInfoRequest,
+    CommanderSetNodeStateRequest
 }
 
 table CommanderRequest

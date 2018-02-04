@@ -46,7 +46,7 @@ add_custom_command(
         COMMAND echo "mv DcdrFlatBuffers_generated.js ${DCDR_FLATBUFFERS_GENERATED_JS_FOLDER}/DcdrFlatBuffers.js"
 		
         COMMAND ${CAT_COMMAND} ${DCDR_FLATBUFFERS_INPUT_FILES} > ${DCDR_FLATBUFFERS_GENERATED_ROOT_FOLDER}/DcdrFlatBuffers.fbs
-        COMMAND ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/flatc --cpp ${DCDR_FLATBUFFERS_GENERATED_ROOT_FOLDER}/DcdrFlatBuffers.fbs
+        COMMAND ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/flatc --cpp --gen-name-strings ${DCDR_FLATBUFFERS_GENERATED_ROOT_FOLDER}/DcdrFlatBuffers.fbs
         COMMAND ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/flatc --js  ${DCDR_FLATBUFFERS_GENERATED_ROOT_FOLDER}/DcdrFlatBuffers.fbs
         COMMAND ${MOVE_COMMAND} DcdrFlatBuffers_generated.h  ${DCDR_FLATBUFFERS_GENERATED_CPP_FOLDER}/DcdrFlatBuffers.h
         COMMAND ${MOVE_COMMAND} DcdrFlatBuffers_generated.js ${DCDR_FLATBUFFERS_GENERATED_JS_FOLDER}/DcdrFlatBuffers.js
