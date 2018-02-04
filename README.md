@@ -2,6 +2,7 @@ DCDR
 ===
 ### Distributed Computing Distributed Ray Tracer
 [![Build Status](https://travis-ci.org/pacmancoder/dcdr.svg?branch=master)](https://travis-ci.org/pacmancoder/dcdr)
+[![Build status](https://ci.appveyor.com/api/projects/status/jps7v4yufd8kl9ux?svg=true)](https://ci.appveyor.com/project/pacmancoder/dcdr)
 
 #### Important
 This project was started as a project for my bachelor thesis and it does not pretend to be a feature-full industry-grade renderer.  
@@ -22,8 +23,8 @@ Currently I am working on the implementation of connectivity between DCDR-Server
 - JS for WebUI operations
 
 ##### Protocols
-- WebSocket for DCDR-Server <\ -> DCDR-WebUI communications
-- TCP sockets for DCDR-Server <\ -> DCDR-Worcel communications
+- WebSocket for DCDR-Server <-> DCDR-WebUI communications
+- TCP sockets for DCDR-Server <-> DCDR-Worker communications
 
 ##### Build / Deploy / CI
 - CMake as main C ++ build system

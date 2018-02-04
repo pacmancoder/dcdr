@@ -18,4 +18,4 @@ script:
   - make -j2
   - mkdir ../build-test && cd ../build-test
   - cmake -DCMAKE_BUILD_TYPE=Debug .. && cd tests
-  - make -j2 && ctest -V
+  - make -j2 && ctest -C Debug -V
