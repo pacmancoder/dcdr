@@ -1,28 +1,19 @@
 #pragma once
 
 #include <cstdint>
-#include <dcdr/messaging/commander/ACommanderRequestParcel.h>
-#include <dcdr/messaging/commander/ACommanderRequestParcelDispatcher.h>
 #include <dcdr/messaging/commander/CommanderCommandData.h>
 
 namespace Dcdr::Interconnect
 {
-    class AParcelSerializer;
-    class ACommanderRequestParcelDispatcher;
+    class CommanderGetJobListRequest {};
 
-    class CommanderGetJobListRequest : public ACommanderRequestParcel
+    class ACommanderJobRequest
     {
     public:
-        SerializedParcel serialize(AParcelSerializer& serializer) const override;
-        ParcelHandle dispatch(ACommanderRequestParcelDispatcher& dispatcher) const override;
-    };
-
-    class ACommanderJobRequest : public ACommanderRequestParcel
-    {
-    public:
-        ACommanderJobRequest(uint32_t jobId);
+        explicit ACommanderJobRequest(uint32_t jobId);
 
         uint32_t get_job_id() const;
+
     private:
         uint32_t jobId_;
     };
@@ -30,10 +21,7 @@ namespace Dcdr::Interconnect
     class CommanderGetJobInfoRequest : public ACommanderJobRequest
     {
     public:
-        CommanderGetJobInfoRequest(uint32_t jobId);
-
-        SerializedParcel serialize(AParcelSerializer& serializer) const override;
-        ParcelHandle dispatch(ACommanderRequestParcelDispatcher& dispatcher) const override;
+        explicit CommanderGetJobInfoRequest(uint32_t jobId);
     };
 
     class CommanderGetJobPreviewRequest: public ACommanderJobRequest
@@ -41,10 +29,8 @@ namespace Dcdr::Interconnect
     public:
         CommanderGetJobPreviewRequest(uint32_t jobId, uint8_t mipmapLevel);
 
-        SerializedParcel serialize(AParcelSerializer& serializer) const override;
-        ParcelHandle dispatch(ACommanderRequestParcelDispatcher& dispatcher) const override;
-
         uint8_t get_mipmap_level() const;
+
     private:
         uint8_t mipmapLevel_;
     };
@@ -52,10 +38,7 @@ namespace Dcdr::Interconnect
     class CommanderGetJobArtifactRequest : public ACommanderJobRequest
     {
     public:
-        CommanderGetJobArtifactRequest(uint32_t jobId);
-
-        SerializedParcel serialize(AParcelSerializer& serializer) const override;
-        ParcelHandle dispatch(ACommanderRequestParcelDispatcher& dispatcher) const override;
+        explicit CommanderGetJobArtifactRequest(uint32_t jobId);
     };
 
     class CommanderSetJobStateRequest : public ACommanderJobRequest
@@ -63,21 +46,16 @@ namespace Dcdr::Interconnect
     public:
         CommanderSetJobStateRequest(uint32_t jobId, JobState jobState);
 
-        SerializedParcel serialize(AParcelSerializer& serializer) const override;
-        ParcelHandle dispatch(ACommanderRequestParcelDispatcher& dispatcher) const override;
-
         JobState get_job_state() const;
+
     private:
         JobState jobState_;
     };
 
-    class CommanderAddJobRequest : public ACommanderJobRequest
+    class CommanderAddJobRequest
     {
     public:
-        CommanderAddJobRequest(uint32_t jobId, uint32_t scene_id, float scale);
-
-        SerializedParcel serialize(AParcelSerializer& serializer) const override;
-        ParcelHandle dispatch(ACommanderRequestParcelDispatcher& dispatcher) const override;
+        CommanderAddJobRequest(uint32_t sceneId, float scale);
 
         uint32_t get_scene_id() const;
         float get_scale() const;
@@ -87,24 +65,14 @@ namespace Dcdr::Interconnect
         float scale_;
     };
 
-    class CommanderGetSceneListRequest : public ACommanderRequestParcel
-    {
-    public:
-        SerializedParcel serialize(AParcelSerializer& serializer) const override;
-        ParcelHandle dispatch(ACommanderRequestParcelDispatcher& dispatcher) const override;
-    };
+    class CommanderGetSceneListRequest {};
 
-    class CommanderGetNodeListRequest : public ACommanderRequestParcel
-    {
-    public:
-        SerializedParcel serialize(AParcelSerializer& serializer) const override;
-        ParcelHandle dispatch(ACommanderRequestParcelDispatcher& dispatcher) const override;
-    };
+    class CommanderGetNodeListRequest {};
 
-    class ACommanderNodeRequest : public ACommanderRequestParcel
+    class ACommanderNodeRequest
     {
     public:
-        ACommanderNodeRequest(uint32_t nodeId);
+        explicit ACommanderNodeRequest(uint32_t nodeId);
 
         uint32_t get_node_id() const;
 
@@ -115,19 +83,13 @@ namespace Dcdr::Interconnect
     class CommanderGetNodeInfoRequest : public ACommanderNodeRequest
     {
     public:
-        CommanderGetNodeInfoRequest(uint32_t jobId);
-
-        SerializedParcel serialize(AParcelSerializer& serializer) const override;
-        ParcelHandle dispatch(ACommanderRequestParcelDispatcher& dispatcher) const override;
+        explicit CommanderGetNodeInfoRequest(uint32_t nodeId);
     };
 
     class CommanderSetNodeStateRequest : public ACommanderNodeRequest
     {
     public:
-        CommanderSetNodeStateRequest(uint32_t jobId, NodeState nodeState);
-
-        SerializedParcel serialize(AParcelSerializer& serializer) const override;
-        ParcelHandle dispatch(ACommanderRequestParcelDispatcher& dispatcher) const override;
+        CommanderSetNodeStateRequest(uint32_t nodeId, NodeState nodeState);
 
         NodeState get_node_state() const;
 

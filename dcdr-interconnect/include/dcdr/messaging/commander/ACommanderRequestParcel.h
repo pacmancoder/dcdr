@@ -4,7 +4,8 @@
 
 namespace Dcdr::Interconnect
 {
-    class ACommanderRequestParcelDispatcher;
+    class ICommanderRequestDispatcher;
+    class ICommanderRequestSerializer;
 
     class ACommanderRequestParcel : public IParcel
     {
@@ -12,9 +13,11 @@ namespace Dcdr::Interconnect
         using CommanderRequestParcelPtr = std::unique_ptr<ACommanderRequestParcel>;
 
     public:
-        ParcelHandle dispatch(AParcelDispatcher& dispatcher) const override;
+        IParcel::ParcelHandle dispatch(IParcelDispatcher& dispatcher) const override;
+        SerializedParcel serialize(IParcelSerializer& serializer) const override;
 
-        virtual ParcelHandle dispatch(ACommanderRequestParcelDispatcher& dispatcher) const = 0;
+        virtual ParcelHandle dispatch(ICommanderRequestDispatcher& dispatcher) const = 0;
+        virtual SerializedParcel serialize(ICommanderRequestSerializer& serializer) const = 0;
 
     };
 }

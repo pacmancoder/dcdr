@@ -1,45 +1,23 @@
 #pragma once
 
-#include <dcdr/messaging/AParcelSerializer.h>
+#include <dcdr/messaging/IParcelSerializer.h>
 #include <memory>
 
 namespace Dcdr::Interconnect
 {
-
-    class FlatBuffersParcelSerializer : public AParcelSerializer
+    class FlatBuffersParcelSerializer : public IParcelSerializer
     {
     public:
-        IParcel::SerializedParcel serialize(const CommanderGetJobListRequest& parcel) override;
+        FlatBuffersParcelSerializer();
 
-        IParcel::SerializedParcel serialize(const CommanderGetJobInfoRequest& parcel) override;
+        IParcel::SerializedParcel serialize(const ACommanderRequestParcel& parcel) override;
 
-        IParcel::SerializedParcel serialize(const CommanderGetJobPreviewRequest& parcel) override;
+        IParcel::SerializedParcel serialize(const ACommanderResponseParcel& parcel) override;
 
-        IParcel::SerializedParcel serialize(const CommanderGetJobArtifactRequest& parcel) override;
+        virtual ~FlatBuffersParcelSerializer();
 
-        IParcel::SerializedParcel serialize(const CommanderSetJobStateRequest& parcel) override;
-
-        IParcel::SerializedParcel serialize(const CommanderAddJobRequest& parcel) override;
-
-        IParcel::SerializedParcel serialize(const CommanderGetSceneListRequest& parcel) override;
-
-        IParcel::SerializedParcel serialize(const CommanderGetNodeListRequest& parcel) override;
-
-        IParcel::SerializedParcel serialize(const CommanderGetNodeInfoRequest& parcel) override;
-
-        IParcel::SerializedParcel serialize(const CommanderSetNodeStateRequest& parcel) override;
-
-        IParcel::SerializedParcel serialize(const CommanderGetSurfaceInfoResponse& parcel) override;
-
-        IParcel::SerializedParcel serialize(const CommanderGetSurfaceResponse& parcel) override;
-
-    public:
-        //IParcel::SerializedParcel serialize(const WorkerConnectRequest& parcel) override;
-
-        //IParcel::SerializedParcel serialize(const CommanderGetSurfaceInfoRequest& parcel) override;
-        //IParcel::SerializedParcel serialize(const CommanderGetSurfaceRequest& parcel) override;
-
-        //IParcel::SerializedParcel serialize(const CommanderGetSurfaceInfoResponse& parcel) override;
-        //IParcel::SerializedParcel serialize(const CommanderGetSurfaceResponse& parcel) override;
+    private:
+        struct Impl;
+        std::unique_ptr<Impl> impl_;
     };
 }

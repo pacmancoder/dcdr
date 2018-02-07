@@ -3,8 +3,8 @@
 #include <mongoose.h>
 
 #include <dcdr/logging/Logger.h>
-#include <dcdr/messaging/AParcelSerializer.h>
-#include <dcdr/messaging/AParcelDeserializer.h>
+#include <dcdr/messaging/IParcelSerializer.h>
+#include <dcdr/messaging/IParcelDeserializer.h>
 #include <dcdr/server/core/Core.h>
 #include <dcdr/server/transport/mongoose-common/MongooseExceptions.h>
 

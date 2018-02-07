@@ -8,7 +8,7 @@
 namespace Dcdr::Interconnect
 {
 
-    class AParcelDeserializer
+    class IParcelDeserializer
     {
     public:
         using SerializedParcel = std::vector<uint8_t>;
@@ -16,10 +16,6 @@ namespace Dcdr::Interconnect
     public:
         virtual IParcel::ParcelPtr deserialize(IParcel::SerializedParcel serializedParcel) = 0;
 
-        ~AParcelDeserializer() = default;
-
-    protected:
-        IParcel::ParcelPtr deserialize_not_supported();
-
+        ~IParcelDeserializer() = default;
     };
 }
