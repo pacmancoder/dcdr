@@ -1,11 +1,11 @@
 #pragma once
 
 #include <memory>
-#include <dcdr/messaging/AParcelDispatcher.h>
+#include <dcdr/messaging/IParcelDispatcher.h>
 
 namespace Dcdr::Server
 {
-    class Core : public Interconnect::AParcelDispatcher
+    class Core : public Interconnect::IParcelDispatcher
     {
     public:
         Core();

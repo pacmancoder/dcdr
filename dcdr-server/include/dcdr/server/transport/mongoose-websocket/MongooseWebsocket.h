@@ -6,8 +6,8 @@
 
 namespace Dcdr::Interconnect
 {
-    class AParcelSerializer;
-    class AParcelDeserializer;
+    class IParcelSerializer;
+    class IParcelDeserializer;
 }
 
 namespace Dcdr::Server
@@ -20,8 +20,8 @@ namespace Dcdr::Server
         struct MongooseWebsocketImpl;
 
     public:
-        using ParcelSerizlizerPtr = std::shared_ptr<Interconnect::AParcelSerializer>;
-        using ParcelDeserializerPtr = std::shared_ptr<Interconnect::AParcelDeserializer>;
+        using ParcelSerizlizerPtr = std::shared_ptr<Interconnect::IParcelSerializer>;
+        using ParcelDeserializerPtr = std::shared_ptr<Interconnect::IParcelDeserializer>;
         using CorePtr = std::shared_ptr<Core>;
 
     public:

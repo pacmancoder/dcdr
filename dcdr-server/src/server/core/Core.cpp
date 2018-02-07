@@ -5,7 +5,7 @@
 #include <iterator>
 
 #include <dcdr/logging/Logger.h>
-#include <dcdr/messaging/commander/ACommanderRequestParcelDispatcher.h>
+#include <dcdr/messaging/commander/ICommanderRequestDispatcher.h>
 #include <dcdr/messaging/commander/CommanderGetSurfaceInfoRequest.h>
 #include <dcdr/messaging/commander/CommanderGetSurfaceInfoResponse.h>
 #include <dcdr/messaging/commander/CommanderGetSurfaceRequest.h>
@@ -27,11 +27,11 @@ namespace
     }
 }
 
-class Core::CoreCommanderRequestDispatcher : public ACommanderRequestParcelDispatcher
+class Core::CoreCommanderRequestDispatcher : public ICommanderRequestDispatcher
 {
 public:
     CoreCommanderRequestDispatcher() :
-            ACommanderRequestParcelDispatcher() {}
+            ICommanderRequestDispatcher() {}
 
     IParcel::ParcelHandle dispatch(const CommanderGetSurfaceInfoRequest&) override
     {
@@ -58,7 +58,7 @@ public:
 };
 
 Core::Core() :
-        AParcelDispatcher(),
+        IParcelDispatcher(),
         commanderRequestDispatcher_(new Core::CoreCommanderRequestDispatcher()) {}
 
 IParcel::ParcelHandle Core::dispatch(const ACommanderRequestParcel& parcel)

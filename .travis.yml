@@ -1,13 +1,18 @@
 language: cpp
+
+branches:
+  only:
+    - master
+
 dist: trusty
 
 addons:
-    apt:
-        sources:
-            - ubuntu-toolchain-r-test
-        packages:
-            - g++-7
-            - gcc-7
+  apt:
+    sources:
+      - ubuntu-toolchain-r-test
+    packages:
+      - g++-7
+      - gcc-7
 
 install: 
   - export CXX="g++-7" CC="gcc-7"

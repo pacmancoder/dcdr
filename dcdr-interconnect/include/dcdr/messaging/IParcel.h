@@ -7,8 +7,8 @@
 
 namespace Dcdr::Interconnect
 {
-    class AParcelDispatcher;
-    class AParcelSerializer;
+    class IParcelDispatcher;
+    class IParcelSerializer;
 
     class IParcel
     {
@@ -18,8 +18,8 @@ namespace Dcdr::Interconnect
         using SerializedParcel = std::vector<uint8_t>;
 
     public:
-        virtual ParcelHandle dispatch(AParcelDispatcher& dispatcher) const = 0;
-        virtual SerializedParcel serialize(AParcelSerializer& serializer) const = 0;
+        virtual ParcelHandle dispatch(IParcelDispatcher& dispatcher) const = 0;
+        virtual SerializedParcel serialize(IParcelSerializer& serializer) const = 0;
 
         virtual ~IParcel() = default;
     };

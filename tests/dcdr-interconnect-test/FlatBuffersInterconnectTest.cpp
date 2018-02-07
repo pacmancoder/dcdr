@@ -1,6 +1,6 @@
 #include <gtest/gtest.h>
 
-#include <dcdr/messaging/flatbuffers/FlatBuffersParcelSerializer.h>
+#include <dcdr/messaging/flatbuffers/FlatBuffersCommanderRequestSerializer.h>
 #include <dcdr/messaging/flatbuffers/FlatBuffersParcelDeserializer.h>
 #include <dcdr/messaging/worker/AWorkerRequestParcel.h>
 #include <dcdr/messaging/worker/WorkerConnectRequest.h>
