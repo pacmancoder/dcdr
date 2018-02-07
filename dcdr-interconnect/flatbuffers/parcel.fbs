@@ -12,3 +12,5 @@ table Parcel
 {
     parcelData: ParcelData;
 }
+
+root_type Parcel;

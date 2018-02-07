@@ -1,15 +1,17 @@
-#include <dcdr/messaging/flatbuffers/FlatBuffersCommanderRequestSerializer.h>
+#include "FlatBuffersCommanderRequestSerializer.h"
+
 #include <dcdr/logging/Logger.h>
 #include <dcdr/messaging/commander/CommanderRequests.h>
-#include <flatbuffers-generated/DcdrFlatBuffers.h>
+
 #include <iostream>
 #include <stdexcept>
 
+#include "FlatBuffersSerializerUtils.h"
+
+
 using namespace Dcdr::Logging;
 using namespace Dcdr::Interconnect;
-
-// internal helpers for building FlatBuffers
-#include <messaging/flatbuffers/FlatBuffersBuilders.h>
+using namespace Dcdr::Interconnect::FlatBuffers;
 
 namespace
 {
@@ -18,7 +20,7 @@ namespace
     template <class RequestType, class ParcelGenerator>
     IParcel::SerializedParcel build_commander_request_parcel(ParcelGenerator&& parcelGenerator)
     {
-        return build_parcel<DcdrFlatBuffers::CommanderRequest>(
+        return SerializerUtils::build_parcel<DcdrFlatBuffers::CommanderRequest>(
             [parcelGenerator=std::forward<ParcelGenerator>(parcelGenerator)] (auto& flatBuffersBuilder)
             {
                 log_debug(std::string()
@@ -39,29 +41,6 @@ namespace
                         requestData.Union());
             },
             COMMANDER_REQUEST_BUILDER_BUFFER_SIZE);
-    }
-
-    DcdrFlatBuffers::JobState marshal(JobState jobState)
-    {
-        switch (jobState)
-        {
-            case JobState::InProgress: return DcdrFlatBuffers::JobState_InProgress;
-            case JobState::Stopped:    return DcdrFlatBuffers::JobState_Stopped;
-            case JobState::Removed:    return DcdrFlatBuffers::JobState_Removed;
-        }
-        throw std::invalid_argument("Unreachable code!"); // make linter happy
-    }
-
-    DcdrFlatBuffers::NodeState marshal(NodeState nodeState)
-    {
-        switch (nodeState)
-        {
-            case NodeState::Active:        return DcdrFlatBuffers::NodeState_Active;
-            case NodeState::Disabled:      return DcdrFlatBuffers::NodeState_Disabled;
-            case NodeState::Malfunctioned: return DcdrFlatBuffers::NodeState_Malfunctioned;
-            case NodeState::Offline:       return DcdrFlatBuffers::NodeState_Offline;
-        }
-        throw std::invalid_argument("Unreachable code!"); // make linter happy
     }
 }
 
@@ -117,7 +96,7 @@ IParcel::SerializedParcel FlatBuffersCommanderRequestSerializer::serialize(const
                 return DcdrFlatBuffers::CreateCommanderSetJobStateRequest(
                         flatBuffersBuilder,
                         parcel.get_job_id(),
-                        marshal(parcel.get_job_state()));
+                        SerializerUtils::marshal(parcel.get_job_state()));
             });
 }
 
@@ -171,6 +150,7 @@ IParcel::SerializedParcel FlatBuffersCommanderRequestSerializer::serialize(const
             {
                 return DcdrFlatBuffers::CreateCommanderSetNodeStateRequest(
                         flatBuffersBuilder,
-                        marshal(parcel.get_node_state()));
+                        parcel.get_node_id(),
+                        SerializerUtils::marshal(parcel.get_node_state()));
             });
 }

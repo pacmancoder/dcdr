@@ -3,15 +3,16 @@
 #include <dcdr/messaging/commander/ACommanderRequestParcel.h>
 #include <dcdr/messaging/commander/CommanderRequests.h>
 
+#include <dcdr/messaging/commander/ICommanderRequestSerializer.h>
+#include <dcdr/messaging/commander/ICommanderRequestDispatcher.h>
+
 namespace Dcdr::Interconnect
 {
-    class ICommanderRequestSerializer;
-    class ICommanderRequestDispatcher;
-
-
-    template <class ParcelDetails, typename... Args>
+    template <class ParcelDetails>
     class ConcreteCommanderRequestParcel : public ACommanderRequestParcel
     {
+    public:
+        template <typename... Args>
         explicit ConcreteCommanderRequestParcel(Args&&... args) :
                 details_(std::forward<Args>(args)...) {}
 
@@ -23,6 +24,11 @@ namespace Dcdr::Interconnect
         ParcelHandle dispatch(ICommanderRequestDispatcher& dispatcher) const override
         {
             return dispatcher.dispatch(details_);
+        }
+
+        const ParcelDetails& get_request() const
+        {
+            return details_;
         }
 
     private:

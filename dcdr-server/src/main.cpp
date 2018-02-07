@@ -4,8 +4,8 @@
 #include <dcdr/logging/StdoutLogWriter.h>
 #include <dcdr/server/core/Core.h>
 #include <dcdr/server/transport/mongoose-websocket/MongooseWebsocket.h>
-#include <dcdr/messaging/flatbuffers/FlatBuffersCommanderRequestSerializer.h>
 #include <dcdr/messaging/flatbuffers/FlatBuffersParcelDeserializer.h>
+#include <dcdr/messaging/flatbuffers/FlatBuffersParcelSerializer.h>
 
 using namespace Dcdr::Logging;
 using namespace Dcdr::Server;

@@ -13,10 +13,6 @@ namespace Dcdr::Server
         void run();
 
         Interconnect::IParcel::ParcelHandle dispatch(const Interconnect::ACommanderRequestParcel& parcel) override;
-
-        virtual ~Core();
-    private:
-        class CoreCommanderRequestDispatcher;
-        std::unique_ptr<CoreCommanderRequestDispatcher> commanderRequestDispatcher_;
+        Interconnect::IParcel::ParcelHandle dispatch(const Interconnect::ACommanderResponseParcel& parcel) override;
     };
 }
