@@ -1,17 +1,27 @@
 #pragma once
 
-#include <flatbuffers-generated/DcdrFlatBuffers.h>
+#include <dcdr/messaging/IParcel.h>
 #include <dcdr/logging/Logger.h>
+#include <flatbuffers-generated/DcdrFlatBuffers.h>
+#include <dcdr/messaging/commander/CommanderInterconnectTypes.h>
 
 // Following template classes should be local to cpp in which they were included
-namespace
+namespace Dcdr::Interconnect::FlatBuffers::SerializerUtils
 {
-    using namespace Dcdr::Interconnect;
-    using namespace Dcdr::Logging;
+    template <class ParcelType, class ParcelGenerator>
+    IParcel::SerializedParcel build_parcel(ParcelGenerator&& parcelGenerator, size_t builderBufferSize);
+
+    DcdrFlatBuffers::JobState marshal(Commander::JobState jobState);
+    DcdrFlatBuffers::NodeState marshal(Commander::NodeState nodeState);
+
+
+    // === Template Implementations ===
 
     template <class ParcelType, class ParcelGenerator>
     IParcel::SerializedParcel build_parcel(ParcelGenerator&& parcelGenerator, size_t builderBufferSize)
     {
+        using namespace Dcdr::Logging;
+
         log_debug(std::string()
                           .append("[Interconnect][FlatBuffers] Building ")
                           .append(ParcelType::GetFullyQualifiedName())

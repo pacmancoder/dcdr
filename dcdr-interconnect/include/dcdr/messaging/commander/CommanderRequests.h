@@ -1,7 +1,7 @@
 #pragma once
 
 #include <cstdint>
-#include <dcdr/messaging/commander/CommanderCommandData.h>
+#include <dcdr/messaging/commander/CommanderInterconnectTypes.h>
 
 namespace Dcdr::Interconnect
 {
@@ -44,12 +44,12 @@ namespace Dcdr::Interconnect
     class CommanderSetJobStateRequest : public ACommanderJobRequest
     {
     public:
-        CommanderSetJobStateRequest(uint32_t jobId, JobState jobState);
+        CommanderSetJobStateRequest(uint32_t jobId, Commander::JobState jobState);
 
-        JobState get_job_state() const;
+        Commander::JobState get_job_state() const;
 
     private:
-        JobState jobState_;
+        Commander::JobState jobState_;
     };
 
     class CommanderAddJobRequest
@@ -89,11 +89,11 @@ namespace Dcdr::Interconnect
     class CommanderSetNodeStateRequest : public ACommanderNodeRequest
     {
     public:
-        CommanderSetNodeStateRequest(uint32_t nodeId, NodeState nodeState);
+        CommanderSetNodeStateRequest(uint32_t nodeId, Commander::NodeState nodeState);
 
-        NodeState get_node_state() const;
+        Commander::NodeState get_node_state() const;
 
     private:
-        NodeState nodeState_;
+        Commander::NodeState nodeState_;
     };
 }

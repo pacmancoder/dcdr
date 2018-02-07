@@ -10,10 +10,10 @@ uint32_t ACommanderJobRequest::get_job_id() const { return jobId_; }
 CommanderGetJobInfoRequest::CommanderGetJobInfoRequest(uint32_t jobId) :
         ACommanderJobRequest(jobId) {}
 
-CommanderSetJobStateRequest::CommanderSetJobStateRequest(uint32_t jobId, JobState jobState) :
+CommanderSetJobStateRequest::CommanderSetJobStateRequest(uint32_t jobId, Commander::JobState jobState) :
         ACommanderJobRequest(jobId), jobState_(jobState) {}
 
-JobState CommanderSetJobStateRequest::get_job_state() const { return jobState_; }
+Commander::JobState CommanderSetJobStateRequest::get_job_state() const { return jobState_; }
 
 CommanderGetJobPreviewRequest::CommanderGetJobPreviewRequest(uint32_t jobId, uint8_t mipmapLevel) :
         ACommanderJobRequest(jobId), mipmapLevel_(mipmapLevel) {}
@@ -38,7 +38,7 @@ uint32_t ACommanderNodeRequest::get_node_id() const { return nodeId_; }
 CommanderGetNodeInfoRequest::CommanderGetNodeInfoRequest(uint32_t nodeId) :
         ACommanderNodeRequest(nodeId) {}
 
-CommanderSetNodeStateRequest::CommanderSetNodeStateRequest(uint32_t nodeId, NodeState nodeState) :
+CommanderSetNodeStateRequest::CommanderSetNodeStateRequest(uint32_t nodeId, Commander::NodeState nodeState) :
         ACommanderNodeRequest(nodeId), nodeState_(nodeState) {}
 
-NodeState CommanderSetNodeStateRequest::get_node_state() const { return nodeState_; }
+Commander::NodeState CommanderSetNodeStateRequest::get_node_state() const { return nodeState_; }

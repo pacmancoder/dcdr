@@ -2,7 +2,7 @@
 
 #include <cstdint>
 
-namespace Dcdr::Interconnect
+namespace Dcdr::Interconnect::Commander
 {
     enum class JobState : uint8_t
     {

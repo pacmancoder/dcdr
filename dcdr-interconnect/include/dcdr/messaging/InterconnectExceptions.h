@@ -18,6 +18,14 @@ namespace Dcdr::Interconnect
                 InterconnectException("Deserialization", msg) {}
     };
 
+    class DeserializationNotImplementedException : public DeserializationException
+    {
+    public:
+        explicit DeserializationNotImplementedException(const std::string& parcelName) :
+                DeserializationException(
+                        std::string("Deserialization for ") + parcelName + std::string(" parcel is not implemented")) {}
+    };
+
     class SerializationException : public InterconnectException
     {
     public:
@@ -28,7 +36,7 @@ namespace Dcdr::Interconnect
     class SerializationNotImplementedException : public SerializationException
     {
     public:
-        SerializationNotImplementedException(const std::string& parcelName) :
+        explicit SerializationNotImplementedException(const std::string& parcelName) :
                 SerializationException(
                         std::string("Serialization for ") + parcelName + std::string(" parcel is not implemented")) {}
     };

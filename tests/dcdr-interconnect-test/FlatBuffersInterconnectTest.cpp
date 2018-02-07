@@ -1,13 +1,8 @@
 #include <gtest/gtest.h>
 
-#include <dcdr/messaging/flatbuffers/FlatBuffersCommanderRequestSerializer.h>
+#include <dcdr/messaging/flatbuffers/FlatBuffersParcelSerializer.h>
 #include <dcdr/messaging/flatbuffers/FlatBuffersParcelDeserializer.h>
-#include <dcdr/messaging/worker/AWorkerRequestParcel.h>
-#include <dcdr/messaging/worker/WorkerConnectRequest.h>
-#include <dcdr/messaging/commander/CommanderGetSurfaceRequest.h>
-#include <dcdr/messaging/commander/CommanderGetSurfaceResponse.h>
-#include <dcdr/messaging/commander/CommanderGetSurfaceInfoRequest.h>
-#include <dcdr/messaging/commander/CommanderGetSurfaceInfoResponse.h>
+#include <dcdr/messaging/commander/CommanderRequestParcels.h>
 
 using namespace Dcdr::Interconnect;
 
@@ -18,76 +13,124 @@ protected:
     FlatBuffersParcelDeserializer deserializer_;
 };
 
-TEST_F(FlatBuffersInterconnectTest, WorkerConnectRequestTest)
+
+TEST_F(FlatBuffersInterconnectTest, CommanderGetJobListRequestParcelTest)
 {
-    const AWorkerRequestParcel::SessionID session {0, 1, 2, 3, 4, 6, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15};
-    const WorkerConnectRequest::Token     token   {0, 1, 2, 3, 4, 6, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15};
+    CommanderGetJobListRequestParcel request;
 
-    WorkerConnectRequest request;
-    request.set_session_id(session);
-    request.set_token(token);
+    auto serialized = static_cast<const IParcel&>(request).serialize(serializer_);
+    auto deserialized = deserializer_.deserialize(std::move(serialized));
 
-    auto serializedParcel = request.serialize(serializer_);
-    auto deserializedParcel = deserializer_.deserialize(serializedParcel);
-
-    auto deserializedRequest = dynamic_cast<WorkerConnectRequest*>(deserializedParcel.get());
-
-    ASSERT_TRUE(deserializedRequest->get_session_id() == session);
-    ASSERT_TRUE(deserializedRequest->get_token()      == token);
+    auto receivedRequest = dynamic_cast<CommanderGetJobListRequestParcel*>(deserialized.get());
+    ASSERT_TRUE(receivedRequest != nullptr);
 }
 
-TEST_F(FlatBuffersInterconnectTest, CommanderGetSurfaceInfoRequestTest)
+TEST_F(FlatBuffersInterconnectTest, CommanderGetJobInfoRequestParcelTest)
 {
-    CommanderGetSurfaceInfoRequest request;
+    CommanderGetJobInfoRequestParcel request(42);
 
-    auto serializedParcel = request.serialize(serializer_);
-    auto deserializedParcel = deserializer_.deserialize(serializedParcel);
+    auto serialized = static_cast<const IParcel&>(request).serialize(serializer_);
+    auto deserialized = deserializer_.deserialize(std::move(serialized));
 
-    auto deserializedRequest = dynamic_cast<CommanderGetSurfaceInfoRequest*>(deserializedParcel.get());
-    ASSERT_TRUE(deserializedRequest != nullptr);
+    auto receivedRequest = dynamic_cast<CommanderGetJobInfoRequestParcel*>(deserialized.get());
+    ASSERT_TRUE(receivedRequest != nullptr);
+    ASSERT_TRUE(receivedRequest->get_request().get_job_id() == 42);
 }
 
-TEST_F(FlatBuffersInterconnectTest, CommanderGetSurfaceRequestTest)
+TEST_F(FlatBuffersInterconnectTest, CommanderGetJobPreviewRequestParcel)
 {
-    CommanderGetSurfaceRequest request;
+    CommanderGetJobPreviewRequestParcel request(42, 2);
 
-    auto serializedParcel = request.serialize(serializer_);
-    auto deserializedParcel = deserializer_.deserialize(serializedParcel);
+    auto serialized = static_cast<const IParcel&>(request).serialize(serializer_);
+    auto deserialized = deserializer_.deserialize(std::move(serialized));
 
-    auto deserializedRequest = dynamic_cast<CommanderGetSurfaceRequest*>(deserializedParcel.get());
-    ASSERT_TRUE(deserializedRequest != nullptr);
+    auto receivedRequest = dynamic_cast<CommanderGetJobPreviewRequestParcel*>(deserialized.get());
+    ASSERT_TRUE(receivedRequest != nullptr);
+    ASSERT_TRUE(receivedRequest->get_request().get_job_id() == 42);
+    ASSERT_TRUE(receivedRequest->get_request().get_mipmap_level() == 2);
 }
 
-TEST_F(FlatBuffersInterconnectTest, CommanderGetSurfaceInfoResponseTest)
+TEST_F(FlatBuffersInterconnectTest, CommanderGetJobArtifactRequestParcel)
 {
-    CommanderGetSurfaceInfoResponse response;
-    response.set_width(1920);
-    response.set_height(1080);
+    CommanderGetJobArtifactRequestParcel request(42);
 
-    auto serializedParcel = response.serialize(serializer_);
-    auto deserializedParcel = deserializer_.deserialize(serializedParcel);
+    auto serialized = static_cast<const IParcel&>(request).serialize(serializer_);
+    auto deserialized = deserializer_.deserialize(std::move(serialized));
 
-    auto deserializedResponse = dynamic_cast<CommanderGetSurfaceInfoResponse*>(deserializedParcel.get());
-    ASSERT_TRUE(deserializedResponse != nullptr);
-
-    ASSERT_TRUE(deserializedResponse->get_width()  == 1920);
-    ASSERT_TRUE(deserializedResponse->get_height() == 1080);
+    auto receivedRequest = dynamic_cast<CommanderGetJobArtifactRequestParcel*>(deserialized.get());
+    ASSERT_TRUE(receivedRequest != nullptr);
+    ASSERT_TRUE(receivedRequest->get_request().get_job_id() == 42);
 }
 
-TEST_F(FlatBuffersInterconnectTest, CommanderGetSurfaceResponseTest)
+TEST_F(FlatBuffersInterconnectTest, CommanderSetJobStateRequestParcel)
 {
-    const CommanderGetSurfaceResponse::ImageFormat imageFormat(CommanderGetSurfaceResponse::ImageFormat::Png);
-    const CommanderGetSurfaceResponse::ImageBuffer imageBuffer {1, 2, 3, 4};
+    CommanderSetJobStateRequestParcel request(42, Commander::JobState::InProgress);
 
-    CommanderGetSurfaceResponse response;
-    response.set_image(imageFormat, std::vector<uint8_t>(imageBuffer));
+    auto serialized = static_cast<const IParcel&>(request).serialize(serializer_);
+    auto deserialized = deserializer_.deserialize(std::move(serialized));
 
-    auto serializedParcel = response.serialize(serializer_);
-    auto deserializedParcel = deserializer_.deserialize(serializedParcel);
+    auto receivedRequest = dynamic_cast<CommanderSetJobStateRequestParcel*>(deserialized.get());
+    ASSERT_TRUE(receivedRequest != nullptr);
+    ASSERT_TRUE(receivedRequest->get_request().get_job_id() == 42);
+    ASSERT_TRUE(receivedRequest->get_request().get_job_state() == Commander::JobState::InProgress);
+}
 
-    auto deserializedResponse = dynamic_cast<CommanderGetSurfaceResponse*>(deserializedParcel.get());
-    ASSERT_TRUE(deserializedResponse != nullptr);
+TEST_F(FlatBuffersInterconnectTest, CommanderAddJobRequestParcel)
+{
+    CommanderAddJobRequestParcel request(42, 2.0f);
 
-    ASSERT_TRUE(deserializedResponse->get_image_format() == imageFormat);
-    ASSERT_EQ(deserializedResponse->get_image_buffer(), imageBuffer);
+    auto serialized = static_cast<const IParcel&>(request).serialize(serializer_);
+    auto deserialized = deserializer_.deserialize(std::move(serialized));
+
+    auto receivedRequest = dynamic_cast<CommanderAddJobRequestParcel*>(deserialized.get());
+    ASSERT_TRUE(receivedRequest != nullptr);
+    ASSERT_TRUE(receivedRequest->get_request().get_scene_id() == 42);
+    ASSERT_TRUE(receivedRequest->get_request().get_scale() == 2.0f);
+}
+
+TEST_F(FlatBuffersInterconnectTest, CommanderGetSceneListRequestParcel)
+{
+    CommanderGetSceneListRequestParcel request;
+
+    auto serialized = static_cast<const IParcel&>(request).serialize(serializer_);
+    auto deserialized = deserializer_.deserialize(std::move(serialized));
+
+    auto receivedRequest = dynamic_cast<CommanderGetSceneListRequestParcel*>(deserialized.get());
+    ASSERT_TRUE(receivedRequest != nullptr);
+}
+
+TEST_F(FlatBuffersInterconnectTest, CommanderGetNodeListRequestParcel)
+{
+    CommanderGetNodeListRequestParcel request;
+
+    auto serialized = static_cast<const IParcel&>(request).serialize(serializer_);
+    auto deserialized = deserializer_.deserialize(std::move(serialized));
+
+    auto receivedRequest = dynamic_cast<CommanderGetNodeListRequestParcel*>(deserialized.get());
+    ASSERT_TRUE(receivedRequest != nullptr);
+}
+
+TEST_F(FlatBuffersInterconnectTest, CommanderGetNodeInfoRequestParcel)
+{
+    CommanderGetNodeInfoRequestParcel request(42);
+
+    auto serialized = static_cast<const IParcel&>(request).serialize(serializer_);
+    auto deserialized = deserializer_.deserialize(std::move(serialized));
+
+    auto receivedRequest = dynamic_cast<CommanderGetNodeInfoRequestParcel*>(deserialized.get());
+    ASSERT_TRUE(receivedRequest != nullptr);
+    ASSERT_TRUE(receivedRequest->get_request().get_node_id() == 42);
+}
+
+TEST_F(FlatBuffersInterconnectTest, CommanderSetNodeStateRequestParcel)
+{
+    CommanderSetNodeStateRequestParcel request(42, Commander::NodeState::Malfunctioned);
+
+    auto serialized = static_cast<const IParcel&>(request).serialize(serializer_);
+    auto deserialized = deserializer_.deserialize(std::move(serialized));
+
+    auto receivedRequest = dynamic_cast<CommanderSetNodeStateRequestParcel*>(deserialized.get());
+    ASSERT_TRUE(receivedRequest != nullptr);
+    ASSERT_TRUE(receivedRequest->get_request().get_node_id() == 42);
+    ASSERT_TRUE(receivedRequest->get_request().get_node_state() == Commander::NodeState::Malfunctioned);
 }

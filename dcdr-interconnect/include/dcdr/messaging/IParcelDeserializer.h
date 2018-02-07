@@ -16,6 +16,6 @@ namespace Dcdr::Interconnect
     public:
         virtual IParcel::ParcelPtr deserialize(IParcel::SerializedParcel serializedParcel) = 0;
 
-        ~IParcelDeserializer() = default;
+        virtual ~IParcelDeserializer() = default;
     };
 }

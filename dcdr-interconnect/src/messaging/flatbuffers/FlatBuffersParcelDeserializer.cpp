@@ -1,0 +1,41 @@
+#include <dcdr/messaging/flatbuffers/FlatBuffersParcelDeserializer.h>
+#include <dcdr/messaging/InterconnectExceptions.h>
+#include <flatbuffers-generated/DcdrFlatBuffers.h>
+
+#include "private/FlatBuffersSerializerUtils.h"
+#include "private/FlatBuffersCommandRequestDeserializer.h"
+#include "messaging/flatbuffers/private/FlatBuffersExceptions.h"
+
+using namespace Dcdr::Interconnect;
+using namespace Dcdr::Interconnect::FlatBuffers;
+
+IParcel::ParcelPtr FlatBuffersParcelDeserializer::deserialize(IParcel::SerializedParcel serializedParcel)
+{
+    auto verifier = flatbuffers::Verifier(serializedParcel.data(), serializedParcel.size());
+
+    if (!DcdrFlatBuffers::VerifyParcelBuffer(verifier))
+    {
+        throw FlatBuffersVerificationException();
+    }
+
+    auto parcelFlatBuffer = DcdrFlatBuffers::GetParcel(serializedParcel.data());
+
+    switch (parcelFlatBuffer->parcelData_type())
+    {
+        case DcdrFlatBuffers::ParcelData_NONE:
+            return nullptr;
+        case DcdrFlatBuffers::ParcelData_WorkerRequest:
+            throw DeserializationNotImplementedException("WorkerRequest");
+        case DcdrFlatBuffers::ParcelData_WorkerResponse:
+            throw DeserializationNotImplementedException("WorkerResponse");
+        case DcdrFlatBuffers::ParcelData_CommanderRequest:
+        {
+            FlatBuffersCommandRequestDeserializer deserializer;
+            return deserializer.deserialize(parcelFlatBuffer->parcelData_as_CommanderRequest());
+        }
+        case DcdrFlatBuffers::ParcelData_CommanderResponse:
+            throw DeserializationNotImplementedException("CommanderResponse");
+    }
+
+    throw DeserializationNotImplementedException("<Unknown>");
+}
