@@ -19,13 +19,6 @@ table CommanderGetJobArtifactRequest
     data: [uint8];
 }
 
-enum JobState : uint8
-{
-    InProgress,
-    Stopped,
-    Removed,
-}
-
 table CommanderSetJobStateRequest
 {
     jobId: uint32;
@@ -45,14 +38,6 @@ table CommanderGetNodeListRequest {}
 table CommanderGetNodeInfoRequest 
 {
     nodeId: uint32;
-}
-
-enum NodeState : uint8
-{
-    Active,
-    Disabled,
-    Malfunctioned,
-    Offline,
 }
 
 table CommanderSetNodeStateRequest 

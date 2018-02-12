@@ -1,37 +1,49 @@
 namespace DcdrFlatBuffers;
 
-table WorkerConnectRequest
+
+table WorkerLoginRequest
 {
-    token: [ubyte];
+    name: string;
+    token: string;
 }
 
-table WorkerDisconnectRequest {}
-
-table WorkerGetSceneInfoRequest {}
-
-table WorkerVerifySceneRequest
+table WorkerSendHardwareInfoRequest
 {
-    sceneMD5: string;
+    threads: uint16;
+    memory: uint64;
+    storage: uint64;
+
+    // other information, not used in load balancing
+    properties: [PropertyPair];
 }
 
-table WorkerGetWorkScopeRequest 
+table WorkerLogoutRequest {}
+
+table WorkerGetSessionStatusRequest {}
+
+table WorkerGetWorkRequest {}
+
+table WorkerCommitWorkRequest
 {
-    threadsAvailable: ushort;
+    workId: uint32;
+    chunkData: [Pixel];
 }
 
-table WorkerPublishArtifactsRequest
+table WorkerDownloadSceneRequest
 {
-    chunks: [Chunk];
+    sceneId: uint32;
+    offset: uint64;
 }
 
 union WorkerRequestData
 {
-    WorkerConnectRequest,
-    WorkerDisconnectRequest,
-    WorkerGetSceneInfoRequest,
-    WorkerVerifySceneRequest,
-    WorkerGetWorkScopeRequest,
-    WorkerPublishArtifactsRequest,
+    WorkerLoginRequest,
+    WorkerLogoutRequest,
+    WorkerGetSessionStatusRequest,
+    WorkerSendHardwareInfoRequest,
+    WorkerGetWorkRequest,
+    WorkerCommitWorkRequest,
+    WorkerDownloadSceneRequest
 }
 
 table WorkerRequest

@@ -1,6 +1,12 @@
 project(dcdr-interconnect-flatbuffers)
 
-file(GLOB DCDR_FLATBUFFERS_INPUT_FILES ${PROJECT_SOURCE_DIR}/*.fbs)
+set(DCDR_FLATBUFFERS_INPUT_FILES
+		${PROJECT_SOURCE_DIR}/types.fbs
+		${PROJECT_SOURCE_DIR}/commander_request.fbs
+		${PROJECT_SOURCE_DIR}/commander_response.fbs
+		${PROJECT_SOURCE_DIR}/worker_request.fbs
+		${PROJECT_SOURCE_DIR}/worker_response.fbs
+		${PROJECT_SOURCE_DIR}/parcel.fbs)
 
 set(DCDR_FLATBUFFERS_GENERATED_ROOT_FOLDER ${CMAKE_BINARY_DIR}/gen/flatbuffers)
 set(DCDR_FLATBUFFERS_GENERATED_CPP_ROOT_FOLDER ${CMAKE_BINARY_DIR}/gen/flatbuffers/cpp)
