@@ -20,33 +20,37 @@ table PropertyPair
 
 table CommanderGetJobInfoResponse
 {
+    id: uint32;
     properties: [PropertyPair];
 }
 
 table CommanderGetJobPreviewResponse
 {
+    id: uint32;
     data: [uint8];
 }
 
 table CommanderGetJobArtifactResponse
 {
+    id: uint32;
     data: [uint8];
 }
+
+
+table CommanderDoJobListUpdateResponse {}
 
 table Scene
 {
     id: uint32;
     name: string;
-    nativeWidth: uint16;
-    nativeHeight: uint16;
+    width: uint16;
+    height: uint16;
 }
 
 table CommanderGetSceneListReponse
 {
     scenes: [Scene];
 }
-
-table CommanderDoSceneListUpdateResponse {}
 
 table Node
 {
@@ -62,20 +66,22 @@ table CommanderGetNodeListResponse
 
 table CommanderGetNodeInfoResponse
 {
+    id: uint32;
     properties: [PropertyPair];
 }
 
 table CommanderDoNodeListUpdateResponse {}
 
-enum CommanderError : uint16
+enum CommanderErrorKind : uint16
 {
     JobNotExist,
     NodeNotExist,
+    SceneNotExist
 }
 
 table CommanderDoShowErrorResponse
 {
-    error: CommanderError;
+    error: CommanderErrorKind;
     message: string;
 }
 
@@ -86,8 +92,8 @@ union CommanderResponseData
     CommanderGetJobInfoResponse,
     CommanderGetJobPreviewResponse,
     CommanderGetJobArtifactResponse,
+    CommanderDoJobListUpdateResponse,
     CommanderGetSceneListReponse,
-    CommanderDoSceneListUpdateResponse,
     // nodes
     CommanderGetNodeListResponse,
     CommanderGetNodeInfoResponse,

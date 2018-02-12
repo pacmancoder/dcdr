@@ -1,4 +1,4 @@
-#include "FlatBuffersCommandRequestDeserializer.h"
+#include "FlatBuffersCommanderRequestDeserializer.h"
 #include <dcdr/messaging/commander/CommanderRequestParcels.h>
 #include <dcdr/messaging/InterconnectExceptions.h>
 
@@ -67,7 +67,7 @@ namespace
     }
 }
 
-IParcel::ParcelPtr FlatBuffersCommandRequestDeserializer::deserialize(
+IParcel::ParcelPtr FlatBuffersCommanderRequestDeserializer::deserialize(
         const DcdrFlatBuffers::CommanderRequest* request) const
 {
     switch (request->requestData_type())
