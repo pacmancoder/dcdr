@@ -9,6 +9,7 @@ namespace Dcdr::Interconnect
     class CommanderGetJobArtifactRequest;
     class CommanderSetJobStateRequest;
     class CommanderAddJobRequest;
+    // scenes
     class CommanderGetSceneListRequest;
     // commander node requests
     class CommanderGetNodeListRequest;

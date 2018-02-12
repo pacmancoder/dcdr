@@ -1,6 +1,7 @@
 #pragma once
 
 #include <cstdint>
+#include <string>
 
 namespace Dcdr::Interconnect::Commander
 {
@@ -8,7 +9,7 @@ namespace Dcdr::Interconnect::Commander
     {
         InProgress,
         Stopped,
-        Removed,
+        Removed
     };
 
     enum class NodeState : uint8_t
@@ -16,6 +17,42 @@ namespace Dcdr::Interconnect::Commander
         Active,
         Disabled,
         Malfunctioned,
-        Offline,
+        Offline
     };
+
+    struct Job
+    {
+        uint32_t id;
+        std::string name;
+        JobState state;
+    };
+
+    struct PropertyPair
+    {
+        std::string name;
+        std::string value;
+    };
+
+    struct Scene
+    {
+        uint32_t id;
+        std::string name;
+        uint16_t width;
+        uint16_t height;
+    };
+
+    struct Node
+    {
+        uint32_t id;
+        std::string name;
+        NodeState state;
+    };
+
+    enum class CommanderErrorKind : uint16_t
+    {
+        JobNotExist,
+        NodeNotExist,
+        SceneNotExist
+    };
+
 }

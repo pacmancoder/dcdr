@@ -2,11 +2,9 @@
 
 #include <dcdr/messaging/IParcel.h>
 #include <dcdr/messaging/commander/ICommanderRequestSerializer.h>
-#include <memory>
 
 namespace Dcdr::Interconnect::FlatBuffers
 {
-
     class FlatBuffersCommanderRequestSerializer : public ICommanderRequestSerializer
     {
     public:

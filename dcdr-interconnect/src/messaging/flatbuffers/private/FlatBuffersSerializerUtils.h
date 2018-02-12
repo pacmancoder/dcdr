@@ -5,6 +5,8 @@
 #include <flatbuffers-generated/DcdrFlatBuffers.h>
 #include <dcdr/messaging/commander/CommanderInterconnectTypes.h>
 
+#include <vector>
+
 // Following template classes should be local to cpp in which they were included
 namespace Dcdr::Interconnect::FlatBuffers::SerializerUtils
 {
@@ -13,7 +15,25 @@ namespace Dcdr::Interconnect::FlatBuffers::SerializerUtils
 
     DcdrFlatBuffers::JobState marshal(Commander::JobState jobState);
     DcdrFlatBuffers::NodeState marshal(Commander::NodeState nodeState);
+    DcdrFlatBuffers::CommanderErrorKind marshal(Commander::CommanderErrorKind errorKind);
 
+    flatbuffers::Offset<DcdrFlatBuffers::Job> serialize(flatbuffers::FlatBufferBuilder& builder, const Commander::Job& job);
+    flatbuffers::Offset<DcdrFlatBuffers::PropertyPair> serialize(flatbuffers::FlatBufferBuilder& builder, const Commander::PropertyPair& propertyPair);
+    flatbuffers::Offset<DcdrFlatBuffers::Scene> serialize(flatbuffers::FlatBufferBuilder& builder, const Commander::Scene& scene);
+    flatbuffers::Offset<DcdrFlatBuffers::Node> serialize(flatbuffers::FlatBufferBuilder& builder, const Commander::Node& node);
+
+    template <class From, class To>
+    flatbuffers::Offset<flatbuffers::Vector<flatbuffers::Offset<To>>> serialize_vector(
+            flatbuffers::FlatBufferBuilder& builder, const std::vector<From>& data)
+    {
+        std::vector<flatbuffers::Offset<To>> offsets;
+        for(const auto& i : data)
+        {
+            offsets.push_back(serialize(builder, i));
+        }
+
+        return builder.CreateVector(offsets);
+    }
 
     // === Template Implementations ===
 

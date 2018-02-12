@@ -5,7 +5,7 @@
 
 namespace Dcdr::Interconnect::FlatBuffers
 {
-    class FlatBuffersCommandRequestDeserializer
+    class FlatBuffersCommanderRequestDeserializer
     {
     public:
         IParcel::ParcelPtr deserialize(const DcdrFlatBuffers::CommanderRequest* request) const;

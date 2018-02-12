@@ -14,6 +14,7 @@ namespace Dcdr::Interconnect
 
         uint32_t get_job_id() const;
 
+        virtual ~ACommanderJobRequest() = default;
     private:
         uint32_t jobId_;
     };
@@ -75,6 +76,8 @@ namespace Dcdr::Interconnect
         explicit ACommanderNodeRequest(uint32_t nodeId);
 
         uint32_t get_node_id() const;
+
+        virtual ~ACommanderNodeRequest() = default;
 
     private:
         uint32_t nodeId_;

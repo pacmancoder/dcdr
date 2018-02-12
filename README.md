@@ -1,6 +1,5 @@
-DCDR
+![Logo](res/images/logo.png)
 ===
-### Distributed Computing Distributed Ray Tracer
 [![Build Status](https://travis-ci.org/pacmancoder/dcdr.svg?branch=master)](https://travis-ci.org/pacmancoder/dcdr)
 [![Build status](https://ci.appveyor.com/api/projects/status/jps7v4yufd8kl9ux?svg=true)](https://ci.appveyor.com/project/pacmancoder/dcdr)
 
@@ -29,6 +28,9 @@ Currently I am working on the implementation of connectivity between DCDR-Server
 ##### Build / Deploy / CI
 - CMake as main C ++ build system
 - Travis CI as continuous integration platform
+
+##### Development
+- Coding [guidelines](docs/coding_guidelines.md) 
 
 ##### Libraries
 - [Mongoose](https://github.com/cesanta/mongoose) as embedded web-server
