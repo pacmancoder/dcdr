@@ -1,0 +1,55 @@
+namespace DcdrFlatBuffers;
+
+enum JobState : uint8
+{
+    InProgress,
+    Stopped,
+    Removed,
+}
+
+enum NodeState : uint8
+{
+    Active,
+    Disabled,
+    Malfunctioned,
+    Offline,
+}
+
+enum CommanderErrorKind : uint16
+{
+    JobNotExist,
+    NodeNotExist,
+    SceneNotExist
+}
+
+table Pixel
+{
+    r: float;
+    g: float;
+    b: float;
+    samples: uint32;    
+}
+
+table ScenePart
+{
+    sceneId: uint32;
+    offset: uint64;
+    data: [uint32];
+}
+
+enum WorkerSessionStatus : uint8
+{
+    Absent,
+    Logined,
+    Ready,
+    Paused,
+    Blocked
+}
+
+enum ServerErrorKind : uint16
+{
+    SessionNotReady,
+    WorkNotExist,
+    SceneNotExist,
+    WrongSceneOffset
+}

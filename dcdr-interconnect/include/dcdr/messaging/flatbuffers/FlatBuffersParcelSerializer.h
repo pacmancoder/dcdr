@@ -10,6 +10,5 @@ namespace Dcdr::Interconnect
     public:
         IParcel::SerializedParcel serialize(const ACommanderRequestParcel& parcel) override;
         IParcel::SerializedParcel serialize(const ACommanderResponseParcel& parcel) override;
-
     };
 }
