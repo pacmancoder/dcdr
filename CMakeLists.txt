@@ -42,6 +42,7 @@ add_subdirectory(dcdr-worker)
 add_subdirectory(dcdr-interconnect)
 add_subdirectory(dcdr-server)
 add_subdirectory(dcdr-webui)
+add_subdirectory(dcdr-gui)
 
 # Tests
 add_subdirectory(tests)

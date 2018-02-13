@@ -1,12 +1,5 @@
 project(microtar)
 
-if(MSVC)
-	remove_definitions(/WX)
-else()
-	remove_definitions(-Werror)
-endif()
-
-
 SET(MICROTAR_DIR microtar-git)
 
 SET(MICROTAR_SOURCES

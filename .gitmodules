@@ -13,3 +13,6 @@
 [submodule "libs/gtest-git"]
 	path = libs/gtest-git
 	url = https://github.com/google/googletest.git
+[submodule "libs/nana-git"]
+	path = libs/nana-git
+	url = https://github.com/cnjinhao/nana.git

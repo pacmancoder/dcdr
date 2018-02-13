@@ -9,6 +9,8 @@ addons:
     packages:
       - g++-7
       - gcc-7
+      - libx11-dev
+      - libxft-dev
 
 install: 
   - export CXX="g++-7" CC="gcc-7"
