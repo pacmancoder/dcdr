@@ -11,7 +11,7 @@ namespace Dcdr::Transport
     public:
         TcpAsyncServerTransport(const std::string& address, std::chrono::milliseconds networkTimeout);
 
-        void register_request_processor(std::shared_ptr<IAsyncRequestProcessor> requestProcessor) override;
+        void register_request_processor(std::shared_ptr<IAsyncConnectionProcessor> requestProcessor) override;
         void run() override;
         void close() override;
 

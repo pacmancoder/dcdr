@@ -7,6 +7,7 @@
 #include <mongoose.h>
 #include <thread>
 #include <list>
+#include <functional>
 
 #include <iostream>
 
@@ -28,7 +29,7 @@ namespace
 
     struct ResponseInfo
     {
-        IAsyncRequestProcessor::ResponseHandle handle;
+        IAsyncConnectionProcessor::ResponseHandle handle;
         mg_connection* connection;
 
         ResponseInfo(ResponseInfo&& rhs) :
@@ -41,7 +42,7 @@ namespace
             return *this;
         }
 
-        ResponseInfo(IAsyncRequestProcessor::ResponseHandle handle_, mg_connection* connection_) :
+        ResponseInfo(IAsyncConnectionProcessor::ResponseHandle handle_, mg_connection* connection_) :
                 handle(std::move(handle_)), connection(connection_) {}
     };
 }
@@ -54,13 +55,15 @@ struct TcpAsyncServerTransport::Impl
     mg_mgr mgr;
     mg_connection* rootConnection;
 
-    std::shared_ptr<IAsyncRequestProcessor> requestProcessor;
+    std::shared_ptr<IAsyncConnectionProcessor> connectionProcessor;
 
 
     bool closeRequested;
     std::thread workerThread;
 
     std::list<ResponseInfo> responses;
+
+    std::hash<std::string> stringHasher;
 
     void thread_func();
 
@@ -69,9 +72,11 @@ struct TcpAsyncServerTransport::Impl
             networkTimeout(networkTimeout_),
             mgr(),
             rootConnection(nullptr),
-            requestProcessor(nullptr),
+            connectionProcessor(nullptr),
             closeRequested(false),
-            workerThread() {}
+            workerThread(),
+            responses(),
+            stringHasher() {}
 };
 
 namespace
@@ -80,29 +85,33 @@ namespace
     {
         auto* impl_ = reinterpret_cast<TcpAsyncServerTransport::Impl*>(nc->mgr->user_data);
 
+        const std::string clientAddress = Mongoose::socket_to_string(nc->sa);
+
         switch (event)
         {
             case MG_EV_SEND:
             {
-                log_debug(with_log_prefix("Sent data to ").append(Mongoose::socket_to_string(nc->sa)));
+                log_debug(with_log_prefix("Sent data to ").append(clientAddress));
                 break;
             }
             case MG_EV_ACCEPT:
             {
-                log_debug(with_log_prefix("Client connected at ").append(Mongoose::socket_to_string(nc->sa)));
+                log_debug(with_log_prefix("Client connected at ").append(clientAddress));
+                impl_->connectionProcessor->open_connection(impl_->stringHasher(clientAddress));
                 break;
             }
             case MG_EV_RECV:
             {
-                log_debug(with_log_prefix("Received data from ").append(Mongoose::socket_to_string(nc->sa)));
-                if (impl_->requestProcessor != nullptr)
+                log_debug(with_log_prefix("Received data from ").append(clientAddress));
+
+                if (impl_->connectionProcessor != nullptr)
                 {
                     std::vector<uint8_t> received(nc->recv_mbuf.buf, nc->recv_mbuf.buf + nc->recv_mbuf.len);
                     mbuf_remove(&nc->recv_mbuf, nc->recv_mbuf.len);
 
                     impl_->responses.push_back(
-                            ResponseInfo(impl_->requestProcessor->process_request(received), nc)
-                    );
+                            ResponseInfo(impl_->connectionProcessor->get_response(
+                                    impl_->stringHasher(clientAddress), received), nc));
                 }
                 break;
             }
@@ -111,6 +120,7 @@ namespace
                 log_debug(with_log_prefix("Connection at ")
                                   .append(Mongoose::socket_to_string(nc->sa))
                                   .append(" has been closed"));
+                impl_->connectionProcessor->close_connection(impl_->stringHasher(clientAddress));
                 break;
             }
             default: break;
@@ -165,9 +175,9 @@ void TcpAsyncServerTransport::Impl::thread_func()
 TcpAsyncServerTransport::TcpAsyncServerTransport(const std::string& address, std::chrono::milliseconds networkTimeout) :
         impl_(new Impl(address, networkTimeout)) {}
 
-void TcpAsyncServerTransport::register_request_processor(std::shared_ptr<IAsyncRequestProcessor> requestProcessor)
+void TcpAsyncServerTransport::register_request_processor(std::shared_ptr<IAsyncConnectionProcessor> requestProcessor)
 {
-    impl_->requestProcessor = std::move(requestProcessor);
+    impl_->connectionProcessor = std::move(requestProcessor);
 }
 
 void TcpAsyncServerTransport::run()
