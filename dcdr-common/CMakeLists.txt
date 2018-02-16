@@ -6,6 +6,7 @@ set(DCDR_COMMON_INCLUDES
 
         include/dcdr/utils/Iterator.h
         include/dcdr/utils/Rng.h
+        include/dcdr/utils/Timer.h
 
         include/dcdr/renderer/UnbakedPixel.h
         include/dcdr/renderer/Chunk.h

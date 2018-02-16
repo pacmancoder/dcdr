@@ -40,4 +40,11 @@ namespace Dcdr::Interconnect
                 SerializationException(
                         std::string("Serialization for ") + parcelName + std::string(" parcel is not implemented")) {}
     };
+
+    class DispatchNotImplemented : public InterconnectException
+    {
+    public:
+        explicit DispatchNotImplemented(const std::string& msg) :
+                InterconnectException("Parcel Dispatch", msg) {}
+    };
 }

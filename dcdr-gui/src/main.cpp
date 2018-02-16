@@ -1,45 +1,47 @@
-
 #include "MainForm.h"
+#include "Commander.h"
+#include <dcdr/logging/Logger.h>
+#include <dcdr/logging/StdoutLogWriter.h>
+#include <dcdr/Exception.h>
+
 #include <memory>
 #include <thread>
 #include <future>
 #include <chrono>
 
 using namespace Dcdr::Gui;
-
-namespace
-{
-    void sleep(size_t ms)
-    {
-        std::this_thread::sleep_for(std::chrono::duration<int, std::milli>(ms));
-    }
-}
+using namespace Dcdr::Logging;
 
 int main()
 {
-    auto mainForm = std::make_shared<std::unique_ptr<Dcdr::Gui::MainForm>>(nullptr);
+    Logger::get_instance().add_log_writer(std::make_unique<StdoutLogWriter>());
 
-    auto guiThread = std::thread([mainForm]() mutable
-    {
-        mainForm->reset(new Dcdr::Gui::MainForm());
-        (*mainForm)->show();
-        nana::exec();
-    });
+    // gui will start on promary application thread
+    auto mainForm = std::make_shared<Dcdr::Gui::MainForm>();
 
+    // while commander communication logic should  be started on another thread
     auto commanderThread = std::thread([mainForm]()
     {
-        sleep(1000);
-        (*mainForm)->add_node(1, "Test 1", Dcdr::Interconnect::Commander::NodeState::Active); sleep(500);
-        (*mainForm)->add_node(2, "WOWWWW", Dcdr::Interconnect::Commander::NodeState::Offline); sleep(500);
-        (*mainForm)->add_node(3, "Куку!", Dcdr::Interconnect::Commander::NodeState::Offline); sleep(500);
-        (*mainForm)->add_node(4, "Чё как?", Dcdr::Interconnect::Commander::NodeState::Offline); sleep(500);
-        sleep(3000);
-        (*mainForm)->clear_nodes();
-        sleep(5000);
-        (*mainForm)->terminate();
+        try
+        {
+            auto commander = std::make_shared<Commander>(mainForm);
+            mainForm->attach_commander(commander);
+            commander->run();
+        }
+        catch (const Dcdr::DcdrException& e)
+        {
+            log_error(e.to_string());
+        }
+        catch (const std::exception& e)
+        {
+            log_error(std::string("[GUI][Commander] Unknown error: ").append(e.what()));
+        }
+
     });
 
-    guiThread.join();
+    mainForm->show();
+    nana::exec();
     commanderThread.join();
+    
     return 0;
 }

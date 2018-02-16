@@ -14,6 +14,7 @@ void Logger::add_log_writer(std::unique_ptr<ILogWriter> logWriter)
 
     log_writers_.push_back(std::move(logWriter));
 }
+
 void Logger::log(ILogWriter::MessageType messageType, const std::string& message)
 {
     std::lock_guard<std::mutex> lock_guard(log_mutex_);

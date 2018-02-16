@@ -55,19 +55,6 @@ void MainFormWidgets::Initialize(nana::form& mainForm)
     previewPanel_.create(previewGroup_);
     previewLayout_["previewPanel"] << previewPanel_;
 
-    nana::drawing drawing(previewPanel_);
-    drawing.draw([](nana::paint::graphics& g)
-                 {
-                     for (size_t x = 0, y = 0; y < g.height(); y += (x++ + 1) / g.width(), x = x % g.width())
-                     {
-                         g.set_pixel(x, y, nana::color(
-                                 static_cast<uint8_t>(static_cast<double>(x) / g.width() * 255),
-                                 static_cast<uint8_t>(static_cast<double>(g.width() - x) / g.width() * 255),
-                                 static_cast<uint8_t>(static_cast<double>(y) / g.width() * 255)
-                         ));
-                     }
-                 });
-
     // Log
     logLayout_.bind(logGroup_);
     logLayout_.div("margin=20 logBox");
@@ -119,11 +106,10 @@ void MainFormWidgets::Initialize(nana::form& mainForm)
     sceneScaleLabel_.caption("Scale:");
     jobControlsLayout_["sceneScaleLabel"] << sceneScaleLabel_;
     sceneComboBox_.create(jobControlsGroup_);
-    sceneComboBox_.push_back("test");
     jobControlsLayout_["sceneComboBox"] << sceneComboBox_;
     sceneScaleSpinBox_.create(jobControlsGroup_);
-    sceneScaleSpinBox_.value("1.0");
     sceneScaleSpinBox_.range(0.25, 4.0, 0.25);
+    sceneScaleSpinBox_.caption("1.000000");
     jobControlsLayout_["sceneScaleSpinBox"] << sceneScaleSpinBox_;
     sceneResolutionLabel_.create(jobControlsGroup_);
     sceneResolutionLabel_.caption("Resolution:");

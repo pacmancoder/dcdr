@@ -5,7 +5,7 @@
 
 using namespace Dcdr::Interconnect;
 
-IParcel::ParcelHandle ACommanderRequestParcel::dispatch(IParcelDispatcher& dispatcher) const
+IParcel::ParcelPtr ACommanderRequestParcel::dispatch(IParcelDispatcher& dispatcher) const
 {
     return dispatcher.dispatch(*this);
 }

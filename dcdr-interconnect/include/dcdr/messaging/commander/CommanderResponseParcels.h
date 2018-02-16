@@ -16,14 +16,14 @@ namespace Dcdr::Interconnect
         explicit ConcreteCommanderResponseParcel(Args&&... args) :
                 details_(std::forward<Args>(args)...) {}
 
-        SerializedParcel serialize(ICommanderResponseSerializer& serializer) const override
+        IParcel::SerializedParcel serialize(ICommanderResponseSerializer& serializer) const override
         {
             return serializer.serialize(details_);
         }
 
-        ParcelHandle dispatch(ICommanderResponseDispatcher& dispatcher) const override
+        void dispatch(ICommanderResponseDispatcher& dispatcher) const override
         {
-            return dispatcher.dispatch(details_);
+            dispatcher.dispatch(details_);
         }
 
         const ParcelDetails& get_response() const
