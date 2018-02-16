@@ -45,10 +45,10 @@ namespace
 
     };
 
-    class RequestProcessor : public IAsyncRequestProcessor
+    class RequestProcessor : public IAsyncConnectionProcessor
     {
     public:
-        ResponseHandle process_request(const Request& request) override
+        ResponseHandle get_response(size_t /*id*/, const Request& request) override
         {
             std::promise<std::vector<uint8_t>> promise;
 
@@ -62,6 +62,10 @@ namespace
             promise.set_value(serialized);
             return promise.get_future();
         }
+
+        void open_connection(size_t /*id*/) override {}
+
+        void close_connection(size_t /*id*/) override {}
 
     private:
         ParcelDispatcher dispatcher_;
