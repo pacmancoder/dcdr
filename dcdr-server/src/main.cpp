@@ -2,14 +2,71 @@
 #include <dcdr/Exception.h>
 #include <dcdr/logging/Logger.h>
 #include <dcdr/logging/StdoutLogWriter.h>
-#include <dcdr/server/core/Core.h>
-#include <dcdr/server/transport/mongoose-websocket/MongooseWebsocket.h>
+
 #include <dcdr/messaging/flatbuffers/FlatBuffersParcelDeserializer.h>
 #include <dcdr/messaging/flatbuffers/FlatBuffersParcelSerializer.h>
 
+#include <dcdr/messaging/IParcelDispatcher.h>
+#include <dcdr/messaging/commander/ICommanderRequestDispatcher.h>
+#include <dcdr/messaging/commander/CommanderRequestParcels.h>
+#include <dcdr/messaging/commander/CommanderResponseParcels.h>
+
+#include <dcdr/transport/TcpAsyncServerTransport.h>
+
+#include <chrono>
+#include <iostream>
+#include <future>
+
 using namespace Dcdr::Logging;
-using namespace Dcdr::Server;
 using namespace Dcdr::Interconnect;
+using namespace Dcdr::Transport;
+
+using namespace std::chrono_literals;
+
+namespace
+{
+
+    class ParcelDispatcher : public IParcelDispatcher, public ICommanderRequestDispatcher
+    {
+    public:
+        IParcel::ParcelPtr dispatch(const ACommanderRequestParcel& parcel) override
+        {
+            return parcel.dispatch(static_cast<ICommanderRequestDispatcher&>(*this));
+        }
+
+        IParcel::ParcelPtr dispatch(const CommanderGetSceneListRequest&) override
+        {
+            std::vector<Commander::Scene> scenes;
+            scenes.push_back(Commander::Scene {0, "Test1", 640, 480});
+            scenes.push_back(Commander::Scene {1, "Cornell", 1980, 1080});
+
+            return std::make_unique<CommanderGetSceneListReponseParcel>(std::move(scenes));
+        }
+
+    };
+
+    class RequestProcessor : public IAsyncRequestProcessor
+    {
+    public:
+        ResponseHandle process_request(const Request& request) override
+        {
+            std::promise<std::vector<uint8_t>> promise;
+
+            FlatBuffersParcelDeserializer deserializer;
+            FlatBuffersParcelSerializer serializer;
+
+            auto parcel = deserializer.deserialize(request);
+            auto response = parcel->dispatch(dispatcher_);
+            auto serialized = response->serialize(serializer);
+
+            promise.set_value(serialized);
+            return promise.get_future();
+        }
+
+    private:
+        ParcelDispatcher dispatcher_;
+    };
+}
 
 int main(/* int argc, char* argv[] */)
 {
@@ -18,16 +75,13 @@ int main(/* int argc, char* argv[] */)
 
     try
     {
-        auto core = std::make_shared<Core>();
-        auto serializer = std::make_shared<FlatBuffersParcelSerializer>();
-        auto deserializer = std::make_shared<FlatBuffersParcelDeserializer>();
+        TcpAsyncServerTransport transport("1206", 10s);
+        transport.register_request_processor(std::make_shared<RequestProcessor>());
+        transport.run();
 
-        MongooseWebsocket mongooseWebsocket(core, serializer, deserializer);
-        mongooseWebsocket.open();
+        std::cin.get();
 
-        core->run();
-
-        mongooseWebsocket.close();
+        transport.close();
     }
     catch (Dcdr::DcdrException& e)
     {

@@ -1,5 +1,7 @@
 #pragma once
 
+#include <dcdr/messaging/InterconnectExceptions.h>
+
 namespace Dcdr::Interconnect
 {
     // job
@@ -21,16 +23,51 @@ namespace Dcdr::Interconnect
     {
     public:
 
-        virtual IParcel::ParcelHandle dispatch(const CommanderGetJobListResponse& parcel) = 0;
-        virtual IParcel::ParcelHandle dispatch(const CommanderGetJobInfoResponse& parcel) = 0;
-        virtual IParcel::ParcelHandle dispatch(const CommanderGetJobPreviewResponse& parcel) = 0;
-        virtual IParcel::ParcelHandle dispatch(const CommanderGetJobArtifactResponse& parcel) = 0;
-        virtual IParcel::ParcelHandle dispatch(const CommanderDoJobListUpdateResponse& parcel) = 0;
-        virtual IParcel::ParcelHandle dispatch(const CommanderGetSceneListResponse& parcel) = 0;
-        virtual IParcel::ParcelHandle dispatch(const CommanderGetNodeListResponse& parcel) = 0;
-        virtual IParcel::ParcelHandle dispatch(const CommanderGetNodeInfoResponse& parcel) = 0;
-        virtual IParcel::ParcelHandle dispatch(const CommanderDoNodeListUpdateResponse& parcel) = 0;
-        virtual IParcel::ParcelHandle dispatch(const CommanderDoShowErrorResponse& parcel) = 0;
+        virtual void dispatch(const CommanderGetJobListResponse&)
+        {
+            dispatch_not_implemented("CommanderGetJobListResponse");
+        }
+        virtual void dispatch(const CommanderGetJobInfoResponse&)
+        {
+            dispatch_not_implemented("CommanderGetJobInfoResponse");
+        }
+        virtual void dispatch(const CommanderGetJobPreviewResponse&)
+        {
+            dispatch_not_implemented("CommanderGetJobPreviewResponse");
+        }
+        virtual void dispatch(const CommanderGetJobArtifactResponse&)
+        {
+            dispatch_not_implemented("CommanderGetJobArtifactResponse");
+        }
+        virtual void dispatch(const CommanderDoJobListUpdateResponse&)
+        {
+            dispatch_not_implemented("CommanderDoJobListUpdateResponse");
+        }
+        virtual void dispatch(const CommanderGetSceneListResponse&)
+        {
+            dispatch_not_implemented("CommanderGetSceneListResponse");
+        }
+        virtual void dispatch(const CommanderGetNodeListResponse&)
+        {
+            dispatch_not_implemented("CommanderGetNodeListResponse");
+        }
+        virtual void dispatch(const CommanderGetNodeInfoResponse&)
+        {
+            dispatch_not_implemented("CommanderGetNodeInfoResponse");
+        }
+        virtual void dispatch(const CommanderDoNodeListUpdateResponse&)
+        {
+            dispatch_not_implemented("CommanderDoNodeListUpdateResponse");
+        }
+        virtual void dispatch(const CommanderDoShowErrorResponse&)
+        {
+            dispatch_not_implemented("CommanderDoShowErrorResponse");
+        }
+
+        virtual void dispatch_not_implemented(const std::string& parcelKind)
+        {
+            throw DispatchNotImplemented(std::string("Dispatch not implemented for ").append(parcelKind));
+        };
 
         virtual ~ICommanderResponseDispatcher() = default;
     };

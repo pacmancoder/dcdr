@@ -4,9 +4,10 @@
 
 using namespace Dcdr::Interconnect;
 
-IParcel::ParcelHandle ACommanderResponseParcel::dispatch(IParcelDispatcher& dispatcher) const
+IParcel::ParcelPtr ACommanderResponseParcel::dispatch(IParcelDispatcher& dispatcher) const
 {
-    return dispatcher.dispatch(*this);
+    dispatcher.dispatch(*this);
+    return nullptr;
 }
 
 IParcel::SerializedParcel ACommanderResponseParcel::serialize(IParcelSerializer& serializer) const

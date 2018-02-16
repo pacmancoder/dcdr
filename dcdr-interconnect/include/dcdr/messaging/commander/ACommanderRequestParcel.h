@@ -13,10 +13,10 @@ namespace Dcdr::Interconnect
         using CommanderRequestParcelPtr = std::unique_ptr<ACommanderRequestParcel>;
 
     public:
-        IParcel::ParcelHandle dispatch(IParcelDispatcher& dispatcher) const override;
+        IParcel::ParcelPtr dispatch(IParcelDispatcher& dispatcher) const override;
         SerializedParcel serialize(IParcelSerializer& serializer) const override;
 
-        virtual ParcelHandle dispatch(ICommanderRequestDispatcher& dispatcher) const = 0;
+        virtual ParcelPtr dispatch(ICommanderRequestDispatcher& dispatcher) const = 0;
         virtual SerializedParcel serialize(ICommanderRequestSerializer& serializer) const = 0;
 
     };

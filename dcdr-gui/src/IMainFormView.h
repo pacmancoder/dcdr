@@ -17,8 +17,11 @@ namespace Dcdr::Gui
         virtual void clear_jobs() = 0;
         virtual void add_job(uint32_t id, const std::string& name, Interconnect::Commander::JobState) = 0;
 
+        virtual void clear_job_info() = 0;
+        virtual void add_job_info(const std::string& name, const std::string& value) = 0;
+
         virtual void clear_scenes() = 0;
-        virtual void add_scene(uint32_t id, const std::string& name, int width, int height) = 0;
+        virtual void add_scene(uint32_t id, const std::string& name, uint16_t width, uint16_t height) = 0;
 
         virtual void display_preview(uint16_t width, uint16_t height, const uint8_t* data) = 0;
 

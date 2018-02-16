@@ -36,5 +36,6 @@ include_directories(${CMAKE_BINARY_DIR}/gen/flatbuffers/cpp)
 add_library(${PROJECT_NAME} STATIC ${SOURCE_FILES})
 
 target_include_directories(${PROJECT_NAME} PUBLIC ${PROJECT_SOURCE_DIR}/include)
-target_link_libraries(${PROJECT_NAME} PRIVATE dcdr-common dcdr-logger)
+target_link_libraries(${PROJECT_NAME} PUBLIC dcdr-common)
+target_link_libraries(${PROJECT_NAME} PRIVATE dcdr-logger)
 add_dependencies(${PROJECT_NAME} dcdr-interconnect-flatbuffers)
