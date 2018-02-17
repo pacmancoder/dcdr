@@ -12,7 +12,7 @@ Work::Work(uint32_t jobId, uint32_t nodeId, ChunkRect rect, uint32_t minIteratio
 
 std::chrono::milliseconds Work::get_duration()
 {
-    return  std::chrono::duration_cast<std::chrono::milliseconds >(std::chrono::system_clock::now() - timestamp_);
+    return  std::chrono::duration_cast<std::chrono::milliseconds>(std::chrono::system_clock::now() - timestamp_);
 }
 
 uint32_t Work::get_job_id()

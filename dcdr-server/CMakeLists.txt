@@ -9,15 +9,19 @@ set(INCLUDE_FILES
 file(GLOB SOURCES_SERVER src/server/*.cpp)
 
 set(SOURCE_FILES
-		${SOURCES_SERVER}
-		src/main.cpp)
+		${SOURCES_SERVER})
 
 include_directories(include)
 
-add_executable(${PROJECT_NAME} ${INCLUDE_FILES} ${SOURCE_FILES})
+add_library(${PROJECT_NAME} STATIC ${INCLUDE_FILES} ${SOURCE_FILES})
 
-target_link_libraries(${PROJECT_NAME} PRIVATE dcdr-common dcdr-logger dcdr-interconnect dcdr-transport)
+target_include_directories(${PROJECT_NAME} PUBLIC include)
+
+target_link_libraries(${PROJECT_NAME} PUBLIC dcdr-common dcdr-logger dcdr-interconnect dcdr-transport)
 
 if (NOT WIN32)
 	target_link_libraries(${PROJECT_NAME} PRIVATE pthread)
 endif()
+
+add_executable(${PROJECT_NAME}-bin src/main.cpp)
+target_link_libraries(${PROJECT_NAME}-bin ${PROJECT_NAME})

@@ -8,7 +8,7 @@ namespace
     template<typename T>
     T floor_integer(T a, T b)
     {
-        return a / b + (a % b == 0) ? 0 : 1;
+        return a / b + ((a % b == 0) ? 0 : 1);
     }
 
     template<typename T>
@@ -76,8 +76,9 @@ ChunkRect Surface::next_chunk_to_render()
 }
 
 SurfaceBuffer Surface::get_surface_buffer(
-        SurfaceBufferFormat format, uint8_t mipmapLevel, MipmappingTechnique /*mipmappingTechnique*/)
+        SurfaceBufferFormat format, uint8_t mipmapLevel, MipmappingTechnique /*mipmappingTechnique*/) const
 {
+    // Temporary implementataion. TODO: change this to universal implementation
     auto scaleDownFactor = pow_integer(uint8_t(2), mipmapLevel);
 
     auto resultWidth = width_ / scaleDownFactor;
@@ -90,13 +91,12 @@ SurfaceBuffer Surface::get_surface_buffer(
             std::vector<uint8_t>(static_cast<size_t>(resultWidth * resultHeight * 3))};
 
 
-    for (int column = 0; column < widthInChunks_; ++column)
+    for (int row = 0; row < heightInChunks_; ++row)
     {
-        chunks_[column].resize(heightInChunks_);
-        for (int row = 0; row < heightInChunks_; ++row)
+        for (int column = 0; column < widthInChunks_; ++column)
         {
-            auto startPixelOffset = (row * width_ + column * chunkSize_) * 3 / scaleDownFactor;
-            auto rowSize = row * width_ * 3 / scaleDownFactor;
+            auto startPixelOffset = (row * chunkSize_ * width_ / scaleDownFactor + column * chunkSize_) * 3 / scaleDownFactor;
+            auto rowSize = width_ * 3 / scaleDownFactor;
 
             auto chunk = std::atomic_load(&chunks_[column][row]);
             auto chunkBounds = chunk->get_bounds();
@@ -104,8 +104,8 @@ SurfaceBuffer Surface::get_surface_buffer(
             {
                 for (size_t x = 0; x < chunkBounds.w; x += scaleDownFactor)
                 {
-                    auto pixelOffset = startPixelOffset + rowSize * y + x * 3 / scaleDownFactor;
-                    auto color = chunk->get_pixels()[chunkBounds.w * y + x].color;
+                    auto pixelOffset = startPixelOffset + (rowSize * y + x * 3) / scaleDownFactor;
+                    auto color = chunk->get_pixels()[y * chunkBounds.w + x].color;
                     buffer.data[pixelOffset + 0] =
                             static_cast<uint8_t>(clamp_integer<size_t>(static_cast<size_t>(color.r * 255), 0, 255));
                     buffer.data[pixelOffset + 1] =
@@ -120,7 +120,18 @@ SurfaceBuffer Surface::get_surface_buffer(
     return buffer;
 }
 
-void Surface::commit_chunk(std::shared_ptr<Chunk> chunk)
+void Surface::commit_chunk(const Chunk& chunk)
 {
-    std::atomic_store(&chunks_[chunk->get_bounds().x / chunkSize_][chunk->get_bounds().y / chunkSize_], chunk);
+    auto* chunkAddr =
+            &chunks_[chunk.get_bounds().x / chunkSize_][chunk.get_bounds().y / chunkSize_];
+
+    auto newChunk = std::make_shared<Chunk>(*std::atomic_load(chunkAddr));
+    newChunk->accumulate(chunk);
+    std::atomic_store(chunkAddr, newChunk);
+}
+
+const Chunk Surface::read_chunk(size_t chunkX, size_t chunkY) const
+{
+    auto chunkPtr = std::atomic_load(&chunks_[chunkX][chunkY]);
+    return Chunk(*chunkPtr);
 }
