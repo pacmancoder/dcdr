@@ -19,13 +19,16 @@ namespace Dcdr::Server
         uint32_t samples;
     };
 
+    extern bool operator==(const ChunkPixel& a, const ChunkPixel& b);
+
     class Chunk
     {
     public:
         Chunk(ChunkRect bounds);
         Chunk(ChunkRect bounds, std::vector<ChunkPixel> pixels);
+        Chunk(const Chunk&);
 
-        void accumulate(Chunk& chunk);
+        void accumulate(const Chunk& chunk);
 
         const ChunkRect& get_bounds() const;
         uint32_t get_max_samples() const;

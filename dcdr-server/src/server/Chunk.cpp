@@ -10,6 +10,17 @@ Chunk::Chunk(ChunkRect bounds) :
     minSamples_(0),
     maxSamples_(0) {}
 
+Chunk::Chunk(const Chunk& rhs) :
+        bounds_(rhs.bounds_),
+        pixels_(rhs.pixels_),
+        minSamples_(rhs.minSamples_),
+        maxSamples_(rhs.maxSamples_) {}
+
+bool Dcdr::Server::operator==(const ChunkPixel &a, const ChunkPixel &b)
+{
+    return a.color == b.color && a.samples == b.samples;
+}
+
 Chunk::Chunk(ChunkRect bounds, std::vector<ChunkPixel> pixels) :
     Chunk(bounds)
 {
@@ -17,10 +28,10 @@ Chunk::Chunk(ChunkRect bounds, std::vector<ChunkPixel> pixels) :
     {
         throw ChunkException("Chunk pixel buffers size are not equal");
     }
-    pixels_ = std::move(pixels_);
+    pixels_ = std::move(pixels);
 
-    minSamples_ = pixels[0].samples;
-    maxSamples_ = pixels[0].samples;
+    minSamples_ = pixels_[0].samples;
+    maxSamples_ = pixels_[0].samples;
 
     for(const auto& pixel : pixels_)
     {
@@ -36,7 +47,7 @@ Chunk::Chunk(ChunkRect bounds, std::vector<ChunkPixel> pixels) :
     }
 }
 
-void Chunk::accumulate(Chunk& chunk)
+void Chunk::accumulate(const Chunk& chunk)
 {
     if (chunk.pixels_.size() != pixels_.size())
     {

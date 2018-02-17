@@ -33,6 +33,7 @@
 
 # dcdr specific
 build-*/
+cmake-build-*.
 
 # ide specific
 .idea/
