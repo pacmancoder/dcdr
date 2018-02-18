@@ -10,6 +10,7 @@ namespace Dcdr::Server
     {
     public:
         Job(uint32_t sceneId, uint16_t width, uint16_t height, uint16_t chunkSize);
+        Job(Job&& rhs);
 
         uint32_t get_scene_id() const;
 

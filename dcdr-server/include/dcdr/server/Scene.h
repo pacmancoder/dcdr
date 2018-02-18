@@ -12,6 +12,7 @@ namespace Dcdr::Server
     {
     public:
         Scene(const std::string& path);
+        Scene(Scene&& rhs) = default;
 
         const std::string& get_name() const;
 

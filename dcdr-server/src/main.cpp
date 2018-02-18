@@ -14,8 +14,6 @@
 #include <dcdr/transport/TcpAsyncServerTransport.h>
 
 #include <chrono>
-#include <iostream>
-#include <future>
 
 using namespace Dcdr::Logging;
 using namespace Dcdr::Interconnect;
@@ -76,6 +74,8 @@ int main(/* int argc, char* argv[] */)
 {
 
     Logger::get_instance().add_log_writer(std::unique_ptr<ILogWriter>(new StdoutLogWriter()));
+
+    using namespace std::chrono_literals;
 
     try
     {

@@ -34,6 +34,8 @@ namespace Dcdr::Server
     {
     public:
         Surface(uint16_t width, uint16_t height, uint16_t chunkSize);
+        Surface(Surface&& rhs);
+
 
         ChunkRect next_chunk_to_render();
 

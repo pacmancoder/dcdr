@@ -16,13 +16,15 @@ namespace Dcdr::Server
 
     public:
         Node();
+        Node(Node&& rhs) = default;
 
         void set_state(State state);
-        State get_state();
+        State get_state() const;
 
-        void add_property(const std::string& property, const std::string& value);
+        void set_property(const std::string &property, const std::string &value);
+        std::string get_property(const std::string& property) const;
+        const PropertiesMap& get_all_properties() const;
         void remove_property(const std::string& property);
-        const PropertiesMap& get_properties();
 
     private:
         PropertiesMap properties_;
