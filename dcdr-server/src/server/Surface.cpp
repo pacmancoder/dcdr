@@ -64,6 +64,15 @@ Surface::Surface(uint16_t width, uint16_t height, uint16_t chunkSize) :
     }
 }
 
+Surface::Surface(Surface &&rhs) :
+    width_(rhs.width_),
+    height_(rhs.height_),
+    chunkSize_(rhs.chunkSize_),
+    widthInChunks_(rhs.widthInChunks_),
+    heightInChunks_(rhs.heightInChunks_),
+    chunkCounter_(rhs.chunkCounter_),
+    chunks_(std::move(rhs.chunks_)) {}
+
 ChunkRect Surface::next_chunk_to_render()
 {
     std::lock_guard<std::mutex> guard(chunksMutex_);

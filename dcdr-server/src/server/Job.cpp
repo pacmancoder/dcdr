@@ -9,6 +9,16 @@ Job::Job(uint32_t sceneId, uint16_t width, uint16_t height, uint16_t chunkSize) 
     chunkSize_(chunkSize),
     surface_(width, height, chunkSize){}
 
+Job::Job(Job&& rhs) :
+    scemeId_(rhs.scemeId_),
+    width_(rhs.width_),
+    height_(rhs.height_),
+    chunkSize_(rhs.chunkSize_),
+    surface_(std::move(rhs.surface_))
+{
+
+}
+
 uint32_t Job::get_scene_id() const
 {
     return scemeId_;

@@ -1,21 +1,30 @@
 #include <dcdr/server/Connection.h>
 
+#include <dcdr/server/ServerExceptions.h>
+
 using namespace Dcdr::Server;
 
 Connection::Connection() :
-    node_(nullptr) {}
+    node_(0),
+    isNodeAttached_(false) {}
 
-void Connection::attach_node(std::shared_ptr<Node> node)
+
+void Connection::attach_node(uint32_t node)
 {
-    node_ = std::move(node);
+    node_ = node;
+    isNodeAttached_ = true;
 }
 
-bool Connection::node_is_attached()
+bool Connection::is_node_attached() const
 {
-    return node_ == nullptr;
+    return  isNodeAttached_;
 }
 
-Node& Connection::get_node()
+uint32_t Connection::get_node() const
 {
-    return *node_.get();
+    if (!isNodeAttached_)
+    {
+        throw ConnectionException("Node is not attached to the connection");
+    }
+    return node_;
 }

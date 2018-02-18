@@ -24,4 +24,11 @@ namespace Dcdr::Server
         explicit ChunkException(const std::string& message) :
                 ServerException("Chunk", message) {}
     };
+
+    class ConnectionException : public ServerException
+    {
+    public:
+        explicit  ConnectionException(const std::string& message) :
+                ServerException("Connection", message) {}
+    };
 }
