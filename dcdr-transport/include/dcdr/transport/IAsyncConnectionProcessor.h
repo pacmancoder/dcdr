@@ -10,12 +10,14 @@ namespace Dcdr::Transport
     {
     public:
         using Request = std::vector<uint8_t>;
-        using ResponseHandle = std::future<std::vector<uint8_t>>;
+        using Response = std::vector<uint8_t>;
+        using ResponseHandle = std::future<Response>;
 
     public:
-        virtual void open_connection(size_t id) = 0;
-        virtual ResponseHandle get_response(size_t id, const Request& request) = 0;
-        virtual void close_connection(size_t id) = 0;
+        // should return new connection id
+        virtual uint32_t open_connection() = 0;
+        virtual ResponseHandle get_response(uint32_t id, const Request& request) = 0;
+        virtual void close_connection(uint32_t id) = 0;
 
         virtual ~IAsyncConnectionProcessor() = default;
     };

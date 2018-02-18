@@ -3,7 +3,7 @@
 #include <cstdint>
 #include <chrono>
 
-#include <dcdr/server/Chunk.h>
+#include <dcdr/server/core/Chunk.h>
 
 namespace Dcdr::Server
 {

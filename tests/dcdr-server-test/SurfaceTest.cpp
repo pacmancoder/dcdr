@@ -1,6 +1,6 @@
 #include <gtest/gtest.h>
 
-#include <dcdr/server/Surface.h>
+#include <dcdr/server/core/Surface.h>
 
 using namespace Dcdr::Server;
 

@@ -45,14 +45,6 @@ namespace
         uint16_t height;
     };
 
-
-    const std::array<Scene, 2> scenes = {
-            Scene {"Cornell", 640, 480},
-            Scene {"Spheres", 1024, 768}
-    };
-
-    std::vector<Job> jobs;
-
     // ===========
 
     template<typename ResponseType>
@@ -105,24 +97,12 @@ void Commander::run()
     parcelDeserializer.deserialize(*serializedResponse)->dispatch(CommanderResponseDispatcher<Interconnect::CommanderGetSceneListResponse>(
     [this](const Interconnect::CommanderGetSceneListResponse& response)
     {
-        log_info("Got scenes. sending to gui...");
         for (const auto& scene : response.get_scenes())
         {
-            log_info("Sending scene...");
             view_->add_scene(scene.id, scene.name, scene.width, scene.height);
         }
 
     }));
-
-    uint32_t i = 0;
-    for (const auto& scene : scenes)
-    {
-        view_->add_scene(i++, scene.name, scene.width, scene.height);
-    }
-
-    view_->add_node(0, "Test Node", Interconnect::Commander::NodeState::Offline);
-    view_->add_node(1, "Active", Interconnect::Commander::NodeState::Active);
-
 
     while (!terminateRequested_) { std::this_thread::sleep_for(std::chrono::milliseconds(100)); }
     view_->terminate();
@@ -143,20 +123,14 @@ void Commander::send_node_control(uint32_t /*id*/, Dcdr::Interconnect::Commander
 
 }
 
-void Commander::add_job(uint32_t sceneId, uint16_t width, uint16_t height)
+void Commander::add_job(uint32_t /*sceneId*/, uint16_t /*width*/, uint16_t /*height*/)
 {
-    jobs.push_back(Job {uint32_t(jobs.size()), scenes[sceneId].name + " " + std::to_string(width) + "x" + std::to_string(height), width, height});
-    view_->clear_jobs();
-    for (auto& job : jobs)
-    {
-        view_->add_job(job.id, job.name, Interconnect::Commander::JobState::InProgress);
-    }
+
 }
 
-void Commander::select_job(uint32_t id)
+void Commander::select_job(uint32_t /*id*/)
 {
-    view_->clear_job_info();
-    view_->add_job_info("job", std::to_string(id));
+
 }
 
 void Commander::select_node(uint32_t /*id*/)

@@ -1,4 +1,4 @@
-#include <dcdr/server/Connection.h>
+#include <dcdr/server/core/Connection.h>
 
 #include <dcdr/server/ServerExceptions.h>
 

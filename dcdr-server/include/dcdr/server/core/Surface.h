@@ -3,7 +3,7 @@
 #include <cstdint>
 #include <vector>
 #include <memory>
-#include <dcdr/server/Chunk.h>
+#include <dcdr/server/core/Chunk.h>
 #include <mutex>
 
 namespace Dcdr::Server

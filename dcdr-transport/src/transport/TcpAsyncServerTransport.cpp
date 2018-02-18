@@ -8,6 +8,7 @@
 #include <thread>
 #include <list>
 #include <functional>
+#include <map>
 
 #include <iostream>
 
@@ -65,6 +66,8 @@ struct TcpAsyncServerTransport::Impl
 
     std::hash<std::string> stringHasher;
 
+    std::map<size_t, uint32_t> connectionIds_;
+
     void thread_func();
 
     Impl(std::string address_, std::chrono::milliseconds networkTimeout_) :
@@ -97,7 +100,8 @@ namespace
             case MG_EV_ACCEPT:
             {
                 log_debug(with_log_prefix("Client connected at ").append(clientAddress));
-                impl_->connectionProcessor->open_connection(impl_->stringHasher(clientAddress));
+                impl_->connectionIds_.emplace(impl_->stringHasher(clientAddress),
+                        impl_->connectionProcessor->open_connection());
                 break;
             }
             case MG_EV_RECV:
@@ -111,7 +115,7 @@ namespace
 
                     impl_->responses.push_back(
                             ResponseInfo(impl_->connectionProcessor->get_response(
-                                    impl_->stringHasher(clientAddress), received), nc));
+                                    impl_->connectionIds_.at(impl_->stringHasher(clientAddress)), received), nc));
                 }
                 break;
             }
@@ -120,7 +124,12 @@ namespace
                 log_debug(with_log_prefix("Connection at ")
                                   .append(Mongoose::socket_to_string(nc->sa))
                                   .append(" has been closed"));
-                impl_->connectionProcessor->close_connection(impl_->stringHasher(clientAddress));
+                auto connectionHash = impl_->stringHasher(clientAddress);
+
+                impl_->connectionProcessor->close_connection(
+                        impl_->connectionIds_.at(connectionHash));
+
+                impl_->connectionIds_.erase(connectionHash);
                 break;
             }
             default: break;
