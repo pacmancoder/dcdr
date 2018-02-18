@@ -1,4 +1,4 @@
-#include <dcdr/server/Surface.h>
+#include <dcdr/server/core/Surface.h>
 #include <atomic>
 
 using namespace Dcdr::Server;

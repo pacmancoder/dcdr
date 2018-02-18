@@ -40,7 +40,7 @@ namespace Dcdr::Server
             // any number of clients can change different resources simultaneously
             // as long as ResourceStorageProxy is untouched.
             // So, const cast is performed to provide such capability
-            return const_cast<ResourceProxy&>(resources_.read()->at(id)).write();
+            return resources_.read()->at(id).write();
         }
 
         uint32_t add(ResourceType&& resource)
@@ -78,7 +78,8 @@ namespace Dcdr::Server
             auto handle = resources_.read();
             for (const auto& resource : *handle)
             {
-                std::forward<IterateFunc>(iterateFunc)((*resource.second)->read());
+                auto readHandle = resource.second.read();
+                std::forward<IterateFunc>(iterateFunc)(resource.first, *readHandle);
             }
         }
 
@@ -88,7 +89,8 @@ namespace Dcdr::Server
             auto handle = resources_.write();
             for (auto& resource : *handle)
             {
-                std::forward<IterateFunc>(iterateFunc)(const_cast<ResourceProxy&>(*resource.second)->read());
+                auto writeHandle = resource.second.write();
+                std::forward<IterateFunc>(iterateFunc)(resource.first, *writeHandle);
             }
         }
 

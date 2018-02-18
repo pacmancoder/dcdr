@@ -2,7 +2,7 @@
 
 #include <cstdint>
 
-#include <dcdr/server/Surface.h>
+#include <dcdr/server/core/Surface.h>
 
 namespace Dcdr::Server
 {

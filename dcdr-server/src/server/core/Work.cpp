@@ -1,4 +1,4 @@
-#include <dcdr/server/Work.h>
+#include <dcdr/server/core/Work.h>
 
 using namespace Dcdr::Server;
 

@@ -1,6 +1,6 @@
 #include <gtest/gtest.h>
 
-#include <dcdr/server/Chunk.h>
+#include <dcdr/server/core/Chunk.h>
 
 using namespace Dcdr::Server;
 

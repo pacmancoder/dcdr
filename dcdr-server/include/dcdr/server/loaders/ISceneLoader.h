@@ -2,6 +2,8 @@
 
 #include <map>
 
+#include <dcdr/server/core/SharedResourceManager.h>
+
 namespace Dcdr::Server
 {
     class Scene;
@@ -9,7 +11,7 @@ namespace Dcdr::Server
     class ISceneLoader
     {
     public:
-        virtual void load_scenes(std::map<uint32_t, Scene> scenes) = 0;
+        virtual void load_scenes(SharedResourceManager<Scene>& scenes) = 0;
 
         virtual ~ISceneLoader() = default;
     };

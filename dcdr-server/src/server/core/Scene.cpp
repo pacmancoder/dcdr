@@ -1,4 +1,4 @@
-#include <dcdr/server/Scene.h>
+#include <dcdr/server/core/Scene.h>
 
 #include <dcdr/server/ServerExceptions.h>
 

@@ -1,4 +1,4 @@
-#include <dcdr/server/Chunk.h>
+#include <dcdr/server/core/Chunk.h>
 
 #include <dcdr/server/ServerExceptions.h>
 

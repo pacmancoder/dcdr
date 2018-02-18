@@ -1,4 +1,4 @@
-#include <dcdr/server/Node.h>
+#include <dcdr/server/core/Node.h>
 
 using namespace Dcdr::Server;
 
