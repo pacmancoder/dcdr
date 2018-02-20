@@ -55,4 +55,8 @@ namespace Dcdr::Interconnect::Commander
         SceneNotExist
     };
 
+    enum class ArtifactFormat : uint16_t
+    {
+        Rgb24Unsigned
+    };
 }

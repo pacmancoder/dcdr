@@ -25,21 +25,17 @@ namespace Dcdr::Interconnect
         explicit CommanderGetJobInfoRequest(uint32_t jobId);
     };
 
-    class CommanderGetJobPreviewRequest: public ACommanderJobRequest
-    {
-    public:
-        CommanderGetJobPreviewRequest(uint32_t jobId, uint8_t mipmapLevel);
-
-        uint8_t get_mipmap_level() const;
-
-    private:
-        uint8_t mipmapLevel_;
-    };
-
     class CommanderGetJobArtifactRequest : public ACommanderJobRequest
     {
     public:
-        explicit CommanderGetJobArtifactRequest(uint32_t jobId);
+        CommanderGetJobArtifactRequest(uint32_t jobId, uint8_t mipmapLevel, Commander::ArtifactFormat format);
+
+        uint8_t get_mipmap_level() const;
+        Commander::ArtifactFormat get_format() const;
+
+    private:
+        uint8_t mipmapLevel_;
+        Commander::ArtifactFormat format_;
     };
 
     class CommanderSetJobStateRequest : public ACommanderJobRequest
@@ -99,4 +95,6 @@ namespace Dcdr::Interconnect
     private:
         Commander::NodeState nodeState_;
     };
+
+    class CommanderGetServerStatusRequest {};
 }

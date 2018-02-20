@@ -1,21 +1,8 @@
 namespace DcdrFlatBuffers;
 
-table Job
-{
-    id: uint32;
-    name: string;
-    state: JobState;
-}
-
 table CommanderGetJobListResponse
 {
     jobs: [Job];
-}
-
-table PropertyPair
-{
-    name: string;
-    value: string;
 }
 
 table CommanderGetJobInfoResponse
@@ -24,39 +11,18 @@ table CommanderGetJobInfoResponse
     properties: [PropertyPair];
 }
 
-table CommanderGetJobPreviewResponse
-{
-    id: uint32;
-    data: [uint8];
-}
-
 table CommanderGetJobArtifactResponse
 {
     id: uint32;
-    data: [uint8];
-}
-
-
-table CommanderDoJobListUpdateResponse {}
-
-table Scene
-{
-    id: uint32;
-    name: string;
+    format: ArtifactFormat;
     width: uint16;
     height: uint16;
+    data: [uint8];
 }
 
 table CommanderGetSceneListReponse
 {
     scenes: [Scene];
-}
-
-table Node
-{
-    id: uint32;
-    name: string;
-    state: NodeState;
 }
 
 table CommanderGetNodeListResponse
@@ -70,12 +36,18 @@ table CommanderGetNodeInfoResponse
     properties: [PropertyPair];
 }
 
-table CommanderDoNodeListUpdateResponse {}
-
-table CommanderDoShowErrorResponse
+table CommanderErrorResponse
 {
     error: CommanderErrorKind;
     message: string;
+}
+
+
+table CommanderGetServerStatusResponse
+{
+    scenesLastModifiedTimestamp: uint64;
+    jobsLastModifiedTimestamp: uint64;
+    nodesLastModifiedTimestamp: uint64;    
 }
 
 union CommanderResponseData
@@ -83,16 +55,15 @@ union CommanderResponseData
     // jobs
     CommanderGetJobListResponse,
     CommanderGetJobInfoResponse,
-    CommanderGetJobPreviewResponse,
     CommanderGetJobArtifactResponse,
-    CommanderDoJobListUpdateResponse,
     CommanderGetSceneListReponse,
     // nodes
     CommanderGetNodeListResponse,
     CommanderGetNodeInfoResponse,
-    CommanderDoNodeListUpdateResponse,
+    //status
+    CommanderGetServerStatusResponse,
     // common
-    CommanderDoShowErrorResponse
+    CommanderErrorResponse
 }
 
 table CommanderResponse

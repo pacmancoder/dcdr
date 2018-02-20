@@ -16,6 +16,7 @@ namespace Dcdr::Interconnect::FlatBuffers::SerializerUtils
     DcdrFlatBuffers::JobState marshal(Commander::JobState jobState);
     DcdrFlatBuffers::NodeState marshal(Commander::NodeState nodeState);
     DcdrFlatBuffers::CommanderErrorKind marshal(Commander::CommanderErrorKind errorKind);
+    DcdrFlatBuffers::ArtifactFormat marshal(Commander::ArtifactFormat artifactFormat);
 
     flatbuffers::Offset<DcdrFlatBuffers::Job> serialize(flatbuffers::FlatBufferBuilder& builder, const Commander::Job& job);
     flatbuffers::Offset<DcdrFlatBuffers::PropertyPair> serialize(flatbuffers::FlatBufferBuilder& builder, const Commander::PropertyPair& propertyPair);

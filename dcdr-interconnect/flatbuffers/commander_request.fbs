@@ -7,16 +7,11 @@ table CommanderGetJobInfoRequest
     jobId: uint32;
 }
 
-table CommanderGetJobPreviewRequest 
-{
-    jobId: uint32;
-    mipmapLevel: uint8;    
-}
-
 table CommanderGetJobArtifactRequest
 {
     jobId: uint32;
-    data: [uint8];
+    format: ArtifactFormat;
+    mipmapLevel: uint8;
 }
 
 table CommanderSetJobStateRequest
@@ -46,20 +41,24 @@ table CommanderSetNodeStateRequest
     state: NodeState;
 }
 
+table CommanderGetServerStatusRequest {}
+
 union CommanderRequestData
 {
     // jobs
     CommanderGetJobListRequest,
     CommanderGetJobInfoRequest,
-    CommanderGetJobPreviewRequest,
     CommanderGetJobArtifactRequest,
     CommanderSetJobStateRequest,
     CommanderAddJobRequest,
+    // scenes
     CommanderGetSceneListRequest,
     // nodes
     CommanderGetNodeListRequest,
     CommanderGetNodeInfoRequest,
-    CommanderSetNodeStateRequest
+    CommanderSetNodeStateRequest,
+    // status
+    CommanderGetServerStatusRequest
 }
 
 table CommanderRequest

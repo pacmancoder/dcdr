@@ -77,9 +77,12 @@ namespace
             }
             case MG_EV_RECV:
             {
+                std::vector<uint8_t> received(nc->recv_mbuf.buf, nc->recv_mbuf.buf + nc->recv_mbuf.len);
+                mbuf_remove(&nc->recv_mbuf, nc->recv_mbuf.len);
+
                 log_debug(with_log_prefix("Received data from ")
                                   .append(Mongoose::socket_to_string(nc->sa)));
-                impl_->receivedData.assign(nc->recv_mbuf.buf, nc->recv_mbuf.buf + nc->recv_mbuf.len);
+                impl_->receivedData = std::move(received);
                 impl_->receiveDone = true;
                 break;
             }

@@ -10,6 +10,7 @@ namespace Dcdr::Interconnect::FlatBuffers::DeserializerUtils
     Commander::JobState marshal(DcdrFlatBuffers::JobState jobState);
     Commander::NodeState marshal(DcdrFlatBuffers::NodeState nodeState);
     Commander::CommanderErrorKind marshal(DcdrFlatBuffers::CommanderErrorKind errorKind);
+    Commander::ArtifactFormat marshal(DcdrFlatBuffers::ArtifactFormat artifactFormat);
 
     Commander::Job deserialize(const DcdrFlatBuffers::Job* job);
     Commander::Node deserialize(const DcdrFlatBuffers::Node* job);

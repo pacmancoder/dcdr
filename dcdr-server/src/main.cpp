@@ -4,7 +4,7 @@
 #include <dcdr/logging/StdoutLogWriter.h>
 
 #include <dcdr/server/core/CoreContext.h>
-#include <dcdr/server/service-commander/CommanderConnectionProcessor.h>
+#include <dcdr/server/service-commander/CommanderService.h>
 
 #include <dcdr/server/loaders/DummySceneLoader.h>
 
@@ -30,8 +30,11 @@ int main(/* int argc, char* argv[] */)
 
         DummySceneLoader sceneLoader;
         sceneLoader.load_scenes(coreContext_->get_scenes());
+        // test code
+        coreContext_->get_jobs().add(Job{0, 640, 480, 16});
+        // test code end
 
-        auto commanderService = std::make_shared<CommanderConnectionProcessor>(coreContext_);
+        auto commanderService = std::make_shared<CommanderService>(coreContext_);
 
         TcpAsyncServerTransport transport("1206", 10s);
         transport.register_request_processor(commanderService);

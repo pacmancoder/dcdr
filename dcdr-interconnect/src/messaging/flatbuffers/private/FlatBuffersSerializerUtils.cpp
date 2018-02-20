@@ -42,6 +42,15 @@ DcdrFlatBuffers::CommanderErrorKind SerializerUtils::marshal(Commander::Commande
     throw std::invalid_argument("Unreachable code");
 }
 
+DcdrFlatBuffers::ArtifactFormat SerializerUtils::marshal(Commander::ArtifactFormat artifactFormat)
+{
+    switch (artifactFormat)
+    {
+        case Commander::ArtifactFormat::Rgb24Unsigned: return DcdrFlatBuffers::ArtifactFormat_Rgb24Unsigned;
+    }
+
+    throw std::invalid_argument("Unreachable code");
+}
 
 flatbuffers::Offset<DcdrFlatBuffers::Job>
 SerializerUtils::serialize(flatbuffers::FlatBufferBuilder& builder, const Commander::Job& job)

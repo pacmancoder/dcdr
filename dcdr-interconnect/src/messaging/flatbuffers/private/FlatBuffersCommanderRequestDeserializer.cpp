@@ -19,14 +19,12 @@ namespace
         return std::make_unique<CommanderGetJobInfoRequestParcel>(request->jobId());
     }
 
-    IParcel::ParcelPtr deserialize(const DcdrFlatBuffers::CommanderGetJobPreviewRequest* request)
-    {
-        return std::make_unique<CommanderGetJobPreviewRequestParcel>(request->jobId(), request->mipmapLevel());
-    }
-
     IParcel::ParcelPtr deserialize(const DcdrFlatBuffers::CommanderGetJobArtifactRequest* request)
     {
-        return std::make_unique<CommanderGetJobArtifactRequestParcel>(request->jobId());
+        return std::make_unique<CommanderGetJobArtifactRequestParcel>(
+                request->jobId(),
+                request->mipmapLevel(),
+                DeserializerUtils::marshal(request->format()));
     }
 
     IParcel::ParcelPtr deserialize(const DcdrFlatBuffers::CommanderSetJobStateRequest* request)
@@ -65,6 +63,11 @@ namespace
                 DeserializerUtils::marshal(request->state())
         );
     }
+
+    IParcel::ParcelPtr deserialize(const DcdrFlatBuffers::CommanderGetServerStatusRequest*)
+    {
+        return std::make_unique<CommanderGetServerStatusRequestParcel>();
+    }
 }
 
 IParcel::ParcelPtr FlatBuffersCommanderRequestDeserializer::deserialize(
@@ -78,8 +81,6 @@ IParcel::ParcelPtr FlatBuffersCommanderRequestDeserializer::deserialize(
             return ::deserialize(request->requestData_as_CommanderGetJobListRequest());
         case DcdrFlatBuffers::CommanderRequestData_CommanderGetJobInfoRequest:
             return ::deserialize(request->requestData_as_CommanderGetJobInfoRequest());
-        case DcdrFlatBuffers::CommanderRequestData_CommanderGetJobPreviewRequest:
-            return ::deserialize(request->requestData_as_CommanderGetJobPreviewRequest());
         case DcdrFlatBuffers::CommanderRequestData_CommanderGetJobArtifactRequest:
             return ::deserialize(request->requestData_as_CommanderGetJobArtifactRequest());
         case DcdrFlatBuffers::CommanderRequestData_CommanderSetJobStateRequest:
@@ -94,6 +95,8 @@ IParcel::ParcelPtr FlatBuffersCommanderRequestDeserializer::deserialize(
             return ::deserialize(request->requestData_as_CommanderGetNodeInfoRequest());
         case DcdrFlatBuffers::CommanderRequestData_CommanderSetNodeStateRequest:
             return ::deserialize(request->requestData_as_CommanderSetNodeStateRequest());
+        case DcdrFlatBuffers::CommanderRequestData_CommanderGetServerStatusRequest:
+            return ::deserialize(request->requestData_as_CommanderGetServerStatusRequest());
     }
 
     throw DeserializationNotImplementedException("<Unknown>");

@@ -38,22 +38,9 @@ TEST_F(FlatBuffersInterconnectTest, CommanderGetJobInfoRequestParcelTest)
     ASSERT_TRUE(receivedRequest->get_request().get_job_id() == 42);
 }
 
-TEST_F(FlatBuffersInterconnectTest, CommanderGetJobPreviewRequestParcel)
-{
-    CommanderGetJobPreviewRequestParcel request(42, 2);
-
-    auto serialized = static_cast<const IParcel&>(request).serialize(serializer_);
-    auto deserialized = deserializer_.deserialize(std::move(serialized));
-
-    auto receivedRequest = dynamic_cast<CommanderGetJobPreviewRequestParcel*>(deserialized.get());
-    ASSERT_TRUE(receivedRequest != nullptr);
-    ASSERT_TRUE(receivedRequest->get_request().get_job_id() == 42);
-    ASSERT_TRUE(receivedRequest->get_request().get_mipmap_level() == 2);
-}
-
 TEST_F(FlatBuffersInterconnectTest, CommanderGetJobArtifactRequestParcel)
 {
-    CommanderGetJobArtifactRequestParcel request(42);
+    CommanderGetJobArtifactRequestParcel request(42, 1, Commander::ArtifactFormat::Rgb24Unsigned);
 
     auto serialized = static_cast<const IParcel&>(request).serialize(serializer_);
     auto deserialized = deserializer_.deserialize(std::move(serialized));
@@ -61,6 +48,8 @@ TEST_F(FlatBuffersInterconnectTest, CommanderGetJobArtifactRequestParcel)
     auto receivedRequest = dynamic_cast<CommanderGetJobArtifactRequestParcel*>(deserialized.get());
     ASSERT_TRUE(receivedRequest != nullptr);
     ASSERT_TRUE(receivedRequest->get_request().get_job_id() == 42);
+    ASSERT_TRUE(receivedRequest->get_request().get_mipmap_level() == 1);
+    ASSERT_TRUE(receivedRequest->get_request().get_format() == Commander::ArtifactFormat::Rgb24Unsigned);
 }
 
 TEST_F(FlatBuffersInterconnectTest, CommanderSetJobStateRequestParcel)
@@ -178,51 +167,24 @@ TEST_F(FlatBuffersInterconnectTest, CommanderGetJobInfoResponseParcel)
     }
 }
 
-TEST_F(FlatBuffersInterconnectTest, CommanderGetJobPreviewResponseParcel)
-{
-    std::vector<uint8_t> data = {1, 2, 3};
-
-    CommanderGetJobPreviewResponseParcel response(42, data);
-
-    auto serialized = static_cast<const IParcel&>(response).serialize(serializer_);
-    auto deserialized = deserializer_.deserialize(std::move(serialized));
-
-    auto receivedResponse = dynamic_cast<CommanderGetJobPreviewResponseParcel*>(deserialized.get());
-    ASSERT_TRUE(receivedResponse != nullptr);
-    ASSERT_TRUE(receivedResponse->get_response().get_job_id() == 42);
-    for (size_t i = 0; i < data.size(); ++i)
-    {
-        ASSERT_EQ(data[i], receivedResponse->get_response().get_preview()[i]);
-    }
-}
 
 TEST_F(FlatBuffersInterconnectTest, CommanderGetJobArtifactResponseParcel)
 {
     std::vector<uint8_t> data = {1, 2, 3};
 
-    CommanderGetJobArtifactResponseParcel response(42, data);
+    CommanderGetJobArtifactResponseParcel response(42, Commander::ArtifactFormat::Rgb24Unsigned, 16, 8,  data);
 
     auto serialized = static_cast<const IParcel&>(response).serialize(serializer_);
     auto deserialized = deserializer_.deserialize(std::move(serialized));
 
     auto receivedResponse = dynamic_cast<CommanderGetJobArtifactResponseParcel*>(deserialized.get());
     ASSERT_TRUE(receivedResponse != nullptr);
-    ASSERT_TRUE(receivedResponse->get_response().get_job_id() == 42);
-    for (size_t i = 0; i < data.size(); ++i)
-    {
-        ASSERT_EQ(data[i], receivedResponse->get_response().get_artifact()[i]);
-    }
-}
+    ASSERT_EQ(receivedResponse->get_response().get_job_id(), 42);
+    ASSERT_EQ(receivedResponse->get_response().get_format(), Commander::ArtifactFormat::Rgb24Unsigned);
+    ASSERT_EQ(receivedResponse->get_response().get_width(), 16);
+    ASSERT_EQ(receivedResponse->get_response().get_height(), 8);
 
-TEST_F(FlatBuffersInterconnectTest, CommanderDoJobListUpdateResponseParcel)
-{
-    CommanderDoJobListUpdateResponseParcel response;
-
-    auto serialized = static_cast<const IParcel&>(response).serialize(serializer_);
-    auto deserialized = deserializer_.deserialize(std::move(serialized));
-
-    auto receivedResponse = dynamic_cast<CommanderDoJobListUpdateResponseParcel*>(deserialized.get());
-    ASSERT_TRUE(receivedResponse != nullptr);
+    ASSERT_EQ(data, receivedResponse->get_response().get_data());
 }
 
 TEST_F(FlatBuffersInterconnectTest, CommanderGetSceneListReponseParcel)
@@ -291,26 +253,40 @@ TEST_F(FlatBuffersInterconnectTest, CommanderGetNodeInfoResponseParcel)
     }
 }
 
-TEST_F(FlatBuffersInterconnectTest, CommanderDoNodeListUpdateResponseParcel)
+TEST_F(FlatBuffersInterconnectTest, CommanderErrorParcel)
 {
-    CommanderDoNodeListUpdateResponseParcel response;
+    CommanderErrorResponseParcel response(Commander::CommanderErrorKind::JobNotExist, "test");
 
     auto serialized = static_cast<const IParcel&>(response).serialize(serializer_);
     auto deserialized = deserializer_.deserialize(std::move(serialized));
 
-    auto receivedResponse = dynamic_cast<CommanderDoNodeListUpdateResponseParcel*>(deserialized.get());
+    auto receivedResponse = dynamic_cast<CommanderErrorResponseParcel*>(deserialized.get());
     ASSERT_TRUE(receivedResponse != nullptr);
+    ASSERT_EQ(receivedResponse->get_response().get_error_kind(), Commander::CommanderErrorKind::JobNotExist);
+    ASSERT_EQ(receivedResponse->get_response().get_message(), std::string("test"));
 }
 
-TEST_F(FlatBuffersInterconnectTest, CommanderDoShowErrorResponseParcel)
+TEST_F(FlatBuffersInterconnectTest, CommanderGetServerStatusRequestParcel)
 {
-    CommanderDoShowErrorResponseParcel response(Commander::CommanderErrorKind::NodeNotExist, "Node xxx not exist");
+    CommanderGetServerStatusRequestParcel request;
+
+    auto serialized = static_cast<const IParcel&>(request).serialize(serializer_);
+    auto deserialized = deserializer_.deserialize(std::move(serialized));
+
+    auto receivedRequest = dynamic_cast<CommanderGetServerStatusRequestParcel*>(deserialized.get());
+    ASSERT_TRUE(receivedRequest != nullptr);
+}
+
+TEST_F(FlatBuffersInterconnectTest, CommanderGetServerStatusResponseParcel)
+{
+    CommanderGetServerStatusResponseParcel response(1, 2, 3);
 
     auto serialized = static_cast<const IParcel&>(response).serialize(serializer_);
     auto deserialized = deserializer_.deserialize(std::move(serialized));
 
-    auto receivedResponse = dynamic_cast<CommanderDoShowErrorResponseParcel*>(deserialized.get());
+    auto receivedResponse = dynamic_cast<CommanderGetServerStatusResponseParcel*>(deserialized.get());
     ASSERT_TRUE(receivedResponse != nullptr);
-    ASSERT_TRUE(receivedResponse->get_response().get_error_kind() == response.get_response().get_error_kind());
-    ASSERT_TRUE(receivedResponse->get_response().get_message() == response.get_response().get_message());
+    ASSERT_EQ(receivedResponse->get_response().get_scenes_last_modified_timestamp(), 1);
+    ASSERT_EQ(receivedResponse->get_response().get_jobs_last_modified_timestamp(),   2);
+    ASSERT_EQ(receivedResponse->get_response().get_nodes_last_modified_timestamp(),  3);
 }

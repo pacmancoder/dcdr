@@ -22,19 +22,22 @@ enum CommanderErrorKind : uint16
     SceneNotExist
 }
 
-table Pixel
+enum ArtifactFormat : uint16
 {
-    r: float;
-    g: float;
-    b: float;
-    samples: uint32;    
+    Rgb24Unsigned
 }
 
-table ScenePart
+table Job
 {
-    sceneId: uint32;
-    offset: uint64;
-    data: [uint32];
+    id: uint32;
+    name: string;
+    state: JobState;
+}
+
+table PropertyPair
+{
+    name: string;
+    value: string;
 }
 
 enum WorkerSessionStatus : uint8
@@ -52,4 +55,34 @@ enum ServerErrorKind : uint16
     WorkNotExist,
     SceneNotExist,
     WrongSceneOffset
+}
+
+table Scene
+{
+    id: uint32;
+    name: string;
+    width: uint16;
+    height: uint16;
+}
+
+table Pixel
+{
+    r: float;
+    g: float;
+    b: float;
+    samples: uint32;    
+}
+
+table ScenePart
+{
+    sceneId: uint32;
+    offset: uint64;
+    data: [uint32];
+}
+
+table Node
+{
+    id: uint32;
+    name: string;
+    state: NodeState;
 }

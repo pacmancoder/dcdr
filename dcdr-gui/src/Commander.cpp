@@ -93,16 +93,34 @@ void Commander::run()
     Interconnect::FlatBuffersParcelSerializer parcelSerializer;
     Interconnect::FlatBuffersParcelDeserializer parcelDeserializer;
 
-    auto serializedResponse = transport.get_response(parcelSerializer.serialize(Interconnect::CommanderGetSceneListRequestParcel()));
-    parcelDeserializer.deserialize(*serializedResponse)->dispatch(CommanderResponseDispatcher<Interconnect::CommanderGetSceneListResponse>(
-    [this](const Interconnect::CommanderGetSceneListResponse& response)
-    {
-        for (const auto& scene : response.get_scenes())
-        {
-            view_->add_scene(scene.id, scene.name, scene.width, scene.height);
-        }
+    auto serializedResponse = transport.get_response(
+            parcelSerializer.serialize(Interconnect::CommanderGetSceneListRequestParcel()));
 
-    }));
+    parcelDeserializer.deserialize(*serializedResponse)->dispatch(
+            CommanderResponseDispatcher<Interconnect::CommanderGetSceneListResponse>(
+                    [this](const Interconnect::CommanderGetSceneListResponse& response)
+                    {
+                        for (const auto& scene : response.get_scenes())
+                        {
+                            view_->add_scene(scene.id, scene.name, scene.width, scene.height);
+                        }
+                    }
+            ));
+
+    serializedResponse = transport.get_response(
+            parcelSerializer.serialize(Interconnect::CommanderGetJobListRequestParcel()));
+
+    parcelDeserializer.deserialize(*serializedResponse)->dispatch(
+            CommanderResponseDispatcher<Interconnect::CommanderGetJobListResponse>(
+                    [this](const Interconnect::CommanderGetJobListResponse& response)
+                    {
+                        for (const auto& job : response.get_jobs())
+                        {
+                            view_->add_job(job.id, job.name, job.state);
+                        }
+                    }
+            ));
+
 
     while (!terminateRequested_) { std::this_thread::sleep_for(std::chrono::milliseconds(100)); }
     view_->terminate();

@@ -37,12 +37,11 @@ namespace Dcdr::Interconnect
 
     using CommanderGetJobListResponseParcel = ConcreteCommanderResponseParcel<CommanderGetJobListResponse>;
     using CommanderGetJobInfoResponseParcel = ConcreteCommanderResponseParcel<CommanderGetJobInfoResponse>;
-    using CommanderGetJobPreviewResponseParcel = ConcreteCommanderResponseParcel<CommanderGetJobPreviewResponse>;
     using CommanderGetJobArtifactResponseParcel = ConcreteCommanderResponseParcel<CommanderGetJobArtifactResponse>;
-    using CommanderDoJobListUpdateResponseParcel = ConcreteCommanderResponseParcel<CommanderDoJobListUpdateResponse>;
     using CommanderGetSceneListReponseParcel = ConcreteCommanderResponseParcel<CommanderGetSceneListResponse>;
     using CommanderGetNodeListResponseParcel = ConcreteCommanderResponseParcel<CommanderGetNodeListResponse>;
     using CommanderGetNodeInfoResponseParcel = ConcreteCommanderResponseParcel<CommanderGetNodeInfoResponse>;
-    using CommanderDoNodeListUpdateResponseParcel = ConcreteCommanderResponseParcel<CommanderDoNodeListUpdateResponse>;
-    using CommanderDoShowErrorResponseParcel = ConcreteCommanderResponseParcel<CommanderDoShowErrorResponse>;
+    using CommanderErrorResponseParcel = ConcreteCommanderResponseParcel<CommanderErrorResponse>;
+    using CommanderGetServerStatusResponseParcel = ConcreteCommanderResponseParcel<CommanderGetServerStatusResponse>;
+
 }

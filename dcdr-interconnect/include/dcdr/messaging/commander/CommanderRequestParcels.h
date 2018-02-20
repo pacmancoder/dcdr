@@ -37,7 +37,6 @@ namespace Dcdr::Interconnect
 
     using CommanderGetJobListRequestParcel = ConcreteCommanderRequestParcel<CommanderGetJobListRequest>;
     using CommanderGetJobInfoRequestParcel = ConcreteCommanderRequestParcel<CommanderGetJobInfoRequest>;
-    using CommanderGetJobPreviewRequestParcel = ConcreteCommanderRequestParcel<CommanderGetJobPreviewRequest>;
     using CommanderGetJobArtifactRequestParcel = ConcreteCommanderRequestParcel<CommanderGetJobArtifactRequest>;
     using CommanderSetJobStateRequestParcel = ConcreteCommanderRequestParcel<CommanderSetJobStateRequest>;
     using CommanderAddJobRequestParcel = ConcreteCommanderRequestParcel<CommanderAddJobRequest>;
@@ -45,4 +44,5 @@ namespace Dcdr::Interconnect
     using CommanderGetNodeListRequestParcel = ConcreteCommanderRequestParcel<CommanderGetNodeListRequest>;
     using CommanderGetNodeInfoRequestParcel = ConcreteCommanderRequestParcel<CommanderGetNodeInfoRequest>;
     using CommanderSetNodeStateRequestParcel = ConcreteCommanderRequestParcel<CommanderSetNodeStateRequest>;
+    using CommanderGetServerStatusRequestParcel = ConcreteCommanderRequestParcel<CommanderGetServerStatusRequest>;
 }

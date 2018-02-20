@@ -8,7 +8,6 @@ namespace Dcdr::Interconnect
     // jobs
     class CommanderGetJobListRequest;
     class CommanderGetJobInfoRequest;
-    class CommanderGetJobPreviewRequest;
     class CommanderGetJobArtifactRequest;
     class CommanderSetJobStateRequest;
     class CommanderAddJobRequest;
@@ -18,6 +17,8 @@ namespace Dcdr::Interconnect
     class CommanderGetNodeListRequest;
     class CommanderGetNodeInfoRequest;
     class CommanderSetNodeStateRequest;
+    // status
+    class CommanderGetServerStatusRequest;
 
     class ICommanderRequestDispatcher
     {
@@ -31,11 +32,6 @@ namespace Dcdr::Interconnect
         virtual IParcel::ParcelPtr dispatch(const CommanderGetJobInfoRequest&)
         {
             dispatch_not_implemented("CommanderGetJobInfoRequest");
-            return nullptr;
-        }
-        virtual IParcel::ParcelPtr dispatch(const CommanderGetJobPreviewRequest&)
-        {
-            dispatch_not_implemented("CommanderGetJobPreviewRequest");
             return nullptr;
         }
         virtual IParcel::ParcelPtr dispatch(const CommanderGetJobArtifactRequest&)
@@ -72,6 +68,12 @@ namespace Dcdr::Interconnect
         virtual IParcel::ParcelPtr dispatch(const CommanderSetNodeStateRequest&)
         {
             dispatch_not_implemented("CommanderSetNodeStateRequest");
+            return nullptr;
+        }
+        // status
+        virtual IParcel::ParcelPtr dispatch(const CommanderGetServerStatusRequest&)
+        {
+            dispatch_not_implemented("CommanderGetServerStatusRequest");
             return nullptr;
         }
 
