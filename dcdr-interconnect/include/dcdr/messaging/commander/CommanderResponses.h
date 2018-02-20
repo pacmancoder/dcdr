@@ -39,29 +39,27 @@ namespace Dcdr::Interconnect
         std::vector<Commander::PropertyPair> properties_;
     };
 
-    class CommanderGetJobPreviewResponse : public ACommanderJobResponse
-    {
-    public:
-        CommanderGetJobPreviewResponse(uint32_t id, std::vector<uint8_t> data);
-
-        const std::vector<uint8_t>& get_preview() const;
-
-    private:
-        std::vector<uint8_t> data_;
-    };
-
     class CommanderGetJobArtifactResponse : public ACommanderJobResponse
     {
     public:
-        CommanderGetJobArtifactResponse(uint32_t id, std::vector<uint8_t> data);
+        CommanderGetJobArtifactResponse(
+                uint32_t id,
+                Commander::ArtifactFormat format,
+                uint16_t width,
+                uint16_t height,
+                std::vector<uint8_t> data);
 
-        const std::vector<uint8_t>& get_artifact() const;
+        Commander::ArtifactFormat get_format() const;
+        uint16_t get_width() const;
+        uint16_t get_height() const;
+        const std::vector<uint8_t>& get_data() const;
 
     private:
+        Commander::ArtifactFormat format_;
+        uint16_t width_;
+        uint16_t height_;
         std::vector<uint8_t> data_;
     };
-
-    class CommanderDoJobListUpdateResponse {};
 
     class CommanderGetSceneListResponse
     {
@@ -109,12 +107,10 @@ namespace Dcdr::Interconnect
         std::vector<Commander::PropertyPair> properies_;
     };
 
-    class CommanderDoNodeListUpdateResponse {};
-
-    class CommanderDoShowErrorResponse
+    class CommanderErrorResponse
     {
     public:
-        CommanderDoShowErrorResponse(Commander::CommanderErrorKind errorKind, const std::string& message);
+        CommanderErrorResponse(Commander::CommanderErrorKind errorKind, const std::string& message);
 
         const std::string& get_message() const;
         Commander::CommanderErrorKind get_error_kind() const;
@@ -122,5 +118,23 @@ namespace Dcdr::Interconnect
     private:
         Commander::CommanderErrorKind errorKind_;
         std::string message_;
+    };
+
+    class CommanderGetServerStatusResponse
+    {
+    public:
+        CommanderGetServerStatusResponse(
+                uint64_t scenesLastModifiedTimestamp,
+                uint64_t jobsLastModifiedTimestamp,
+                uint64_t nodesLastModifiedTimestamp);
+
+        uint64_t get_scenes_last_modified_timestamp() const;
+        uint64_t get_nodes_last_modified_timestamp() const;
+        uint64_t get_jobs_last_modified_timestamp() const;
+
+    private:
+        uint64_t scenesLastModifiedTimestamp_;
+        uint64_t jobsLastModifiedTimestamp_;
+        uint64_t nodesLastModifiedTimestamp_;
     };
 }

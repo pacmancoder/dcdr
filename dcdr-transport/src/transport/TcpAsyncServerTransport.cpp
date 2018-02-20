@@ -161,6 +161,7 @@ void TcpAsyncServerTransport::Impl::thread_func()
                             static_cast<int>(responseHandle.size()));
 
                     responses.erase(currentResponse++);
+                    // TODO: check timeout
                 }
                 else
                 {

@@ -7,6 +7,7 @@ Job::Job(uint32_t sceneId, uint16_t width, uint16_t height, uint16_t chunkSize) 
     width_(width),
     height_(height),
     chunkSize_(chunkSize),
+    state_(JobState::InProgress),
     surface_(width, height, chunkSize){}
 
 Job::Job(Job&& rhs) :
@@ -14,10 +15,8 @@ Job::Job(Job&& rhs) :
     width_(rhs.width_),
     height_(rhs.height_),
     chunkSize_(rhs.chunkSize_),
-    surface_(std::move(rhs.surface_))
-{
-
-}
+    state_(rhs.state_),
+    surface_(std::move(rhs.surface_)) {}
 
 uint32_t Job::get_scene_id() const
 {
@@ -47,4 +46,14 @@ const Surface& Job::get_readonly_surface() const
 Surface& Job::get_surface()
 {
     return surface_;
+}
+
+Job::JobState Job::get_state() const
+{
+    return state_;
+}
+
+void Job::set_state(Job::JobState state)
+{
+    state_ = state;
 }

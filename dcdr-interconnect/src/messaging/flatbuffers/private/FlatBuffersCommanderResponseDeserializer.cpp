@@ -24,23 +24,14 @@ namespace
                         response->properties()));
     }
 
-    IParcel::ParcelPtr deserialize(const DcdrFlatBuffers::CommanderGetJobPreviewResponse* response)
-    {
-        return std::make_unique<CommanderGetJobPreviewResponseParcel>(
-                response->id(),
-                std::vector<uint8_t>(response->data()->begin(), response->data()->end()));
-    }
-
     IParcel::ParcelPtr deserialize(const DcdrFlatBuffers::CommanderGetJobArtifactResponse* response)
     {
         return std::make_unique<CommanderGetJobArtifactResponseParcel>(
                 response->id(),
+                DeserializerUtils::marshal(response->format()),
+                response->width(),
+                response->height(),
                 std::vector<uint8_t>(response->data()->begin(), response->data()->end()));
-    }
-
-    IParcel::ParcelPtr deserialize(const DcdrFlatBuffers::CommanderDoJobListUpdateResponse*)
-    {
-        return std::make_unique<CommanderDoJobListUpdateResponseParcel>();
     }
 
     IParcel::ParcelPtr deserialize(const DcdrFlatBuffers::CommanderGetNodeListResponse* response)
@@ -58,22 +49,24 @@ namespace
                         response->properties()));
     }
 
-    IParcel::ParcelPtr deserialize(const DcdrFlatBuffers::CommanderDoNodeListUpdateResponse*)
+    IParcel::ParcelPtr deserialize(const DcdrFlatBuffers::CommanderErrorResponse* response)
     {
-        return std::make_unique<CommanderDoNodeListUpdateResponseParcel>();
-    }
-
-    IParcel::ParcelPtr deserialize(const DcdrFlatBuffers::CommanderDoShowErrorResponse* response)
-    {
-        return std::make_unique<CommanderDoShowErrorResponseParcel>(
-                DeserializerUtils::marshal(response->error()),
-                response->message()->str());
+        return std::make_unique<CommanderErrorResponseParcel>(DeserializerUtils::marshal(
+                response->error()), response->message()->str());
     }
 
     IParcel::ParcelPtr deserialize(const DcdrFlatBuffers::CommanderGetSceneListReponse* response)
     {
         return std::make_unique<CommanderGetSceneListReponseParcel>(
                 DeserializerUtils::deserialize_vector<DcdrFlatBuffers::Scene, Commander::Scene>(response->scenes()));
+    }
+
+    IParcel::ParcelPtr deserialize(const DcdrFlatBuffers::CommanderGetServerStatusResponse* response)
+    {
+        return std::make_unique<CommanderGetServerStatusResponseParcel>(
+                response->scenesLastModifiedTimestamp(),
+                response->jobsLastModifiedTimestamp(),
+                response->nodesLastModifiedTimestamp());
     }
 }
 
@@ -91,22 +84,18 @@ IParcel::ParcelPtr FlatBuffersCommanderResponseDeserializer::deserialize(
             return  ::deserialize(response->responseData_as_CommanderGetJobListResponse());
         case DcdrFlatBuffers::CommanderResponseData_CommanderGetJobInfoResponse:
             return  ::deserialize(response->responseData_as_CommanderGetJobInfoResponse());
-        case DcdrFlatBuffers::CommanderResponseData_CommanderGetJobPreviewResponse:
-            return  ::deserialize(response->responseData_as_CommanderGetJobPreviewResponse());
         case DcdrFlatBuffers::CommanderResponseData_CommanderGetJobArtifactResponse:
             return  ::deserialize(response->responseData_as_CommanderGetJobArtifactResponse());
-        case DcdrFlatBuffers::CommanderResponseData_CommanderDoJobListUpdateResponse:
-            return  ::deserialize(response->responseData_as_CommanderDoJobListUpdateResponse());
         case DcdrFlatBuffers::CommanderResponseData_CommanderGetNodeListResponse:
             return  ::deserialize(response->responseData_as_CommanderGetNodeListResponse());
         case DcdrFlatBuffers::CommanderResponseData_CommanderGetNodeInfoResponse:
             return  ::deserialize(response->responseData_as_CommanderGetNodeInfoResponse());
-        case DcdrFlatBuffers::CommanderResponseData_CommanderDoNodeListUpdateResponse:
-            return  ::deserialize(response->responseData_as_CommanderDoNodeListUpdateResponse());
-        case DcdrFlatBuffers::CommanderResponseData_CommanderDoShowErrorResponse:
-            return  ::deserialize(response->responseData_as_CommanderDoShowErrorResponse());
+        case DcdrFlatBuffers::CommanderResponseData_CommanderErrorResponse:
+            return  ::deserialize(response->responseData_as_CommanderErrorResponse());
         case DcdrFlatBuffers::CommanderResponseData_CommanderGetSceneListReponse:
             return  ::deserialize(response->responseData_as_CommanderGetSceneListReponse());
+        case DcdrFlatBuffers::CommanderResponseData_CommanderGetServerStatusResponse:
+            return  ::deserialize(response->responseData_as_CommanderGetServerStatusResponse());
     }
 
     throw DeserializationNotImplementedException("<Unknown>");

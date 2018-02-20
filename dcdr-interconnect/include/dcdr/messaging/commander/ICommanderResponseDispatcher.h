@@ -7,17 +7,15 @@ namespace Dcdr::Interconnect
     // job
     class CommanderGetJobListResponse;
     class CommanderGetJobInfoResponse;
-    class CommanderGetJobPreviewResponse;
     class CommanderGetJobArtifactResponse;
-    class CommanderDoJobListUpdateResponse;
     // scene
     class CommanderGetSceneListResponse;
     // node
     class CommanderGetNodeListResponse;
     class CommanderGetNodeInfoResponse;
-    class CommanderDoNodeListUpdateResponse;
     // common
-    class CommanderDoShowErrorResponse;
+    class CommanderErrorResponse;
+    class CommanderGetServerStatusResponse;
 
     class ICommanderResponseDispatcher
     {
@@ -31,17 +29,9 @@ namespace Dcdr::Interconnect
         {
             dispatch_not_implemented("CommanderGetJobInfoResponse");
         }
-        virtual void dispatch(const CommanderGetJobPreviewResponse&)
-        {
-            dispatch_not_implemented("CommanderGetJobPreviewResponse");
-        }
         virtual void dispatch(const CommanderGetJobArtifactResponse&)
         {
             dispatch_not_implemented("CommanderGetJobArtifactResponse");
-        }
-        virtual void dispatch(const CommanderDoJobListUpdateResponse&)
-        {
-            dispatch_not_implemented("CommanderDoJobListUpdateResponse");
         }
         virtual void dispatch(const CommanderGetSceneListResponse&)
         {
@@ -55,13 +45,13 @@ namespace Dcdr::Interconnect
         {
             dispatch_not_implemented("CommanderGetNodeInfoResponse");
         }
-        virtual void dispatch(const CommanderDoNodeListUpdateResponse&)
+        virtual void dispatch(const CommanderErrorResponse&)
         {
-            dispatch_not_implemented("CommanderDoNodeListUpdateResponse");
+            dispatch_not_implemented("CommanderErrorResponse");
         }
-        virtual void dispatch(const CommanderDoShowErrorResponse&)
+        virtual void dispatch(const CommanderGetServerStatusResponse&)
         {
-            dispatch_not_implemented("CommanderDoShowErrorResponse");
+            dispatch_not_implemented("CommanderGetServerStatusResponse");
         }
 
         virtual void dispatch_not_implemented(const std::string& parcelKind)

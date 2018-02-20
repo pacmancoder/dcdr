@@ -42,6 +42,16 @@ Commander::CommanderErrorKind DeserializerUtils::marshal(DcdrFlatBuffers::Comman
     throw std::invalid_argument("<Unreachable code>");
 }
 
+Commander::ArtifactFormat DeserializerUtils::marshal(DcdrFlatBuffers::ArtifactFormat artifactFormat)
+{
+    switch (artifactFormat)
+    {
+        case DcdrFlatBuffers::ArtifactFormat_Rgb24Unsigned: return Commander::ArtifactFormat::Rgb24Unsigned;
+    }
+
+    throw std::invalid_argument("<Unreachable code>");
+}
+
 Commander::Job DeserializerUtils::deserialize(const DcdrFlatBuffers::Job* job)
 {
     return Commander::Job { job->id(), job->name()->str(), marshal(job->state()) };

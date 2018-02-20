@@ -66,19 +66,6 @@ IParcel::SerializedParcel FlatBuffersCommanderResponseSerializer::serialize(cons
 }
 
 IParcel::SerializedParcel
-FlatBuffersCommanderResponseSerializer::serialize(const CommanderGetJobPreviewResponse& parcel)
-{
-    return build_commander_response_parcel<DcdrFlatBuffers::CommanderGetJobPreviewResponse>(
-            [&parcel](auto& flatBuffersBuilder)
-            {
-                return DcdrFlatBuffers::CreateCommanderGetJobPreviewResponse(
-                        flatBuffersBuilder,
-                        parcel.get_job_id(),
-                        flatBuffersBuilder.CreateVector(parcel.get_preview()));
-            });
-}
-
-IParcel::SerializedParcel
 FlatBuffersCommanderResponseSerializer::serialize(const CommanderGetJobArtifactResponse& parcel)
 {
     return build_commander_response_parcel<DcdrFlatBuffers::CommanderGetJobArtifactResponse>(
@@ -87,17 +74,10 @@ FlatBuffersCommanderResponseSerializer::serialize(const CommanderGetJobArtifactR
                 return DcdrFlatBuffers::CreateCommanderGetJobArtifactResponse(
                         flatBuffersBuilder,
                         parcel.get_job_id(),
-                        flatBuffersBuilder.CreateVector(parcel.get_artifact()));
-            });
-}
-
-IParcel::SerializedParcel
-FlatBuffersCommanderResponseSerializer::serialize(const CommanderDoJobListUpdateResponse&)
-{
-    return build_commander_response_parcel<DcdrFlatBuffers::CommanderDoJobListUpdateResponse>(
-            [](auto& flatBuffersBuilder)
-            {
-                return DcdrFlatBuffers::CreateCommanderDoJobListUpdateResponse(flatBuffersBuilder);
+                        SerializerUtils::marshal(parcel.get_format()),
+                        parcel.get_width(),
+                        parcel.get_height(),
+                        flatBuffersBuilder.CreateVector(parcel.get_data()));
             });
 }
 
@@ -138,24 +118,28 @@ IParcel::SerializedParcel FlatBuffersCommanderResponseSerializer::serialize(cons
             });
 }
 
-IParcel::SerializedParcel
-FlatBuffersCommanderResponseSerializer::serialize(const CommanderDoNodeListUpdateResponse&)
+IParcel::SerializedParcel FlatBuffersCommanderResponseSerializer::serialize(const CommanderErrorResponse& parcel)
 {
-    return build_commander_response_parcel<DcdrFlatBuffers::CommanderDoNodeListUpdateResponse>(
-            [](auto& flatBuffersBuilder)
-            {
-                return DcdrFlatBuffers::CreateCommanderDoNodeListUpdateResponse(flatBuffersBuilder);
-            });
-}
-
-IParcel::SerializedParcel FlatBuffersCommanderResponseSerializer::serialize(const CommanderDoShowErrorResponse& parcel)
-{
-    return build_commander_response_parcel<DcdrFlatBuffers::CommanderDoShowErrorResponse>(
+    return build_commander_response_parcel<DcdrFlatBuffers::CommanderErrorResponse>(
             [&parcel](auto& flatBuffersBuilder)
             {
-                return DcdrFlatBuffers::CreateCommanderDoShowErrorResponse(
+                return DcdrFlatBuffers::CreateCommanderErrorResponse(
                         flatBuffersBuilder,
                         SerializerUtils::marshal(parcel.get_error_kind()),
                         flatBuffersBuilder.CreateString(parcel.get_message()));
+            });
+}
+
+IParcel::SerializedParcel
+FlatBuffersCommanderResponseSerializer::serialize(const CommanderGetServerStatusResponse& parcel)
+{
+    return build_commander_response_parcel<DcdrFlatBuffers::CommanderGetServerStatusResponse>(
+            [&parcel](auto& flatBuffersBuilder)
+            {
+                return DcdrFlatBuffers::CreateCommanderGetServerStatusResponse(
+                        flatBuffersBuilder,
+                        parcel.get_scenes_last_modified_timestamp(),
+                        parcel.get_jobs_last_modified_timestamp(),
+                        parcel.get_nodes_last_modified_timestamp());
             });
 }

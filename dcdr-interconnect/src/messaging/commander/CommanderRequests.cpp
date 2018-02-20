@@ -11,17 +11,20 @@ CommanderGetJobInfoRequest::CommanderGetJobInfoRequest(uint32_t jobId) :
         ACommanderJobRequest(jobId) {}
 
 CommanderSetJobStateRequest::CommanderSetJobStateRequest(uint32_t jobId, Commander::JobState jobState) :
-        ACommanderJobRequest(jobId), jobState_(jobState) {}
+        ACommanderJobRequest(jobId),
+        jobState_(jobState) {}
 
 Commander::JobState CommanderSetJobStateRequest::get_job_state() const { return jobState_; }
 
-CommanderGetJobPreviewRequest::CommanderGetJobPreviewRequest(uint32_t jobId, uint8_t mipmapLevel) :
-        ACommanderJobRequest(jobId), mipmapLevel_(mipmapLevel) {}
+CommanderGetJobArtifactRequest::CommanderGetJobArtifactRequest(uint32_t jobId, uint8_t mipmapLevel,
+        Commander::ArtifactFormat format) :
+    ACommanderJobRequest(jobId),
+    mipmapLevel_(mipmapLevel),
+    format_(format) {}
 
-uint8_t CommanderGetJobPreviewRequest::get_mipmap_level() const { return mipmapLevel_; }
+uint8_t CommanderGetJobArtifactRequest::get_mipmap_level() const { return mipmapLevel_; }
 
-CommanderGetJobArtifactRequest::CommanderGetJobArtifactRequest(uint32_t jobId) :
-        ACommanderJobRequest(jobId) {}
+Commander::ArtifactFormat CommanderGetJobArtifactRequest::get_format() const { return format_; }
 
 CommanderAddJobRequest::CommanderAddJobRequest(uint32_t sceneId, float scale) :
         sceneId_(sceneId), scale_(scale) {}
