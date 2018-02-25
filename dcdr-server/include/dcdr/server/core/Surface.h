@@ -3,15 +3,13 @@
 #include <cstdint>
 #include <vector>
 #include <memory>
-#include <dcdr/server/core/Chunk.h>
 #include <mutex>
+#include <dcdr/server/core/Chunk.h>
+#include <dcdr/messaging/commander/CommanderInterconnectTypes.h>
 
 namespace Dcdr::Server
 {
-    enum class SurfaceBufferFormat : uint8_t
-    {
-        Rgb24Unsigned
-    };
+    using SurfaceFormat = Interconnect::Commander::ArtifactFormat;
 
     enum class MipmappingTechnique : uint8_t
     {
@@ -20,7 +18,7 @@ namespace Dcdr::Server
 
     struct SurfaceBuffer
     {
-        SurfaceBufferFormat format;
+        SurfaceFormat format;
         uint16_t width;
         uint16_t height;
         std::vector<uint8_t> data;
@@ -40,7 +38,7 @@ namespace Dcdr::Server
         ChunkRect next_chunk_to_render();
 
         SurfaceBuffer get_surface_buffer(
-                SurfaceBufferFormat format,
+                SurfaceFormat format,
                 uint8_t mipmapLevel = 0,
                 MipmappingTechnique mipmappingTechnique = MipmappingTechnique::Nearest) const;
 

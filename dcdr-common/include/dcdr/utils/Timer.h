@@ -16,6 +16,11 @@ namespace Dcdr::Utils
             return std::chrono::system_clock::now() - start_ >= interval_;
         }
 
+        void reset()
+        {
+            start_ = std::chrono::system_clock::now();
+        }
+
     private:
         std::chrono::time_point<std::chrono::system_clock> start_;
         std::chrono::milliseconds interval_;

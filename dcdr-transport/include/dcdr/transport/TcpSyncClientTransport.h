@@ -14,6 +14,7 @@ namespace Dcdr::Transport
     public:
         TcpSyncClientTransport(const std::string& address, std::chrono::milliseconds networkTimeout);
 
+        void send_request(const Request& request) override;
         ResponsePtr get_response(const Request& request) override;
 
         virtual ~TcpSyncClientTransport();

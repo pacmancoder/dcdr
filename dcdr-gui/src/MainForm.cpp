@@ -115,6 +115,7 @@ public:
         uint16_t height = 0;
     } new_scene_resolution;
 
+    float new_scene_scale = 1.0f;
     uint32_t new_scene_id = std::numeric_limits<uint32_t>::max();
 };
 
@@ -134,6 +135,8 @@ void MainForm::Impl::update_new_scene_params()
 
     new_scene_resolution.width = static_cast<uint16_t>(scale * scene.width);
     new_scene_resolution.height = static_cast<uint16_t>(scale * scene.height);
+
+    new_scene_scale = static_cast<float>(scale);
 
     widgets_.sceneResolutionValueLabel_.caption(
             std::to_string(new_scene_resolution.width) + "x" + std::to_string(new_scene_resolution.height));
@@ -179,8 +182,7 @@ Dcdr::Gui::MainForm::MainForm() :
            {
                commander->add_job(
                        impl_->new_scene_id,
-                       impl_->new_scene_resolution.width,
-                       impl_->new_scene_resolution.height);
+                       impl_->new_scene_scale);
            }
        }
     });

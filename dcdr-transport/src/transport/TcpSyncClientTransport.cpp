@@ -153,6 +153,11 @@ ISyncClientTransport::ResponsePtr TcpSyncClientTransport::receive()
     return std::make_unique<ISyncClientTransport::Response>(std::move(impl_->receivedData));
 }
 
+void TcpSyncClientTransport::send_request(const ISyncClientTransport::Request& request)
+{
+    send(request);
+}
+
 ISyncClientTransport::ResponsePtr TcpSyncClientTransport::get_response(const Request& request)
 {
     send(request);

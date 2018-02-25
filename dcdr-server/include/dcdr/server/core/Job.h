@@ -1,6 +1,7 @@
 #pragma once
 
 #include <cstdint>
+#include <map>
 
 #include <dcdr/server/core/Surface.h>
 
@@ -12,6 +13,7 @@ namespace Dcdr::Server
     {
     public:
         using JobState = Interconnect::Commander::JobState;
+        using PropertiesMap = std::map<std::string, std::string>;
 
     public:
         Job(uint32_t sceneId, uint16_t width, uint16_t height, uint16_t chunkSize);
@@ -28,6 +30,12 @@ namespace Dcdr::Server
 
         const Surface& get_readonly_surface() const;
         Surface& get_surface();
+
+        void set_property(const std::string& property, const std::string& value);
+        void remove_property(const std::string& property);
+        const std::string get_property(const std::string& property) const;
+        const PropertiesMap& get_all_properties() const;
+
     private:
         uint32_t scemeId_;
         uint16_t width_;
@@ -37,5 +45,7 @@ namespace Dcdr::Server
         JobState state_;
 
         Surface surface_;
+
+        PropertiesMap properties_;
     };
 }
