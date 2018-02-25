@@ -149,7 +149,11 @@ void TcpAsyncServerTransport::Impl::thread_func()
             auto currentResponse = responses.begin();
             while (currentResponse != responses.end())
             {
-                if (currentResponse->handle.wait_for(0s) == std::future_status::ready)
+                if (!currentResponse->handle.valid())
+                {
+                    responses.erase(currentResponse++);
+                }
+                else if (currentResponse->handle.wait_for(0s) == std::future_status::ready)
                 {
                     log_debug(with_log_prefix("Sending response to ")
                                       .append(Mongoose::socket_to_string(currentResponse->connection->sa)));

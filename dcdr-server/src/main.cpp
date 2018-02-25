@@ -30,13 +30,22 @@ int main(/* int argc, char* argv[] */)
 
         DummySceneLoader sceneLoader;
         sceneLoader.load_scenes(coreContext_->get_scenes());
+
         // test code
-        coreContext_->get_jobs().add(Job{0, 640, 480, 16});
+        auto newJobId = coreContext_->get_jobs().add(Job{0, 640, 480, 16});
+        {
+            coreContext_->get_jobs().access_write(newJobId,
+            [](Job& job)
+            {
+                job.set_property("Started", "12:32:22 09.04.18");
+                job.set_property("Current workers", "1");
+            });
+        }
         // test code end
 
         auto commanderService = std::make_shared<CommanderService>(coreContext_);
 
-        TcpAsyncServerTransport transport("1206", 10s);
+        TcpAsyncServerTransport transport("61296", 10s);
         transport.register_request_processor(commanderService);
         transport.run();
 

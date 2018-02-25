@@ -85,7 +85,7 @@ ChunkRect Surface::next_chunk_to_render()
 }
 
 SurfaceBuffer Surface::get_surface_buffer(
-        SurfaceBufferFormat format, uint8_t mipmapLevel, MipmappingTechnique /*mipmappingTechnique*/) const
+        SurfaceFormat format, uint8_t mipmapLevel, MipmappingTechnique /*mipmappingTechnique*/) const
 {
     // Temporary implementataion. TODO: change this to universal implementation
     auto scaleDownFactor = pow_integer(uint8_t(2), mipmapLevel);
