@@ -2,6 +2,7 @@
 
 // Include implicitly -- Worker Types are subset of Interconnect Types
 #include <dcdr/messaging/InterconnectTypes.h>
+#include <dcdr/Types.h>
 
 #include <vector>
 
@@ -16,10 +17,12 @@ namespace Dcdr::Interconnect::Worker
         WrongSceneOffset
     };
 
+    using Pixel = Types::MultisamplePixel;
+
     struct TaskArtifact
     {
         uint32_t taskId;
-        std::vector<uint8_t> data;
+        std::vector<Pixel> data;
     };
 
     struct ChunkTaskInfo

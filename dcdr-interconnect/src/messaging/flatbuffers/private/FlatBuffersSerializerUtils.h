@@ -6,6 +6,7 @@
 #include <dcdr/messaging/commander/CommanderInterconnectTypes.h>
 
 #include <vector>
+#include <dcdr/messaging/worker/WorkerInterconnectTypes.h>
 
 // Following template classes should be local to cpp in which they were included
 namespace Dcdr::Interconnect::FlatBuffers::SerializerUtils
@@ -18,10 +19,14 @@ namespace Dcdr::Interconnect::FlatBuffers::SerializerUtils
     DcdrFlatBuffers::CommanderErrorKind marshal(Commander::CommanderErrorKind errorKind);
     DcdrFlatBuffers::ArtifactFormat marshal(Commander::ArtifactFormat artifactFormat);
 
-    flatbuffers::Offset<DcdrFlatBuffers::Job> serialize(flatbuffers::FlatBufferBuilder& builder, const Commander::Job& job);
     flatbuffers::Offset<DcdrFlatBuffers::PropertyPair> serialize(flatbuffers::FlatBufferBuilder& builder, const PropertyPair& propertyPair);
+
+    flatbuffers::Offset<DcdrFlatBuffers::Job> serialize(flatbuffers::FlatBufferBuilder& builder, const Commander::Job& job);
     flatbuffers::Offset<DcdrFlatBuffers::Scene> serialize(flatbuffers::FlatBufferBuilder& builder, const Commander::Scene& scene);
     flatbuffers::Offset<DcdrFlatBuffers::Node> serialize(flatbuffers::FlatBufferBuilder& builder, const Commander::Node& node);
+
+    flatbuffers::Offset<DcdrFlatBuffers::Pixel> serialize(flatbuffers::FlatBufferBuilder& builder, const Worker::Pixel& pixel);
+    flatbuffers::Offset<DcdrFlatBuffers::TaskArtifact> serialize(flatbuffers::FlatBufferBuilder& builder, const Worker::TaskArtifact& taskArtifact);
 
     template <class From, class To>
     flatbuffers::Offset<flatbuffers::Vector<flatbuffers::Offset<To>>> serialize_vector(

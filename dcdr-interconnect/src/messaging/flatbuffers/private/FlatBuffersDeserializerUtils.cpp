@@ -42,6 +42,11 @@ Commander::CommanderErrorKind DeserializerUtils::marshal(DcdrFlatBuffers::Comman
     throw std::invalid_argument("<Unreachable code>");
 }
 
+PropertyPair DeserializerUtils::deserialize(const DcdrFlatBuffers::PropertyPair* job)
+{
+    return PropertyPair { job->name()->str(), job->value()->str() };
+}
+
 Commander::ArtifactFormat DeserializerUtils::marshal(DcdrFlatBuffers::ArtifactFormat artifactFormat)
 {
     switch (artifactFormat)
@@ -67,7 +72,16 @@ Commander::Scene DeserializerUtils::deserialize(const DcdrFlatBuffers::Scene* sc
     return Commander::Scene { scene->id(), scene->name()->str(), scene->width(), scene->height() };
 }
 
-PropertyPair DeserializerUtils::deserialize(const DcdrFlatBuffers::PropertyPair* job)
+Worker::Pixel DeserializerUtils::deserialize(const DcdrFlatBuffers::Pixel* pixel)
 {
-    return PropertyPair { job->name()->str(), job->value()->str() };
+    return Dcdr::Interconnect::Worker::Pixel { Types::Vec3(pixel->r(), pixel->g(), pixel->b()), pixel->samples() };
+}
+
+Worker::TaskArtifact DeserializerUtils::deserialize(const DcdrFlatBuffers::TaskArtifact* taskArtifact)
+{
+    return Worker::TaskArtifact
+        {
+                taskArtifact->taskId(),
+                deserialize_vector<DcdrFlatBuffers::Pixel, Worker::Pixel>(taskArtifact->data())
+        };
 }

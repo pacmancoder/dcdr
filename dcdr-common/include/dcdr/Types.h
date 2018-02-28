@@ -21,6 +21,17 @@ namespace Dcdr::Types
     typedef Vec3 Direction;
     typedef Vec3 Color;
 
+    struct MultisamplePixel
+    {
+        Vec3 color;
+        uint32_t samples;
+
+        bool operator==(const MultisamplePixel& rhs) const
+        {
+            return color == rhs.color && samples == rhs.samples;
+        }
+    };
+
     struct UVCoord
     {
         Real u;

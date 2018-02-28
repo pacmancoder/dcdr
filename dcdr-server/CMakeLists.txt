@@ -38,7 +38,3 @@ target_link_libraries(${PROJECT_NAME} PUBLIC dcdr-common dcdr-logger dcdr-interc
 if (NOT WIN32)
 	target_link_libraries(${PROJECT_NAME} PRIVATE pthread)
 endif()
-
-# Actual dcdr-server core. Module has been divided into lib/bin to allow bore flexible testing
-add_executable(${PROJECT_NAME}-bin src/main.cpp)
-target_link_libraries(${PROJECT_NAME}-bin ${PROJECT_NAME})

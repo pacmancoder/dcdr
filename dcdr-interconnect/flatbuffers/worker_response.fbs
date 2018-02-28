@@ -2,7 +2,7 @@ namespace DcdrFlatBuffers;
 
 table WorkerLoginResponse
 {
-    // additional data could be added later
+    nodeId: uint32;    
 }
 
 table ChunkTaskInfo
@@ -24,17 +24,20 @@ table ChunkTaskInfo
 
 table WorkerPollTasksResponse
 {
+    nodeId: uint32;    
     taskList: [ChunkTaskInfo];
 }
 
 table WorkerServerStatusResponse
 {
+    nodeId: uint32;    
     status: WorkerServerStatus;
     message: string;
 }
 
 table WorkerDownloadSceneResponse
 {
+    nodeId: uint32;    
     sceneId: uint32;
     offset: uint64;
     bytesLeft: uint64;
@@ -51,6 +54,5 @@ union WorkerResponseData
 
 table WorkerResponse
 {
-    nodeId: uint32;
     responseData: WorkerResponseData;
 }

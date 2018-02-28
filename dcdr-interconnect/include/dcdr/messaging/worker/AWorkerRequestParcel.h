@@ -10,7 +10,7 @@ namespace Dcdr::Interconnect
     class IWorkerRequestDispatcher;
     class IWorkerRequestSerializer;
 
-    class AWorkerRequestParcel : IParcel
+    class AWorkerRequestParcel : public IParcel
     {
     public:
         using WorkerRequestParcelPtr = std::unique_ptr<AWorkerRequestParcel>;
