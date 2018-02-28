@@ -3,10 +3,15 @@
 #include <dcdr/messaging/commander/ACommanderRequestParcel.h>
 #include <dcdr/messaging/commander/ACommanderResponseParcel.h>
 
+#include <dcdr/messaging/worker/AWorkerRequestParcel.h>
+#include <dcdr/messaging/worker/AWorkerResponseParcel.h>
+
 #include <dcdr/messaging/InterconnectExceptions.h>
 
 #include "private/FlatBuffersCommanderRequestSerializer.h"
 #include "private/FlatBuffersCommanderResponseSerializer.h"
+
+#include "private/FlatBuffersWorkerRequestSerializer.h"
 
 using namespace Dcdr::Interconnect;
 using namespace Dcdr::Interconnect::FlatBuffers;
@@ -28,9 +33,10 @@ IParcel::SerializedParcel FlatBuffersParcelSerializer::serialize(const ACommande
     return parcel.serialize(serializer);
 }
 
-IParcel::SerializedParcel FlatBuffersParcelSerializer::serialize(const AWorkerRequestParcel&)
+IParcel::SerializedParcel FlatBuffersParcelSerializer::serialize(const AWorkerRequestParcel& parcel)
 {
-    return IParcel::SerializedParcel();
+    FlatBuffersWorkerRequestSerializer serializer;
+    return parcel.serialize(serializer);
 }
 
 IParcel::SerializedParcel FlatBuffersParcelSerializer::serialize(const AWorkerResponseParcel&)

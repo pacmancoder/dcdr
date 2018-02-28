@@ -3,32 +3,42 @@ namespace DcdrFlatBuffers;
 
 table WorkerLoginRequest
 {
+    nodeId: uint32;
     name: string;
     token: string;
 }
 
 table WorkerSendHardwareInfoRequest
 {
+    nodeId: uint32;
     properties: [PropertyPair];
 }
 
-table WorkerLogoutRequest {}
+table WorkerLogoutRequest 
+{
+    nodeId: uint32;
+}
 
-table WorkerPollTasksRequest {}
+table WorkerPollTasksRequest 
+{
+    nodeId: uint32;    
+}
 
 table TaskArtifact
 {
-    workId: uint32;
+    taskId: uint32;
     data: [Pixel];
 }
 
 table WorkerCommitTasksRequest
 {
+    nodeId: uint32;    
     artifacts: [TaskArtifact];
 }
 
 table WorkerDownloadSceneRequest
 {
+    nodeId: uint32;    
     sceneId: uint32;
     offset: uint64;
 }
@@ -45,6 +55,5 @@ union WorkerRequestData
 
 table WorkerRequest
 {
-    nodeId: uint32;
     requestData: WorkerRequestData;
 }

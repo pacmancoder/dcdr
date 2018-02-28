@@ -16,11 +16,6 @@ Chunk::Chunk(const Chunk& rhs) :
         minSamples_(rhs.minSamples_),
         maxSamples_(rhs.maxSamples_) {}
 
-bool Dcdr::Server::operator==(const ChunkPixel &a, const ChunkPixel &b)
-{
-    return a.color == b.color && a.samples == b.samples;
-}
-
 Chunk::Chunk(ChunkRect bounds, std::vector<ChunkPixel> pixels) :
     Chunk(bounds)
 {

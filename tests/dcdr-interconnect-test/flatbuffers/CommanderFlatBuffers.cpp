@@ -1,21 +1,12 @@
-#include <gtest/gtest.h>
+#include "FlatBuffersTest.h"
 
-#include <dcdr/messaging/flatbuffers/FlatBuffersParcelSerializer.h>
-#include <dcdr/messaging/flatbuffers/FlatBuffersParcelDeserializer.h>
 #include <dcdr/messaging/commander/CommanderRequestParcels.h>
 #include <dcdr/messaging/commander/CommanderResponseParcels.h>
 
 using namespace Dcdr::Interconnect;
 
-class FlatBuffersInterconnectTest : public ::testing::Test
-{
-protected:
-    FlatBuffersParcelSerializer serializer_;
-    FlatBuffersParcelDeserializer deserializer_;
-};
 
-
-TEST_F(FlatBuffersInterconnectTest, CommanderGetJobListRequestParcelTest)
+TEST_F(FlatBuffersInterconnectTest, CommanderGetJobListRequestParcel)
 {
     CommanderGetJobListRequestParcel request;
 
@@ -26,7 +17,7 @@ TEST_F(FlatBuffersInterconnectTest, CommanderGetJobListRequestParcelTest)
     ASSERT_TRUE(receivedRequest != nullptr);
 }
 
-TEST_F(FlatBuffersInterconnectTest, CommanderGetJobInfoRequestParcelTest)
+TEST_F(FlatBuffersInterconnectTest, CommanderGetJobInfoRequestParcel)
 {
     CommanderGetJobInfoRequestParcel request(42);
 

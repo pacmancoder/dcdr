@@ -35,8 +35,6 @@ namespace Dcdr::Interconnect
 
         virtual IParcel::SerializedParcel serialize(const CommanderGetServerStatusRequest& parcel) = 0;
 
-
-
         virtual ~ICommanderRequestSerializer() = default;
     };
 }

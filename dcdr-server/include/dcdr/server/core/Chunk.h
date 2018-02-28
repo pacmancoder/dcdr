@@ -13,13 +13,7 @@ namespace Dcdr::Server
         uint16_t h;
     };
 
-    struct ChunkPixel
-    {
-        Types::Vec3 color;
-        uint32_t samples;
-    };
-
-    extern bool operator==(const ChunkPixel& a, const ChunkPixel& b);
+    using ChunkPixel = Types::MultisamplePixel;
 
     class Chunk
     {

@@ -1,6 +1,7 @@
 #pragma once
 
 #include <dcdr/messaging/commander/CommanderInterconnectTypes.h>
+#include <dcdr/messaging/worker/WorkerInterconnectTypes.h>
 #include <flatbuffers-generated/DcdrFlatBuffers.h>
 
 #include <vector>
@@ -12,10 +13,15 @@ namespace Dcdr::Interconnect::FlatBuffers::DeserializerUtils
     Commander::CommanderErrorKind marshal(DcdrFlatBuffers::CommanderErrorKind errorKind);
     Commander::ArtifactFormat marshal(DcdrFlatBuffers::ArtifactFormat artifactFormat);
 
-    Commander::Job deserialize(const DcdrFlatBuffers::Job* job);
-    Commander::Node deserialize(const DcdrFlatBuffers::Node* job);
-    Commander::Scene deserialize(const DcdrFlatBuffers::Scene* job);
     PropertyPair deserialize(const DcdrFlatBuffers::PropertyPair* job);
+
+    Commander::Job deserialize(const DcdrFlatBuffers::Job* job);
+    Commander::Node deserialize(const DcdrFlatBuffers::Node* node);
+    Commander::Scene deserialize(const DcdrFlatBuffers::Scene* scene);
+
+    Worker::Pixel deserialize(const DcdrFlatBuffers::Pixel* pixel);
+    Worker::TaskArtifact deserialize(const DcdrFlatBuffers::TaskArtifact* taskArtifact);
+
 
     template <class From, class To>
     std::vector<To> deserialize_vector(const flatbuffers::Vector<flatbuffers::Offset<From>>* data)

@@ -76,3 +76,18 @@ SerializerUtils::serialize(flatbuffers::FlatBufferBuilder& builder, const Comman
 {
     return DcdrFlatBuffers::CreateNode(builder, node.id, builder.CreateString(node.name), marshal(node.state));
 }
+
+flatbuffers::Offset<DcdrFlatBuffers::Pixel>
+SerializerUtils::serialize(flatbuffers::FlatBufferBuilder& builder, const Worker::Pixel& pixel)
+{
+    return DcdrFlatBuffers::CreatePixel(builder, pixel.color.r, pixel.color.g, pixel.color.b, pixel.samples);
+}
+
+flatbuffers::Offset<DcdrFlatBuffers::TaskArtifact>
+SerializerUtils::serialize(flatbuffers::FlatBufferBuilder& builder, const Worker::TaskArtifact& taskArtifact)
+{
+    return DcdrFlatBuffers::CreateTaskArtifact(
+            builder,
+            taskArtifact.taskId,
+            serialize_vector<Worker::Pixel, DcdrFlatBuffers::Pixel>(builder, taskArtifact.data));
+}

@@ -1,8 +1,43 @@
-//
-// Created by pacmancoder on 28.02.18.
-//
+#pragma once
 
-#ifndef DCDR_SUITE_IWORKERRESPONSEDISPATCHER_H
-#define DCDR_SUITE_IWORKERRESPONSEDISPATCHER_H
+#include <dcdr/messaging/IParcel.h>
+#include <dcdr/messaging/InterconnectExceptions.h>
 
-#endif //DCDR_SUITE_IWORKERRESPONSEDISPATCHER_H
+namespace Dcdr::Interconnect
+{
+    class WorkerServerStatusResponse;
+    class WorkerLoginResponse;
+    class WorkerPollTasksResponse;
+    class WorkerDownloadSceneResponse;
+
+    class IWorkerResponseDispatcher
+    {
+    public:
+        virtual void dispatch(const WorkerServerStatusResponse&)
+        {
+            dispatch_not_implemented("WorkerServerStatusResponse");
+        }
+
+        virtual void dispatch(const WorkerLoginResponse&)
+        {
+            dispatch_not_implemented("WorkerLoginResponse");
+        }
+
+        virtual void dispatch(const WorkerPollTasksResponse&)
+        {
+            dispatch_not_implemented("WorkerPollTasksResponse");
+        }
+
+        virtual void dispatch(const WorkerDownloadSceneResponse&)
+        {
+            dispatch_not_implemented("WorkerDownloadSceneResponse");
+        }
+
+        virtual void dispatch_not_implemented(const std::string& parcelKind)
+        {
+            throw DispatchNotImplemented(std::string("Dispatch not implemented for ").append(parcelKind));
+        };
+
+        virtual ~IWorkerResponseDispatcher() = default;
+    };
+}

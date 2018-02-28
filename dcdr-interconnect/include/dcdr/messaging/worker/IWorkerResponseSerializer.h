@@ -1,15 +1,22 @@
-//
-// Created by pacmancoder on 28.02.18.
-//
+#pragma once
 
-#ifndef DCDR_SUITE_IWORKERRESPONSESERIALIZER_H
-#define DCDR_SUITE_IWORKERRESPONSESERIALIZER_H
+#include <dcdr/messaging/IParcel.h>
 
-
-class IWorkerResponseSerializer
+namespace Dcdr::Interconnect
 {
+    class WorkerServerStatusResponse;
+    class WorkerLoginResponse;
+    class WorkerPollTasksResponse;
+    class WorkerDownloadSceneResponse;
 
-};
+    class IWorkerResponseSerializer
+    {
+    public:
+        virtual IParcel::SerializedParcel serialize(const WorkerServerStatusResponse& parcel) = 0;
+        virtual IParcel::SerializedParcel serialize(const WorkerLoginResponse& parcel) = 0;
+        virtual IParcel::SerializedParcel serialize(const WorkerPollTasksResponse& parcel) = 0;
+        virtual IParcel::SerializedParcel serialize(const WorkerDownloadSceneResponse& parcel) = 0;
 
-
-#endif //DCDR_SUITE_IWORKERRESPONSESERIALIZER_H
+        virtual ~IWorkerResponseSerializer() = default;
+    };
+}
