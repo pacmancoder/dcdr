@@ -9,24 +9,22 @@ table WorkerLoginRequest
 
 table WorkerSendHardwareInfoRequest
 {
-    threads: uint16;
-    memory: uint64;
-    storage: uint64;
-
-    // other information, not used in load balancing
     properties: [PropertyPair];
 }
 
 table WorkerLogoutRequest {}
 
-table WorkerGetSessionStatusRequest {}
+table WorkerPollTasksRequest {}
 
-table WorkerGetWorkRequest {}
-
-table WorkerCommitWorkRequest
+table TaskArtifact
 {
     workId: uint32;
-    chunkData: [Pixel];
+    data: [Pixel];
+}
+
+table WorkerCommitTasksRequest
+{
+    artifacts: [TaskArtifact];
 }
 
 table WorkerDownloadSceneRequest
@@ -39,15 +37,14 @@ union WorkerRequestData
 {
     WorkerLoginRequest,
     WorkerLogoutRequest,
-    WorkerGetSessionStatusRequest,
     WorkerSendHardwareInfoRequest,
-    WorkerGetWorkRequest,
-    WorkerCommitWorkRequest,
+    WorkerPollTasksRequest,
+    WorkerCommitTasksRequest,
     WorkerDownloadSceneRequest
 }
 
 table WorkerRequest
 {
-    session: [ubyte];
+    nodeId: uint32;
     requestData: WorkerRequestData;
 }

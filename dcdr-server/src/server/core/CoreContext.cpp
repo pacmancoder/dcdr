@@ -22,7 +22,7 @@ SharedResourceManager<Job>& CoreContext::get_jobs()
     return jobs_;
 }
 
-SharedResourceManager<Work>& CoreContext::get_works()
+SharedResourceManager<ChunkTask>& CoreContext::get_tasks()
 {
-    return works_;
+    return tasks_;
 }

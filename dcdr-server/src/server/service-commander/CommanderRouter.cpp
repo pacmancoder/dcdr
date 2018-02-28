@@ -69,13 +69,13 @@ IParcel::ParcelPtr CommanderRouter::dispatch(const CommanderGetJobListRequest&)
 
 IParcel::ParcelPtr CommanderRouter::dispatch(const CommanderGetJobInfoRequest& request)
 {
-    std::vector<Commander::PropertyPair> properties;
+    std::vector<PropertyPair> properties;
 
     coreContext_->get_jobs().access_read(request.get_job_id(), [&properties](const Job& job)
     {
         for (const auto& property : job.get_all_properties())
         {
-            properties.emplace_back(Commander::PropertyPair {property.first, property.second});
+            properties.emplace_back(PropertyPair {property.first, property.second});
         }
     });
 
@@ -148,13 +148,13 @@ IParcel::ParcelPtr CommanderRouter::dispatch(const CommanderGetNodeListRequest&)
 
 IParcel::ParcelPtr CommanderRouter::dispatch(const CommanderGetNodeInfoRequest& request)
 {
-    std::vector<Commander::PropertyPair> properties;
+    std::vector<PropertyPair> properties;
 
     coreContext_->get_nodes().access_read(request.get_node_id(), [&properties](const Node& node)
     {
         for (const auto& property : node.get_all_properties())
         {
-            properties.emplace_back(Commander::PropertyPair {property.first, property.second});
+            properties.emplace_back(PropertyPair {property.first, property.second});
         }
     });
 

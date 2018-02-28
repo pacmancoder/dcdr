@@ -1,0 +1,15 @@
+//
+// Created by pacmancoder on 28.02.18.
+//
+
+#ifndef DCDR_SUITE_IWORKERRESPONSESERIALIZER_H
+#define DCDR_SUITE_IWORKERRESPONSESERIALIZER_H
+
+
+class IWorkerResponseSerializer
+{
+
+};
+
+
+#endif //DCDR_SUITE_IWORKERRESPONSESERIALIZER_H

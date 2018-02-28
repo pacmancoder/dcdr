@@ -1,7 +1,9 @@
 #pragma once
 
 #include <cstdint>
-#include <string>
+
+// Include implicitly -- CommanderTypes are subset of Interconnect Types
+#include <dcdr/messaging/InterconnectTypes.h>
 
 namespace Dcdr::Interconnect::Commander
 {
@@ -25,12 +27,6 @@ namespace Dcdr::Interconnect::Commander
         uint32_t id;
         std::string name;
         JobState state;
-    };
-
-    struct PropertyPair
-    {
-        std::string name;
-        std::string value;
     };
 
     struct Scene

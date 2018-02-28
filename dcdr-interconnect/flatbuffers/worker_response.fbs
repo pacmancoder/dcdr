@@ -2,23 +2,16 @@ namespace DcdrFlatBuffers;
 
 table WorkerLoginResponse
 {
-    sessionId: [ubyte];
+    // additional data could be added later
 }
 
-table WorkerGetSessionStatusResponse
+table ChunkTaskInfo
 {
-    status: WorkerSessionStatus;
-}
-
-table WorkerGetChunkWorkResponse
-{
-    workId: uint32;
-
-    jobId: uint32;
+    taskId: uint32;
 
     sceneId: uint32;
-    sceneWidth: uint32;
-    sceneHeight: uint32;
+    sceneWidth: uint16;
+    sceneHeight: uint16;
 
     x: uint16;
     y: uint16;
@@ -26,12 +19,17 @@ table WorkerGetChunkWorkResponse
     height: uint16;
 
     minIterations: uint32;
-    maxIterations: uint32; 
+    maxIterations: uint32;
 }
 
-table WorkerServerErrorResponse
+table WorkerPollTasksResponse
 {
-    error: ServerErrorKind;
+    taskList: [ChunkTaskInfo];
+}
+
+table WorkerServerStatusResponse
+{
+    status: WorkerServerStatus;
     message: string;
 }
 
@@ -45,15 +43,14 @@ table WorkerDownloadSceneResponse
 
 union WorkerResponseData
 {
+    WorkerServerStatusResponse,
     WorkerLoginResponse,
-    WorkerGetSessionStatusResponse,
-    WorkerGetChunkWorkResponse,
-    WorkerServerErrorResponse,
+    WorkerPollTasksResponse,
     WorkerDownloadSceneResponse
 }
 
 table WorkerResponse
 {
-    session: [ubyte];
+    nodeId: uint32;
     responseData: WorkerResponseData;
 }

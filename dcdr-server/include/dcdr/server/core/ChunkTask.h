@@ -7,11 +7,11 @@
 
 namespace Dcdr::Server
 {
-    class Work
+    class ChunkTask
     {
     public:
-        Work(uint32_t jobId, uint32_t nodeId, ChunkRect rect, uint32_t minIterations, uint32_t maxIterations);
-        Work(Work&& rhs) = default;
+        ChunkTask(uint32_t jobId, uint32_t nodeId, ChunkRect rect, uint32_t minIterations, uint32_t maxIterations);
+        ChunkTask(ChunkTask&& rhs) = default;
 
         std::chrono::milliseconds get_duration();
 

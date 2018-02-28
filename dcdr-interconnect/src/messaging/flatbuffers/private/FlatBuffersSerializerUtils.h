@@ -19,7 +19,7 @@ namespace Dcdr::Interconnect::FlatBuffers::SerializerUtils
     DcdrFlatBuffers::ArtifactFormat marshal(Commander::ArtifactFormat artifactFormat);
 
     flatbuffers::Offset<DcdrFlatBuffers::Job> serialize(flatbuffers::FlatBufferBuilder& builder, const Commander::Job& job);
-    flatbuffers::Offset<DcdrFlatBuffers::PropertyPair> serialize(flatbuffers::FlatBufferBuilder& builder, const Commander::PropertyPair& propertyPair);
+    flatbuffers::Offset<DcdrFlatBuffers::PropertyPair> serialize(flatbuffers::FlatBufferBuilder& builder, const PropertyPair& propertyPair);
     flatbuffers::Offset<DcdrFlatBuffers::Scene> serialize(flatbuffers::FlatBufferBuilder& builder, const Commander::Scene& scene);
     flatbuffers::Offset<DcdrFlatBuffers::Node> serialize(flatbuffers::FlatBufferBuilder& builder, const Commander::Node& node);
 

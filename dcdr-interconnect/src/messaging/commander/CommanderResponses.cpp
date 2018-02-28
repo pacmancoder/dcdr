@@ -12,10 +12,10 @@ ACommanderJobResponse::ACommanderJobResponse(uint32_t id) :
 
 uint32_t ACommanderJobResponse::get_job_id() const { return id_; }
 
-CommanderGetJobInfoResponse::CommanderGetJobInfoResponse(uint32_t id, std::vector<Commander::PropertyPair> properties) :
+CommanderGetJobInfoResponse::CommanderGetJobInfoResponse(uint32_t id, std::vector<PropertyPair> properties) :
     ACommanderJobResponse(id), properties_(std::move(properties)) {}
 
-const std::vector<Commander::PropertyPair>& CommanderGetJobInfoResponse::get_job_info() const { return properties_; }
+const std::vector<PropertyPair>& CommanderGetJobInfoResponse::get_job_info() const { return properties_; }
 
 CommanderGetJobArtifactResponse::CommanderGetJobArtifactResponse(
         uint32_t id,
@@ -53,10 +53,10 @@ ACommanderNodeResponse::ACommanderNodeResponse(uint32_t id) :
 uint32_t ACommanderNodeResponse::get_node_id() const { return id_; }
 
 CommanderGetNodeInfoResponse::CommanderGetNodeInfoResponse(
-        uint32_t id, std::vector<Commander::PropertyPair> properties) :
+        uint32_t id, std::vector<PropertyPair> properties) :
     ACommanderNodeResponse(id), properies_(std::move(properties)) {}
 
-const std::vector<Commander::PropertyPair>& CommanderGetNodeInfoResponse::get_node_info() const { return properies_; }
+const std::vector<PropertyPair>& CommanderGetNodeInfoResponse::get_node_info() const { return properies_; }
 
 CommanderErrorResponse::CommanderErrorResponse(
         Commander::CommanderErrorKind errorKind, const std::string& message) :

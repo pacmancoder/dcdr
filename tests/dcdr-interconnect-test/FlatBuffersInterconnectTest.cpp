@@ -150,7 +150,7 @@ TEST_F(FlatBuffersInterconnectTest, CommanderGetJobListResponseParcel)
 
 TEST_F(FlatBuffersInterconnectTest, CommanderGetJobInfoResponseParcel)
 {
-    std::vector<Commander::PropertyPair> properties = {{"one", "1"}, {"two", "2"}};
+    std::vector<PropertyPair> properties = {{"one", "1"}, {"two", "2"}};
 
     CommanderGetJobInfoResponseParcel response(42, properties);
 
@@ -236,7 +236,7 @@ TEST_F(FlatBuffersInterconnectTest, CommanderGetNodeListResponseParcel)
 
 TEST_F(FlatBuffersInterconnectTest, CommanderGetNodeInfoResponseParcel)
 {
-    std::vector<Commander::PropertyPair> properties = {{"one", "1"}, {"two", "2"}};
+    std::vector<PropertyPair> properties = {{"one", "1"}, {"two", "2"}};
 
     CommanderGetNodeInfoResponseParcel response(42, properties);
 

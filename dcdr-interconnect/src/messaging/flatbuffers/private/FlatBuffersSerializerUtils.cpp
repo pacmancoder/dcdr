@@ -59,7 +59,7 @@ SerializerUtils::serialize(flatbuffers::FlatBufferBuilder& builder, const Comman
 }
 
 flatbuffers::Offset<DcdrFlatBuffers::PropertyPair>
-SerializerUtils::serialize(flatbuffers::FlatBufferBuilder& builder, const Commander::PropertyPair& propertyPair)
+SerializerUtils::serialize(flatbuffers::FlatBufferBuilder& builder, const PropertyPair& propertyPair)
 {
     return DcdrFlatBuffers::CreatePropertyPair(
             builder, builder.CreateString(propertyPair.name), builder.CreateString(propertyPair.value));

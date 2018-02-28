@@ -27,3 +27,13 @@ IParcel::SerializedParcel FlatBuffersParcelSerializer::serialize(const ACommande
     FlatBuffersCommanderResponseSerializer serializer;
     return parcel.serialize(serializer);
 }
+
+IParcel::SerializedParcel FlatBuffersParcelSerializer::serialize(const AWorkerRequestParcel&)
+{
+    return IParcel::SerializedParcel();
+}
+
+IParcel::SerializedParcel FlatBuffersParcelSerializer::serialize(const AWorkerResponseParcel&)
+{
+    return IParcel::SerializedParcel();
+}
