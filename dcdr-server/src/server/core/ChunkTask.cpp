@@ -1,8 +1,8 @@
-#include <dcdr/server/core/Work.h>
+#include <dcdr/server/core/ChunkTask.h>
 
 using namespace Dcdr::Server;
 
-Work::Work(uint32_t jobId, uint32_t nodeId, ChunkRect rect, uint32_t minIterations, uint32_t maxIterations) :
+ChunkTask::ChunkTask(uint32_t jobId, uint32_t nodeId, ChunkRect rect, uint32_t minIterations, uint32_t maxIterations) :
     jobId_(jobId),
     nodeId_(nodeId),
     timestamp_(std::chrono::system_clock::now()),
@@ -10,27 +10,27 @@ Work::Work(uint32_t jobId, uint32_t nodeId, ChunkRect rect, uint32_t minIteratio
     minIterations_(minIterations),
     maxIterations_(maxIterations) {}
 
-std::chrono::milliseconds Work::get_duration()
+std::chrono::milliseconds ChunkTask::get_duration()
 {
     return  std::chrono::duration_cast<std::chrono::milliseconds>(std::chrono::system_clock::now() - timestamp_);
 }
 
-uint32_t Work::get_job_id()
+uint32_t ChunkTask::get_job_id()
 {
     return jobId_;
 }
 
-uint32_t Work::get_node_id()
+uint32_t ChunkTask::get_node_id()
 {
     return nodeId_;
 }
 
-uint32_t Work::get_min_iterations()
+uint32_t ChunkTask::get_min_iterations()
 {
     return minIterations_;
 }
 
-uint32_t Work::get_max_iterations()
+uint32_t ChunkTask::get_max_iterations()
 {
     return maxIterations_;
 }

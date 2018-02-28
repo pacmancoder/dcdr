@@ -20,7 +20,7 @@ namespace
     {
         return std::make_unique<CommanderGetJobInfoResponseParcel>(
                 response->id(),
-                DeserializerUtils::deserialize_vector<DcdrFlatBuffers::PropertyPair, Commander::PropertyPair>(
+                DeserializerUtils::deserialize_vector<DcdrFlatBuffers::PropertyPair, PropertyPair>(
                         response->properties()));
     }
 
@@ -45,7 +45,7 @@ namespace
     {
         return std::make_unique<CommanderGetNodeInfoResponseParcel>(
                 response->id(),
-                DeserializerUtils::deserialize_vector<DcdrFlatBuffers::PropertyPair, Commander::PropertyPair>(
+                DeserializerUtils::deserialize_vector<DcdrFlatBuffers::PropertyPair, PropertyPair>(
                         response->properties()));
     }
 

@@ -40,19 +40,11 @@ table PropertyPair
     value: string;
 }
 
-enum WorkerSessionStatus : uint8
+enum WorkerServerStatus : uint16
 {
-    Absent,
-    Logined,
-    Ready,
-    Paused,
-    Blocked
-}
-
-enum ServerErrorKind : uint16
-{
-    SessionNotReady,
-    WorkNotExist,
+    Ok,
+    NodeNotConnected,
+    TaskNotExist,
     SceneNotExist,
     WrongSceneOffset
 }

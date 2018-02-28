@@ -67,7 +67,7 @@ Commander::Scene DeserializerUtils::deserialize(const DcdrFlatBuffers::Scene* sc
     return Commander::Scene { scene->id(), scene->name()->str(), scene->width(), scene->height() };
 }
 
-Commander::PropertyPair DeserializerUtils::deserialize(const DcdrFlatBuffers::PropertyPair* job)
+PropertyPair DeserializerUtils::deserialize(const DcdrFlatBuffers::PropertyPair* job)
 {
-    return Commander::PropertyPair { job->name()->str(), job->value()->str() };
+    return PropertyPair { job->name()->str(), job->value()->str() };
 }

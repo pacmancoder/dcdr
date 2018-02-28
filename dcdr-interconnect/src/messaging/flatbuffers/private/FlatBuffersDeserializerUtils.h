@@ -15,7 +15,7 @@ namespace Dcdr::Interconnect::FlatBuffers::DeserializerUtils
     Commander::Job deserialize(const DcdrFlatBuffers::Job* job);
     Commander::Node deserialize(const DcdrFlatBuffers::Node* job);
     Commander::Scene deserialize(const DcdrFlatBuffers::Scene* job);
-    Commander::PropertyPair deserialize(const DcdrFlatBuffers::PropertyPair* job);
+    PropertyPair deserialize(const DcdrFlatBuffers::PropertyPair* job);
 
     template <class From, class To>
     std::vector<To> deserialize_vector(const flatbuffers::Vector<flatbuffers::Offset<From>>* data)

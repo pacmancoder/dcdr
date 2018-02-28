@@ -60,7 +60,7 @@ IParcel::SerializedParcel FlatBuffersCommanderResponseSerializer::serialize(cons
                 return DcdrFlatBuffers::CreateCommanderGetJobInfoResponse(
                         flatBuffersBuilder,
                         parcel.get_job_id(),
-                        SerializerUtils::serialize_vector<Commander::PropertyPair, DcdrFlatBuffers::PropertyPair>(
+                        SerializerUtils::serialize_vector<PropertyPair, DcdrFlatBuffers::PropertyPair>(
                                 flatBuffersBuilder, parcel.get_job_info()));
             });
 }
@@ -113,7 +113,7 @@ IParcel::SerializedParcel FlatBuffersCommanderResponseSerializer::serialize(cons
                 return DcdrFlatBuffers::CreateCommanderGetNodeInfoResponse(
                         flatBuffersBuilder,
                         parcel.get_node_id(),
-                        SerializerUtils::serialize_vector<Commander::PropertyPair, DcdrFlatBuffers::PropertyPair>(
+                        SerializerUtils::serialize_vector<PropertyPair, DcdrFlatBuffers::PropertyPair>(
                                 flatBuffersBuilder, parcel.get_node_info()));
             });
 }

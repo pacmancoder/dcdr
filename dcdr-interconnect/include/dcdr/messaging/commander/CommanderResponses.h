@@ -31,12 +31,12 @@ namespace Dcdr::Interconnect
     class CommanderGetJobInfoResponse : public ACommanderJobResponse
     {
     public:
-        CommanderGetJobInfoResponse(uint32_t id, std::vector<Commander::PropertyPair> properties);
+        CommanderGetJobInfoResponse(uint32_t id, std::vector<PropertyPair> properties);
 
-        const std::vector<Commander::PropertyPair>& get_job_info() const;
+        const std::vector<PropertyPair>& get_job_info() const;
 
     private:
-        std::vector<Commander::PropertyPair> properties_;
+        std::vector<PropertyPair> properties_;
     };
 
     class CommanderGetJobArtifactResponse : public ACommanderJobResponse
@@ -99,12 +99,12 @@ namespace Dcdr::Interconnect
     class CommanderGetNodeInfoResponse : public ACommanderNodeResponse
     {
     public:
-        CommanderGetNodeInfoResponse(uint32_t id, std::vector<Commander::PropertyPair> properties);
+        CommanderGetNodeInfoResponse(uint32_t id, std::vector<PropertyPair> properties);
 
-        const std::vector<Commander::PropertyPair>& get_node_info() const;
+        const std::vector<PropertyPair>& get_node_info() const;
 
     private:
-        std::vector<Commander::PropertyPair> properies_;
+        std::vector<PropertyPair> properies_;
     };
 
     class CommanderErrorResponse
