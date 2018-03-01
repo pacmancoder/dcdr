@@ -1,8 +1,6 @@
 #include "FlatBuffersWorkerRequestSerializer.h"
 
 #include <dcdr/logging/Logger.h>
-#include <flatbuffers-generated/DcdrFlatBuffers.h>
-
 #include <dcdr/messaging/worker/WorkerRequests.h>
 
 #include "FlatBuffersSerializerUtils.h"

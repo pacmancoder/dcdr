@@ -27,10 +27,10 @@ const std::string &WorkerServerStatusResponse::get_message() const
     return message_;
 }
 
-WorkerPollTasksResponse::WorkerPollTasksResponse(uint32_t nodeId, const std::vector<Worker::ChunkTaskInfo> &tasks) :
+WorkerPollTasksResponse::WorkerPollTasksResponse(uint32_t nodeId, const std::vector<Worker::TaskInfo> &tasks) :
     WorkerResponse(nodeId), tasks_(tasks) {}
 
-const std::vector<Worker::ChunkTaskInfo> &WorkerPollTasksResponse::get_tasks() const
+const std::vector<Worker::TaskInfo> &WorkerPollTasksResponse::get_tasks() const
 {
     return tasks_;
 }

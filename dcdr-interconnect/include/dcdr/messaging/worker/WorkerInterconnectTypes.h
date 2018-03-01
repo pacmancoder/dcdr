@@ -25,7 +25,7 @@ namespace Dcdr::Interconnect::Worker
         std::vector<Pixel> data;
     };
 
-    struct ChunkTaskInfo
+    struct TaskInfo
     {
         uint32_t taskId;
 

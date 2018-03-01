@@ -19,6 +19,8 @@ namespace Dcdr::Interconnect::FlatBuffers::SerializerUtils
     DcdrFlatBuffers::CommanderErrorKind marshal(Commander::CommanderErrorKind errorKind);
     DcdrFlatBuffers::ArtifactFormat marshal(Commander::ArtifactFormat artifactFormat);
 
+    DcdrFlatBuffers::WorkerServerStatus marshal(Worker::ServerStatus status);
+
     flatbuffers::Offset<DcdrFlatBuffers::PropertyPair> serialize(flatbuffers::FlatBufferBuilder& builder, const PropertyPair& propertyPair);
 
     flatbuffers::Offset<DcdrFlatBuffers::Job> serialize(flatbuffers::FlatBufferBuilder& builder, const Commander::Job& job);
@@ -27,6 +29,7 @@ namespace Dcdr::Interconnect::FlatBuffers::SerializerUtils
 
     flatbuffers::Offset<DcdrFlatBuffers::Pixel> serialize(flatbuffers::FlatBufferBuilder& builder, const Worker::Pixel& pixel);
     flatbuffers::Offset<DcdrFlatBuffers::TaskArtifact> serialize(flatbuffers::FlatBufferBuilder& builder, const Worker::TaskArtifact& taskArtifact);
+    flatbuffers::Offset<DcdrFlatBuffers::TaskInfo> serialize(flatbuffers::FlatBufferBuilder& builder, const Worker::TaskInfo& taskInfo);
 
     template <class From, class To>
     flatbuffers::Offset<flatbuffers::Vector<flatbuffers::Offset<To>>> serialize_vector(

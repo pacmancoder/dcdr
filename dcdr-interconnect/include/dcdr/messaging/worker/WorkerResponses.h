@@ -37,12 +37,12 @@ namespace Dcdr::Interconnect
     class WorkerPollTasksResponse : public WorkerResponse
     {
     public:
-        WorkerPollTasksResponse(uint32_t nodeId, const std::vector<Worker::ChunkTaskInfo>& tasks);
+        WorkerPollTasksResponse(uint32_t nodeId, const std::vector<Worker::TaskInfo>& tasks);
 
-        const std::vector<Worker::ChunkTaskInfo>& get_tasks() const;
+        const std::vector<Worker::TaskInfo>& get_tasks() const;
 
     private:
-        std::vector<Worker::ChunkTaskInfo> tasks_;
+        std::vector<Worker::TaskInfo> tasks_;
     };
 
     class WorkerDownloadSceneResponse : public WorkerResponse

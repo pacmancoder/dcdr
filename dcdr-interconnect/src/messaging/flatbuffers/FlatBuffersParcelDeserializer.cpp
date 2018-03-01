@@ -10,6 +10,7 @@
 #include "private/FlatBuffersCommanderResponseDeserializer.h"
 
 #include "private/FlatBuffersWorkerRequestDeserializer.h"
+#include "private/FlatBuffersWorkerResponseDeserializer.h"
 
 using namespace Dcdr::Interconnect;
 using namespace Dcdr::Interconnect::FlatBuffers;
@@ -35,7 +36,10 @@ IParcel::ParcelPtr FlatBuffersParcelDeserializer::deserialize(IParcel::Serialize
             return deserializer.deserialize(parcelFlatBuffer->parcelData_as_WorkerRequest());
         }
         case DcdrFlatBuffers::ParcelData_WorkerResponse:
-            throw DeserializationNotImplementedException("WorkerResponse");
+        {
+            FlatBuffersWorkerResponseDeserializer deserializer;
+            return deserializer.deserialize(parcelFlatBuffer->parcelData_as_WorkerResponse());
+        }
         case DcdrFlatBuffers::ParcelData_CommanderRequest:
         {
             FlatBuffersCommanderRequestDeserializer deserializer;
