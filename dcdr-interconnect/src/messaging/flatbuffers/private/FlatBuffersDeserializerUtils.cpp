@@ -42,6 +42,25 @@ Commander::CommanderErrorKind DeserializerUtils::marshal(DcdrFlatBuffers::Comman
     throw std::invalid_argument("<Unreachable code>");
 }
 
+Worker::ServerStatus DeserializerUtils::marshal(DcdrFlatBuffers::WorkerServerStatus status)
+{
+    switch (status)
+    {
+        case DcdrFlatBuffers::WorkerServerStatus::WorkerServerStatus_Ok:
+            return Worker::ServerStatus::Ok;
+        case DcdrFlatBuffers::WorkerServerStatus::WorkerServerStatus_WrongSceneOffset:
+            return Worker::ServerStatus::WrongSceneOffset;
+        case DcdrFlatBuffers::WorkerServerStatus::WorkerServerStatus_TaskNotExist:
+            return Worker::ServerStatus::TaskNotExist;
+        case DcdrFlatBuffers::WorkerServerStatus::WorkerServerStatus_SceneNotExist:
+            return Worker::ServerStatus::SceneNotExist;
+        case DcdrFlatBuffers::WorkerServerStatus::WorkerServerStatus_NodeNotConnected:
+            return Worker::ServerStatus::NodeNotConnected;
+    }
+
+    throw std::invalid_argument("<Unreachable code>");
+}
+
 PropertyPair DeserializerUtils::deserialize(const DcdrFlatBuffers::PropertyPair* job)
 {
     return PropertyPair { job->name()->str(), job->value()->str() };
@@ -84,4 +103,21 @@ Worker::TaskArtifact DeserializerUtils::deserialize(const DcdrFlatBuffers::TaskA
                 taskArtifact->taskId(),
                 deserialize_vector<DcdrFlatBuffers::Pixel, Worker::Pixel>(taskArtifact->data())
         };
+}
+
+Worker::TaskInfo DeserializerUtils::deserialize(const DcdrFlatBuffers::TaskInfo *taskInfo)
+{
+    return Worker::TaskInfo
+            {
+                    taskInfo->taskId(),
+                    taskInfo->sceneId(),
+                    taskInfo->sceneWidth(),
+                    taskInfo->sceneHeight(),
+                    taskInfo->x(),
+                    taskInfo->y(),
+                    taskInfo->width(),
+                    taskInfo->height(),
+                    taskInfo->minIterations(),
+                    taskInfo->maxIterations()
+            };
 }

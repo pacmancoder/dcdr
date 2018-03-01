@@ -5,7 +5,7 @@ table WorkerLoginResponse
     nodeId: uint32;    
 }
 
-table ChunkTaskInfo
+table TaskInfo
 {
     taskId: uint32;
 
@@ -25,7 +25,7 @@ table ChunkTaskInfo
 table WorkerPollTasksResponse
 {
     nodeId: uint32;    
-    taskList: [ChunkTaskInfo];
+    taskList: [TaskInfo];
 }
 
 table WorkerServerStatusResponse

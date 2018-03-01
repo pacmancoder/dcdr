@@ -13,6 +13,8 @@ namespace Dcdr::Interconnect::FlatBuffers::DeserializerUtils
     Commander::CommanderErrorKind marshal(DcdrFlatBuffers::CommanderErrorKind errorKind);
     Commander::ArtifactFormat marshal(DcdrFlatBuffers::ArtifactFormat artifactFormat);
 
+    Worker::ServerStatus marshal(DcdrFlatBuffers::WorkerServerStatus status);
+
     PropertyPair deserialize(const DcdrFlatBuffers::PropertyPair* job);
 
     Commander::Job deserialize(const DcdrFlatBuffers::Job* job);
@@ -21,6 +23,7 @@ namespace Dcdr::Interconnect::FlatBuffers::DeserializerUtils
 
     Worker::Pixel deserialize(const DcdrFlatBuffers::Pixel* pixel);
     Worker::TaskArtifact deserialize(const DcdrFlatBuffers::TaskArtifact* taskArtifact);
+    Worker::TaskInfo deserialize(const DcdrFlatBuffers::TaskInfo* taskInfo);
 
 
     template <class From, class To>

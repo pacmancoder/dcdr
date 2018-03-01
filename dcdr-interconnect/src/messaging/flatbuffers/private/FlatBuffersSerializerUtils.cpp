@@ -52,6 +52,25 @@ DcdrFlatBuffers::ArtifactFormat SerializerUtils::marshal(Commander::ArtifactForm
     throw std::invalid_argument("Unreachable code");
 }
 
+DcdrFlatBuffers::WorkerServerStatus SerializerUtils::marshal(Worker::ServerStatus status)
+{
+    switch (status)
+    {
+        case Worker::ServerStatus::Ok:
+            return DcdrFlatBuffers::WorkerServerStatus::WorkerServerStatus_Ok;
+        case Worker::ServerStatus::NodeNotConnected:
+            return DcdrFlatBuffers::WorkerServerStatus::WorkerServerStatus_NodeNotConnected;
+        case Worker::ServerStatus::SceneNotExist:
+            return DcdrFlatBuffers::WorkerServerStatus::WorkerServerStatus_SceneNotExist;
+        case Worker::ServerStatus::TaskNotExist:
+            return DcdrFlatBuffers::WorkerServerStatus::WorkerServerStatus_TaskNotExist;
+        case Worker::ServerStatus::WrongSceneOffset:
+            return DcdrFlatBuffers::WorkerServerStatus::WorkerServerStatus_WrongSceneOffset;
+    }
+
+    throw std::invalid_argument("Unreachable code");
+}
+
 flatbuffers::Offset<DcdrFlatBuffers::Job>
 SerializerUtils::serialize(flatbuffers::FlatBufferBuilder& builder, const Commander::Job& job)
 {
@@ -90,4 +109,22 @@ SerializerUtils::serialize(flatbuffers::FlatBufferBuilder& builder, const Worker
             builder,
             taskArtifact.taskId,
             serialize_vector<Worker::Pixel, DcdrFlatBuffers::Pixel>(builder, taskArtifact.data));
+}
+
+flatbuffers::Offset<DcdrFlatBuffers::TaskInfo>
+SerializerUtils::serialize(flatbuffers::FlatBufferBuilder &builder, const Worker::TaskInfo &taskInfo)
+{
+    return DcdrFlatBuffers::CreateTaskInfo(
+            builder,
+            taskInfo.taskId,
+            taskInfo.sceneId,
+            taskInfo.sceneWidth,
+            taskInfo.sceneHeight,
+            taskInfo.x,
+            taskInfo.y,
+            taskInfo.width,
+            taskInfo.height,
+            taskInfo.minIterations,
+            taskInfo.maxIterations
+    );
 }

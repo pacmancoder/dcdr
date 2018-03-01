@@ -12,6 +12,7 @@
 #include "private/FlatBuffersCommanderResponseSerializer.h"
 
 #include "private/FlatBuffersWorkerRequestSerializer.h"
+#include "private/FlatBuffersWorkerResponseSerializer.h"
 
 using namespace Dcdr::Interconnect;
 using namespace Dcdr::Interconnect::FlatBuffers;
@@ -39,7 +40,8 @@ IParcel::SerializedParcel FlatBuffersParcelSerializer::serialize(const AWorkerRe
     return parcel.serialize(serializer);
 }
 
-IParcel::SerializedParcel FlatBuffersParcelSerializer::serialize(const AWorkerResponseParcel&)
+IParcel::SerializedParcel FlatBuffersParcelSerializer::serialize(const AWorkerResponseParcel& parcel)
 {
-    return IParcel::SerializedParcel();
+    FlatBuffersWorkerResponseSerizlizer serizlizer;
+    return parcel.serialize(serizlizer);
 }
