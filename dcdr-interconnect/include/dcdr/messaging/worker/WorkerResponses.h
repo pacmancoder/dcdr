@@ -24,7 +24,7 @@ namespace Dcdr::Interconnect
     class WorkerServerStatusResponse : public WorkerResponse
     {
     public:
-        WorkerServerStatusResponse(uint32_t nodeId, Worker::ServerStatus status, const std::string& message);
+        WorkerServerStatusResponse(uint32_t nodeId, Worker::ServerStatus status, const std::string& message = "");
 
         Worker::ServerStatus get_status() const;
         const std::string& get_message() const;
@@ -51,7 +51,7 @@ namespace Dcdr::Interconnect
         WorkerDownloadSceneResponse(
                 uint32_t nodeId,
                 uint32_t sceneId,
-                uint64_t offset,
+                uint64_t offset, // TODO: remove
                 uint64_t bytesLeft,
                 std::vector<uint8_t>&& data);
 

@@ -19,7 +19,7 @@ namespace Dcdr::Server
     {
     public:
         Chunk(ChunkRect bounds);
-        Chunk(ChunkRect bounds, std::vector<ChunkPixel> pixels);
+        Chunk(ChunkRect bounds, const std::vector<ChunkPixel>& pixels);
         Chunk(const Chunk&);
 
         void accumulate(const Chunk& chunk);

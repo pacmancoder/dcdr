@@ -37,7 +37,8 @@ namespace Dcdr::Server
             resources_.access_read([id, accessFunc = std::forward<AccessFunc>(accessFunc)]
                                            (const ResourceStorage& resource)
             {
-                resource.at(id).access_read(std::move(accessFunc));
+                const_cast<ResourceProxy&>(resource.at(id))
+                        .access_read(std::move(accessFunc));
             });
 
         }
@@ -93,7 +94,9 @@ namespace Dcdr::Server
         template <typename IterateFunc>
         void iterate_const(IterateFunc&& iterateFunc) const
         {
-            resources_.access_read([iterateFunc = std::forward<IterateFunc>(iterateFunc)](const ResourceStorage& resources)
+            resources_.access_read(
+            [iterateFunc = std::forward<IterateFunc>(iterateFunc)]
+                    (const ResourceStorage& resources)
             {
                 for (const auto& resourceEntry : resources)
                 {
@@ -110,7 +113,9 @@ namespace Dcdr::Server
         void iterate(IterateFunc&& iterateFunc) const
         {
             resources_.update_modify_timestamp();
-            resources_.access_read([iterateFunc = std::forward<IterateFunc>(iterateFunc)](const ResourceStorage& resources)
+            resources_.access_read(
+            [iterateFunc = std::forward<IterateFunc>(iterateFunc)]
+                    (const ResourceStorage& resources) mutable
             {
                 for (auto& resourceEntry : const_cast<ResourceStorage&>(resources))
                 {

@@ -16,14 +16,14 @@ Chunk::Chunk(const Chunk& rhs) :
         minSamples_(rhs.minSamples_),
         maxSamples_(rhs.maxSamples_) {}
 
-Chunk::Chunk(ChunkRect bounds, std::vector<ChunkPixel> pixels) :
+Chunk::Chunk(ChunkRect bounds, const std::vector<ChunkPixel>& pixels) :
     Chunk(bounds)
 {
     if (pixels.size() != pixels_.size())
     {
         throw ChunkException("Chunk pixel buffers size are not equal");
     }
-    pixels_ = std::move(pixels);
+    pixels_ = pixels;
 
     minSamples_ = pixels_[0].samples;
     maxSamples_ = pixels_[0].samples;

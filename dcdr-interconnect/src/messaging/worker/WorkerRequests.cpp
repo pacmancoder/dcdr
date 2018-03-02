@@ -42,7 +42,7 @@ WorkerCommitTasksRequest::WorkerCommitTasksRequest(
         uint32_t nodeId, std::vector<Worker::TaskArtifact> &&artifacts) :
     WorkerRequest(nodeId), artifacts_(std::move(artifacts)) {}
 
-const std::vector<Worker::TaskArtifact> &WorkerCommitTasksRequest::get_artifacts() const
+const std::vector<Worker::TaskArtifact>& WorkerCommitTasksRequest::get_artifacts() const
 {
     return artifacts_;
 }

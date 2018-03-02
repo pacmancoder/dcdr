@@ -16,12 +16,12 @@ using namespace Dcdr::Interconnect;
 CommanderService::CommanderService(std::shared_ptr<CoreContext>& coreContext) :
     IAsyncConnectionProcessor(),
     coreContext_(coreContext),
-    commanderRouter_(std::make_shared<CommanderRouter>(coreContext)) {}
+    commanderRouter_(std::make_unique<CommanderRouter>(coreContext)) {}
 
 
 uint32_t CommanderService::open_connection()
 {
-    return coreContext_->get_connections().add(Connection());
+    return 0;
 }
 
 IAsyncConnectionProcessor::ResponseHandle CommanderService::get_response(
@@ -47,7 +47,4 @@ IAsyncConnectionProcessor::ResponseHandle CommanderService::get_response(
     return responsePromise.get_future();
 }
 
-void CommanderService::close_connection(uint32_t id)
-{
-    coreContext_->get_connections().remove(id);
-}
+void CommanderService::close_connection(uint32_t) {}
