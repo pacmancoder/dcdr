@@ -31,7 +31,7 @@ namespace
     }
 }
 
-CommanderRouter::CommanderRouter(std::shared_ptr<CoreContext> coreContext) :
+CommanderRouter::CommanderRouter(const std::shared_ptr<CoreContext>& coreContext) :
         coreContext_(coreContext) {}
 
 IParcel::ParcelPtr CommanderRouter::dispatch(const ACommanderRequestParcel& parcel)

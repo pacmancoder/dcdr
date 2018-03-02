@@ -20,6 +20,6 @@ namespace Dcdr::Server
 
     private:
         std::shared_ptr<CoreContext> coreContext_;
-        std::shared_ptr<CommanderRouter> commanderRouter_;
+        std::unique_ptr<CommanderRouter> commanderRouter_;
     };
 }

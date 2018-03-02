@@ -9,11 +9,13 @@
 
 namespace Dcdr::Server
 {
-    class CommanderRouter : public Interconnect::IParcelDispatcher, public Interconnect::ICommanderRequestDispatcher
+    class CommanderRouter :
+            public Interconnect::IParcelDispatcher,
+            public Interconnect::ICommanderRequestDispatcher
     {
     public:
 
-        explicit CommanderRouter(std::shared_ptr<CoreContext> coreContext);
+        explicit CommanderRouter(const std::shared_ptr<CoreContext>& coreContext);
 
         // IParcel dispatcher
         Interconnect::IParcel::ParcelPtr dispatch(const Interconnect::ACommanderRequestParcel& parcel) override;
