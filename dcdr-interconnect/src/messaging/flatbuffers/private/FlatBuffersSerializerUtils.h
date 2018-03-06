@@ -51,10 +51,9 @@ namespace Dcdr::Interconnect::FlatBuffers::SerializerUtils
     {
         using namespace Dcdr::Logging;
 
-        log_debug(std::string()
-                          .append("[Interconnect][FlatBuffers] Building ")
-                          .append(ParcelType::GetFullyQualifiedName())
-                          .append(" flatbuffer"));
+        const char* LOG_PREFIX =  "[Interconnect][FlatBuffers] ";
+
+        log_trace(LOG_PREFIX, "Building ", ParcelType::GetFullyQualifiedName());
 
         flatbuffers::FlatBufferBuilder flatBuffersBuilder(builderBufferSize);
 
@@ -67,10 +66,7 @@ namespace Dcdr::Interconnect::FlatBuffers::SerializerUtils
 
         flatBuffersBuilder.Finish(parcel);
 
-        log_debug(std::string()
-                          .append("[Interconnect][FlatBuffers] ")
-                          .append(ParcelType::GetFullyQualifiedName())
-                          .append(" flatbuffer was created"));
+        log_trace(LOG_PREFIX, ParcelType::GetFullyQualifiedName(), " flatbuffer was created");
 
         return IParcel::SerializedParcel(
                 flatBuffersBuilder.GetBufferPointer(),

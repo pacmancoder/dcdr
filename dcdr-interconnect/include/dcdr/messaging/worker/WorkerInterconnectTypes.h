@@ -22,7 +22,7 @@ namespace Dcdr::Interconnect::Worker
     struct TaskArtifact
     {
         uint32_t taskId;
-        std::vector<Pixel> data;
+        std::vector<Types::MultisamplePixel> data;
     };
 
     struct TaskInfo

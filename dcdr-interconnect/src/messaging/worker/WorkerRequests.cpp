@@ -10,8 +10,8 @@ uint32_t WorkerRequest::get_node_id() const
     return nodeId_;
 }
 
-WorkerLoginRequest::WorkerLoginRequest(uint32_t nodeId, const std::string &name, const std::string &token) :
-    WorkerRequest(nodeId), name_(name), token_(token) {}
+WorkerLoginRequest::WorkerLoginRequest(const std::string &name, const std::string &token) :
+    WorkerRequest(0), name_(name), token_(token) {}
 
 const std::string WorkerLoginRequest::get_name() const
 {

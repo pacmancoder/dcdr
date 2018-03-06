@@ -4,6 +4,7 @@
 #include <vector>
 #include <memory>
 #include <mutex>
+#include <sstream>
 
 namespace Dcdr::Logging
 {
@@ -13,16 +14,60 @@ namespace Dcdr::Logging
         static Logger& get_instance();
 
         void add_log_writer(std::unique_ptr<ILogWriter> logWriter);
-        void log(ILogWriter::MessageType messageType, const std::string& message);
+        void log(LogCategory messageType, const std::string& message);
+
+        void enable_trace();
+        bool is_trace_enabled();
 
     private:
-        std::vector<std::unique_ptr<ILogWriter>> log_writers_;
-        std::mutex log_mutex_;
+        Logger();
+
+    private:
+        std::vector<std::unique_ptr<ILogWriter>> logWriters_;
+        std::mutex logMutex_;
+        bool traceEnabled_;
     };
 
-    // convenient functions to log information using current logger
-    extern void log_error(const std::string& message);
-    extern void log_warning(const std::string& message);
-    extern void log_info(const std::string& message);
-    extern void log_debug(const std::string& message);
+    template <typename Arg>
+    void __write_to_strstream(std::stringstream& stream, Arg&& arg)
+    {
+        stream << std::forward<Arg>(arg);
+    }
+
+    template <typename Arg>
+    void __write_varargs_to_strstream(std::stringstream& stream, Arg&& arg)
+    {
+        __write_to_strstream(stream, std::forward<Arg>(arg));
+    }
+
+    template <typename Arg, typename... Args>
+    void __write_varargs_to_strstream(std::stringstream& stream, Arg&& arg, Args&&... args)
+    {
+        __write_to_strstream(stream, arg);
+
+        __write_varargs_to_strstream(stream, std::forward<Args>(args)...);
+    }
+
+    template <typename... Args>
+    void __log_internal(LogCategory category, Args&&... args)
+    {
+        std::stringstream stream;
+        __write_varargs_to_strstream(stream, std::forward<Args>(args)...);
+        Logger::get_instance().log(category, stream.str());
+    }
+
+    // Macro are used to avoid argument evaluation if current log level disabled
+
+    #define log_error(...) Dcdr::Logging::__log_internal(LogCategory::Error, __VA_ARGS__)
+    #define log_warning(...) Dcdr::Logging::__log_internal(LogCategory::Warning, __VA_ARGS__)
+    #define log_info(...) Dcdr::Logging::__log_internal(LogCategory::Info, __VA_ARGS__)
+
+    #ifndef NDEBUG
+        #define log_debug(...) Dcdr::Logging::__log_internal(LogCategory::Debug, __VA_ARGS__)
+    #else
+        #define log_debug(...) // Dcdr::Logging::__log_internal(LogCategory::Debug, __VA_ARGS__)
+    #endif
+
+    #define log_trace(...) if (Dcdr::Logging::Logger::get_instance().is_trace_enabled()) \
+        Dcdr::Logging::__log_internal(LogCategory::Trace, __VA_ARGS__)
 }

@@ -6,16 +6,16 @@
 
 namespace Dcdr::Transport
 {
-    class TcpAsyncServerTransport : public IAsyncServerTransport
+    class WebsocketAsyncServerTransport : public IAsyncServerTransport
     {
     public:
-        TcpAsyncServerTransport(const std::string& address, std::chrono::milliseconds networkTimeout);
+        WebsocketAsyncServerTransport(const std::string& address, std::chrono::milliseconds networkTimeout);
 
         void register_request_processor(std::shared_ptr<IAsyncConnectionProcessor> requestProcessor) override;
         void run() override;
         void close() override;
 
-        virtual ~TcpAsyncServerTransport();
+        virtual ~WebsocketAsyncServerTransport();
     public:
         struct Impl;
 

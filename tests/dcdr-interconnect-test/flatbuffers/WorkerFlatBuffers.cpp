@@ -8,14 +8,14 @@ using namespace Dcdr::Interconnect;
 
 TEST_F(FlatBuffersInterconnectTest, WorkerLoginRequestParcel)
 {
-    WorkerLoginRequestParcel request(42, "hello", "there");
+    WorkerLoginRequestParcel request("hello", "there");
 
     auto serialized = static_cast<const IParcel&>(request).serialize(serializer_);
     auto deserialized = deserializer_.deserialize(std::move(serialized));
 
     auto receivedRequest = dynamic_cast<WorkerLoginRequestParcel*>(deserialized.get());
     ASSERT_TRUE(receivedRequest != nullptr);
-    ASSERT_EQ(receivedRequest->get_request().get_node_id(), 42);
+    ASSERT_EQ(receivedRequest->get_request().get_node_id(), 0);
     ASSERT_EQ(receivedRequest->get_request().get_name(), request.get_request().get_name());
     ASSERT_EQ(receivedRequest->get_request().get_token(), request.get_request().get_token());
 }

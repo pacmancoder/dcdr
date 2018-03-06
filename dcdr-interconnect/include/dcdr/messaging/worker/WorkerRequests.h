@@ -21,7 +21,6 @@ namespace Dcdr::Interconnect
     {
     public:
         WorkerLoginRequest(
-                uint32_t nodeId,
                 const std::string& name,
                 const std::string& token);
 
