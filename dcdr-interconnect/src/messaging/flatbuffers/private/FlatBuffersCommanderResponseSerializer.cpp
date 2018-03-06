@@ -11,6 +11,7 @@ using namespace Dcdr::Interconnect::FlatBuffers;
 
 namespace
 {
+    const char* LOG_PREFIX = "[Interconnect][FlatBuffers] ";
     const size_t COMMANDER_RESPONSE_BUILDER_BUFFER_SIZE = 1024;
 
     template <class ResponseType, class ParcelGenerator>
@@ -19,17 +20,11 @@ namespace
         return SerializerUtils::build_parcel<DcdrFlatBuffers::CommanderResponse>(
                 [parcelGenerator=std::forward<ParcelGenerator>(parcelGenerator)] (auto& flatBuffersBuilder)
                 {
-                    log_debug(std::string()
-                                      .append("[Interconnect][FlatBuffers] Serializing parcel into ")
-                                      .append(ResponseType::GetFullyQualifiedName())
-                                      .append(" flatbuffer"));
+                    log_trace(LOG_PREFIX, "Serializing parcel into ", ResponseType::GetFullyQualifiedName());
 
                     flatbuffers::Offset<ResponseType> responseData = parcelGenerator(flatBuffersBuilder);
 
-                    log_debug(std::string()
-                                      .append("[Interconnect][FlatBuffers] Parcel was serialized to ")
-                                      .append(ResponseType::GetFullyQualifiedName())
-                                      .append(" flatbuffer"));
+                    log_trace(LOG_PREFIX, "Parcel was serialized to ", ResponseType::GetFullyQualifiedName());
 
                     return DcdrFlatBuffers::CreateCommanderResponse(
                             flatBuffersBuilder,

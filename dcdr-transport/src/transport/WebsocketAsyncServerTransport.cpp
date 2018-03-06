@@ -1,4 +1,4 @@
-#include <dcdr/transport/TcpAsyncServerTransport.h>
+#include <dcdr/transport/WebsocketAsyncServerTransport.h>
 #include <dcdr/utils/Timer.h>
 #include <dcdr/logging/Logger.h>
 
@@ -21,12 +21,8 @@ using namespace std::chrono_literals;
 
 namespace
 {
+    const char* LOG_PREFIX = "[Transport][TcpAsyncServer] ";
     const int MONGOOSE_POOL_INTERVAL = 50;
-
-    std::string with_log_prefix(const std::string& message)
-    {
-        return std::string("[Transport][TcpAsyncServer] ").append(message);
-    };
 
     struct ResponseInfo
     {
@@ -48,7 +44,7 @@ namespace
     };
 }
 
-struct TcpAsyncServerTransport::Impl
+struct WebsocketAsyncServerTransport::Impl
 {
     std::string address;
     std::chrono::milliseconds networkTimeout;
@@ -84,9 +80,9 @@ struct TcpAsyncServerTransport::Impl
 
 namespace
 {
-    void server_handler(struct mg_connection *nc, int event, void*)
+    void server_handler(struct mg_connection *nc, int event, void* eventData)
     {
-        auto* impl_ = reinterpret_cast<TcpAsyncServerTransport::Impl*>(nc->mgr->user_data);
+        auto* impl_ = reinterpret_cast<WebsocketAsyncServerTransport::Impl*>(nc->mgr->user_data);
 
         const std::string clientAddress = Mongoose::socket_to_string(nc->sa);
 
@@ -94,24 +90,31 @@ namespace
         {
             case MG_EV_SEND:
             {
-                log_debug(with_log_prefix("Sent data to ").append(clientAddress));
+                log_trace(LOG_PREFIX, "Sent data to ", clientAddress);
                 break;
             }
             case MG_EV_ACCEPT:
             {
-                log_debug(with_log_prefix("Client connected at ").append(clientAddress));
+
+                log_debug(LOG_PREFIX, "Client connected at ", clientAddress);
+
                 impl_->connectionIds_.emplace(impl_->stringHasher(clientAddress),
                         impl_->connectionProcessor->open_connection());
                 break;
             }
-            case MG_EV_RECV:
+            case MG_EV_WEBSOCKET_FRAME:
             {
-                log_debug(with_log_prefix("Received data from ").append(clientAddress));
+                const auto* receivedMessage = reinterpret_cast<const websocket_message*>(eventData);
+                if ((receivedMessage->flags & 0x0F) != WEBSOCKET_OP_BINARY)
+                {
+                    break;
+                }
+
+                log_trace(LOG_PREFIX, "Received data from ", clientAddress, " with size ", receivedMessage->size);
 
                 if (impl_->connectionProcessor != nullptr)
                 {
-                    std::vector<uint8_t> received(nc->recv_mbuf.buf, nc->recv_mbuf.buf + nc->recv_mbuf.len);
-                    mbuf_remove(&nc->recv_mbuf, nc->recv_mbuf.len);
+                    std::vector<uint8_t> received(receivedMessage->data, receivedMessage->data + receivedMessage->size);
 
                     impl_->responses.push_back(
                             ResponseInfo(impl_->connectionProcessor->get_response(
@@ -121,9 +124,8 @@ namespace
             }
             case MG_EV_CLOSE:
             {
-                log_debug(with_log_prefix("Connection at ")
-                                  .append(Mongoose::socket_to_string(nc->sa))
-                                  .append(" has been closed"));
+                log_debug(LOG_PREFIX, "Connection at ", Mongoose::socket_to_string(nc->sa), " has been closed");
+
                 auto connectionHash = impl_->stringHasher(clientAddress);
 
                 impl_->connectionProcessor->close_connection(
@@ -138,7 +140,7 @@ namespace
     }
 }
 
-void TcpAsyncServerTransport::Impl::thread_func()
+void WebsocketAsyncServerTransport::Impl::thread_func()
 {
     try
     {
@@ -155,17 +157,18 @@ void TcpAsyncServerTransport::Impl::thread_func()
                 }
                 else if (currentResponse->handle.wait_for(0s) == std::future_status::ready)
                 {
-                    log_debug(with_log_prefix("Sending response to ")
-                                      .append(Mongoose::socket_to_string(currentResponse->connection->sa)));
-
                     auto responseHandle = currentResponse->handle.get();
 
-                    mg_send(currentResponse->connection,
+                    log_trace(LOG_PREFIX, "Sending response with size ", responseHandle.size(), " to ",
+                        Mongoose::socket_to_string(currentResponse->connection->sa));
+
+                    mg_send_websocket_frame(
+                            currentResponse->connection,
+                            WEBSOCKET_OP_BINARY,
                             responseHandle.data(),
                             static_cast<int>(responseHandle.size()));
 
                     responses.erase(currentResponse++);
-                    // TODO: check timeout
                 }
                 else
                 {
@@ -182,27 +185,27 @@ void TcpAsyncServerTransport::Impl::thread_func()
     }
     catch (const std::exception& e)
     {
-        log_error(with_log_prefix("Unexpected error: ").append( e.what()));
+        log_error(LOG_PREFIX, "Unexpected error: ", e.what());
     }
 }
 
-TcpAsyncServerTransport::TcpAsyncServerTransport(const std::string& address, std::chrono::milliseconds networkTimeout) :
+WebsocketAsyncServerTransport::WebsocketAsyncServerTransport(const std::string& address, std::chrono::milliseconds networkTimeout) :
         impl_(new Impl(address, networkTimeout)) {}
 
-void TcpAsyncServerTransport::register_request_processor(std::shared_ptr<IAsyncConnectionProcessor> requestProcessor)
+void WebsocketAsyncServerTransport::register_request_processor(std::shared_ptr<IAsyncConnectionProcessor> requestProcessor)
 {
     impl_->connectionProcessor = std::move(requestProcessor);
 }
 
-void TcpAsyncServerTransport::run()
+void WebsocketAsyncServerTransport::run()
 {
-    log_info(with_log_prefix("Starting background thread..."));
     if (impl_->rootConnection == nullptr)
     {
         impl_->closeRequested = false;
 
         mg_mgr_init(&impl_->mgr, this->impl_.get());
         impl_->rootConnection = mg_bind(&impl_->mgr, impl_->address.c_str(), server_handler);
+        mg_set_protocol_http_websocket(impl_->rootConnection );
 
         if (!impl_->rootConnection)
         {
@@ -216,13 +219,12 @@ void TcpAsyncServerTransport::run()
     }
     else
     {
-        log_info(with_log_prefix("Trying to start TcpAsyncServer more than once before closing"));
+        log_warning(LOG_PREFIX, "Trying to start TcpAsyncServer more than once before closing");
     }
 }
 
-void TcpAsyncServerTransport::close()
+void WebsocketAsyncServerTransport::close()
 {
-    log_info(with_log_prefix("Closing connection..."));
     impl_->closeRequested = true;
     if (impl_->workerThread.joinable())
     {
@@ -231,4 +233,4 @@ void TcpAsyncServerTransport::close()
     }
 }
 
-TcpAsyncServerTransport::~TcpAsyncServerTransport() = default;
+WebsocketAsyncServerTransport::~WebsocketAsyncServerTransport() = default;

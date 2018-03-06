@@ -4,7 +4,7 @@
 
 #include <dcdr/logging/Logger.h>
 
-#include <dcdr/transport/TcpSyncClientTransport.h>
+#include <dcdr/transport/WebsocketSyncClientTransport.h>
 
 #include <dcdr/messaging/flatbuffers/FlatBuffersParcelSerializer.h>
 #include <dcdr/messaging/flatbuffers/FlatBuffersParcelDeserializer.h>
@@ -87,7 +87,7 @@ namespace
 
 Commander::Commander(std::shared_ptr<IMainFormView> view) :
     view_(std::move(view)),
-    transport_(std::make_unique<Transport::TcpSyncClientTransport>("127.0.0.1:61296", 10s)),
+    transport_(std::make_unique<Transport::WebsocketSyncClientTransport>("127.0.0.1:61296", 10s)),
     terminateRequested_(false),
     scenesTimestamp_(0),
     nodesTimestamp_(0),

@@ -2,9 +2,11 @@ cmake_minimum_required(VERSION 3.8)
 
 project(dcdr-suite)
 
+set(CMAKE_CXX_STANDARD 17)
+
 # Common flags
 if(MSVC)
-	add_definitions(/W4 /WX /std:c++latest)
+	add_definitions(/W4 /WX)
 else()
 	add_definitions(-Wall -Wextra -Werror)
 endif()
@@ -39,6 +41,7 @@ add_subdirectory(dcdr-common)
 add_subdirectory(dcdr-logger)
 add_subdirectory(dcdr-pathtracer)
 add_subdirectory(dcdr-worker)
+add_subdirectory(dcdr-worker-cli)
 add_subdirectory(dcdr-transport)
 add_subdirectory(dcdr-interconnect)
 add_subdirectory(dcdr-server)

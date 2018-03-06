@@ -14,7 +14,7 @@ namespace Dcdr::Server
     {
     public:
         explicit WorkerRouter(const std::shared_ptr<CoreContext>& coreContext);
-        ~WorkerRouter();
+        ~WorkerRouter() override;
 
         uint32_t get_connection_id();
 

@@ -10,7 +10,7 @@ namespace Dcdr::Logging
     public:
         explicit FileLogWriter(const std::string& file_path);
 
-        void write(MessageType messageType, const std::string& message) override;
+        void write(LogCategory messageType, const std::string& message) override;
 
     private:
         std::ofstream file_;

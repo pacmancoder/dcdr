@@ -15,11 +15,16 @@ namespace Dcdr::Server
     class CoreContext
     {
     public:
+        CoreContext();
+
         SharedResourceManager<Scene>& get_scenes();
         SharedResourceManager<Node>& get_nodes();
         SharedResourceManager<Connection>& get_connections();
         SharedResourceManager<Job>& get_jobs();
         SharedResourceManager<ChunkTask>& get_tasks();
+
+    private:
+        void on_delete_connection(uint32_t connectionId);
 
     private:
         SharedResourceManager<Scene> scenes_;

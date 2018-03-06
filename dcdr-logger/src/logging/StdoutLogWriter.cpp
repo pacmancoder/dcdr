@@ -4,29 +4,34 @@
 
 using namespace Dcdr::Logging;
 
-void StdoutLogWriter::write(ILogWriter::MessageType messageType, const std::string &message)
+void StdoutLogWriter::write(LogCategory category, const std::string &message)
 {
     std::string formatCode = "0";
-    switch (messageType)
+    switch (category)
     {
-        case ILogWriter::MessageType::Error:
+        case LogCategory::Error:
         {
             formatCode = "1;31";
             break;
         }
-        case ILogWriter::MessageType::Warning:
+        case LogCategory::Warning:
         {
             formatCode = "33";
             break;
         }
-        case ILogWriter::MessageType::Info:
+        case LogCategory::Info:
         {
             formatCode = "1";
             break;
         }
-        case ILogWriter::MessageType::Debug:
+        case LogCategory::Debug:
         {
             formatCode = "37";
+            break;
+        }
+        case LogCategory::Trace:
+        {
+            formatCode = "94";
             break;
         }
     }

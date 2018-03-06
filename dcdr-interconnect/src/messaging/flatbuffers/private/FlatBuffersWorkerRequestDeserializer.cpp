@@ -13,7 +13,6 @@ namespace
     IParcel::ParcelPtr deserialize(const DcdrFlatBuffers::WorkerLoginRequest* request)
     {
         return std::make_unique<WorkerLoginRequestParcel>(
-                request->nodeId(),
                 request->name()->str(),
                 request->token()->str());
     }

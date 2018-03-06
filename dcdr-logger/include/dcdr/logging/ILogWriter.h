@@ -4,19 +4,21 @@
 
 namespace Dcdr::Logging
 {
+    enum class LogCategory
+    {
+        Error,
+        Warning,
+        Info,
+        Debug,
+        Trace
+    };
+
+
     class ILogWriter
     {
     public:
-        enum class MessageType
-        {
-            Error,
-            Warning,
-            Info,
-            Debug
-        };
+        virtual void write(LogCategory messageType, const std::string& message) = 0;
 
-        virtual void write(MessageType messageType, const std::string& message) = 0;
-
-        virtual ~ILogWriter() {}
+        virtual ~ILogWriter() = default;
     };
 }

@@ -4,11 +4,13 @@
 #include <dcdr/logging/StdoutLogWriter.h>
 
 #include <dcdr/server/core/CoreContext.h>
+
 #include <dcdr/server/service-commander/CommanderService.h>
+#include <dcdr/server/service-worker/WorkerService.h>
 
 #include <dcdr/server/loaders/DummySceneLoader.h>
 
-#include <dcdr/transport/TcpAsyncServerTransport.h>
+#include <dcdr/transport/WebsocketAsyncServerTransport.h>
 
 #include <chrono>
 
@@ -31,27 +33,21 @@ int main(/* int argc, char* argv[] */)
         DummySceneLoader sceneLoader;
         sceneLoader.load_scenes(coreContext_->get_scenes());
 
-        // test code
-        auto newJobId = coreContext_->get_jobs().add(Job{0, 640, 480, 16});
-        {
-            coreContext_->get_jobs().access_write(newJobId,
-            [](Job& job)
-            {
-                job.set_property("Started", "12:32:22 09.04.18");
-                job.set_property("Current workers", "1");
-            });
-        }
-        // test code end
-
         auto commanderService = std::make_shared<CommanderService>(coreContext_);
+        WebsocketAsyncServerTransport commanderTransport("61296", 10s);
+        commanderTransport.register_request_processor(commanderService);
+        commanderTransport.run();
 
-        TcpAsyncServerTransport transport("61296", 10s);
-        transport.register_request_processor(commanderService);
-        transport.run();
+
+        auto workerService = std::make_shared<WorkerService>(coreContext_);
+        WebsocketAsyncServerTransport workerTransport("61297", 10s);
+        workerTransport.register_request_processor(workerService);
+        workerTransport.run();
 
         std::cin.get();
 
-        transport.close();
+        workerTransport.close();
+        commanderTransport.close();
     }
     catch (Dcdr::DcdrException& e)
     {

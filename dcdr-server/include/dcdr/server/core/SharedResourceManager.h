@@ -86,6 +86,17 @@ namespace Dcdr::Server
             });
         }
 
+        bool exists(IdType id) const
+        {
+            bool exists = false;
+            resources_.access_read([id, &exists](const ResourceStorage& resources)
+            {
+                exists = resources.find(id) != resources.cend();
+            });
+
+            return exists;
+        }
+
         Timestamp get_last_modified() const
         {
             return resources_.get_last_modified();

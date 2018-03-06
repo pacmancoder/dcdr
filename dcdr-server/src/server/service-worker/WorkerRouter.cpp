@@ -121,6 +121,8 @@ IParcel::ParcelPtr WorkerRouter::dispatch(const WorkerCommitTasksRequest &reques
 {
     for (const auto& artifact : request.get_artifacts())
     {
+        log_warning(std::string("I got artifact for task ").append(std::to_string(artifact.taskId)));
+
         uint32_t jobId = 0;
         ChunkRect chunkRect = {};
 
