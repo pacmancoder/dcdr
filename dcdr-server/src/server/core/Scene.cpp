@@ -66,7 +66,7 @@ std::vector<uint8_t> Scene::get_scene_part(uint64_t offset, uint32_t partSize) c
     }
     if (offset + partSize > size_)
     {
-        return std::vector<uint8_t>(size_ - offset);
+        return std::vector<uint8_t>(static_cast<size_t>(size_ - offset));
     }
 
     return std::vector<uint8_t>(partSize);

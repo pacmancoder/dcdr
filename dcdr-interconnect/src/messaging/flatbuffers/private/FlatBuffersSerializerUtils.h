@@ -49,11 +49,11 @@ namespace Dcdr::Interconnect::FlatBuffers::SerializerUtils
     template <class ParcelType, class ParcelGenerator>
     IParcel::SerializedParcel build_parcel(ParcelGenerator&& parcelGenerator, size_t builderBufferSize)
     {
+        static const char* LOG_PREFIX_ =  "[Interconnect][FlatBuffers] ";
+
         using namespace Dcdr::Logging;
 
-        const char* LOG_PREFIX =  "[Interconnect][FlatBuffers] ";
-
-        log_trace(LOG_PREFIX, "Building ", ParcelType::GetFullyQualifiedName());
+        log_trace(LOG_PREFIX_, "Building ", ParcelType::GetFullyQualifiedName());
 
         flatbuffers::FlatBufferBuilder flatBuffersBuilder(builderBufferSize);
 
@@ -66,7 +66,7 @@ namespace Dcdr::Interconnect::FlatBuffers::SerializerUtils
 
         flatBuffersBuilder.Finish(parcel);
 
-        log_trace(LOG_PREFIX, ParcelType::GetFullyQualifiedName(), " flatbuffer was created");
+        log_trace(LOG_PREFIX_, ParcelType::GetFullyQualifiedName(), " flatbuffer was created");
 
         return IParcel::SerializedParcel(
                 flatBuffersBuilder.GetBufferPointer(),
