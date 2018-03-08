@@ -53,8 +53,8 @@ void Chunk::accumulate(const Chunk& chunk)
     {
         pixels_[i].samples += chunk.pixels_[i].samples;
         pixels_[i].color +=
-                (chunk.pixels_[i].color - pixels_[i].color) * chunk.pixels_[i].samples // weight of new samples
-                / static_cast<Types::Real>(pixels_[i].samples); // weight in overall color
+                (chunk.pixels_[i].color - pixels_[i].color) * Types::Real(chunk.pixels_[i].samples) // weight of new samples
+                / Types::Real(pixels_[i].samples); // weight in overall color
 
     }
 }

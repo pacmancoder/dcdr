@@ -205,7 +205,7 @@ void CommanderNode::Impl::run()
         {
             perform_command<CommanderGetJobArtifactResponse>(
                     CommanderGetJobArtifactRequestParcel(
-                        currentScene_.value(), 0, Commander::ArtifactFormat::Rgb24Unsigned
+                        currentScene_.value(), uint8_t(0), Commander::ArtifactFormat::Rgb24Unsigned
                     ),
                     [](const CommanderGetJobArtifactResponse&)
                     {

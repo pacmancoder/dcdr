@@ -6,16 +6,24 @@ set(CMAKE_CXX_STANDARD 17)
 
 # Common flags
 if(MSVC)
-	add_definitions(/W4 /WX)
+	# Force to always compile with W4
+	if(CMAKE_CXX_FLAGS MATCHES "/W[0-4]")
+		string(REGEX REPLACE "/W[0-4]" "/W4" CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS}")
+	else()
+		set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} /W4")
+	endif()
+
+	set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} /WX")
+
 else()
-	add_definitions(-Wall -Wextra -Werror)
+	set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wall -Wextra -Werror")
 endif()
 
 
 if(CMAKE_BUILD_TYPE STREQUAL "Debug")
 # Debug flags
     if(CMAKE_COMPILER_IS_GNUCC)
-		add_definitions(-O0)
+		set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -O0")
     endif(CMAKE_COMPILER_IS_GNUCC)
 else()
 # Release flags

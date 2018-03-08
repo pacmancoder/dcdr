@@ -31,7 +31,7 @@ TEST_F(FlatBuffersInterconnectTest, CommanderGetJobInfoRequestParcel)
 
 TEST_F(FlatBuffersInterconnectTest, CommanderGetJobArtifactRequestParcel)
 {
-    CommanderGetJobArtifactRequestParcel request(42, 1, Commander::ArtifactFormat::Rgb24Unsigned);
+    CommanderGetJobArtifactRequestParcel request(uint32_t(42), uint8_t(1), Commander::ArtifactFormat::Rgb24Unsigned);
 
     auto serialized = static_cast<const IParcel&>(request).serialize(serializer_);
     auto deserialized = deserializer_.deserialize(std::move(serialized));
@@ -163,14 +163,19 @@ TEST_F(FlatBuffersInterconnectTest, CommanderGetJobArtifactResponseParcel)
 {
     std::vector<uint8_t> data = {1, 2, 3};
 
-    CommanderGetJobArtifactResponseParcel response(42, Commander::ArtifactFormat::Rgb24Unsigned, 16, 8,  data);
+    CommanderGetJobArtifactResponseParcel response(
+            uint32_t(42),
+            Commander::ArtifactFormat::Rgb24Unsigned,
+            uint16_t(16),
+            uint16_t(8),
+            data);
 
     auto serialized = static_cast<const IParcel&>(response).serialize(serializer_);
     auto deserialized = deserializer_.deserialize(std::move(serialized));
 
     auto receivedResponse = dynamic_cast<CommanderGetJobArtifactResponseParcel*>(deserialized.get());
     ASSERT_TRUE(receivedResponse != nullptr);
-    ASSERT_EQ(receivedResponse->get_response().get_job_id(), 42);
+    ASSERT_EQ(receivedResponse->get_response().get_job_id(), uint32_t(42));
     ASSERT_EQ(receivedResponse->get_response().get_format(), Commander::ArtifactFormat::Rgb24Unsigned);
     ASSERT_EQ(receivedResponse->get_response().get_width(), 16);
     ASSERT_EQ(receivedResponse->get_response().get_height(), 8);

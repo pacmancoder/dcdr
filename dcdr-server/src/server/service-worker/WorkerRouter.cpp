@@ -146,7 +146,7 @@ IParcel::ParcelPtr WorkerRouter::dispatch(const WorkerCommitTasksRequest &reques
 
 IParcel::ParcelPtr WorkerRouter::dispatch(const WorkerDownloadSceneRequest &request)
 {
-    const uint32_t SCENE_PART_SIZE = 1024;
+    static const uint32_t SCENE_PART_SIZE = 1024;
 
     std::vector<uint8_t> data;
     uint64_t sceneSize = 0;

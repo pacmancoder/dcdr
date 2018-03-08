@@ -16,8 +16,8 @@ TEST_F(ChunkTest, NewChunkTest)
     ASSERT_EQ(chunk.get_bounds().y, bounds.y);
     ASSERT_EQ(chunk.get_bounds().w, bounds.w);
     ASSERT_EQ(chunk.get_bounds().h, bounds.h);
-    ASSERT_EQ(chunk.get_min_samples(), 0);
-    ASSERT_EQ(chunk.get_max_samples(), 0);
+    ASSERT_EQ(chunk.get_min_samples(), 0u);
+    ASSERT_EQ(chunk.get_max_samples(), 0u);
     ASSERT_EQ(chunk.get_pixels(), pixels);
 }
 
@@ -25,19 +25,19 @@ TEST_F(ChunkTest, ConstructFromBufferTest)
 {
     const ChunkRect bounds { 16, 0, 8, 8 };
 
-    const uint32_t START_SAMPLES = 42;
-    const uint32_t MIN_SAMPLES = 42;
-    const uint32_t MAX_SAMPLES = START_SAMPLES + bounds.w * bounds.h - 1;
+    const uint32_t START_SAMPLES = 42u;
+    const uint32_t MIN_SAMPLES = 42u;
+    const uint32_t MAX_SAMPLES = START_SAMPLES + bounds.w * bounds.h - 1u;
 
     std::vector<ChunkPixel> pixels(bounds.w * bounds.h);
     for (size_t y = 0; y < bounds.h; ++y)
     {
         for (size_t x = 0; x < bounds.w; ++x)
         {
-            pixels[y * bounds.w + x].color.r = x;
-            pixels[y * bounds.w + x].color.g = y;
-            pixels[y * bounds.w + x].color.b = 255 - x;
-            if (x == 1 && y == 0)
+            pixels[y * bounds.w + x].color.r = Dcdr::Types::Real(x);
+            pixels[y * bounds.w + x].color.g = Dcdr::Types::Real(y);
+            pixels[y * bounds.w + x].color.b = 255.0f - Dcdr::Types::Real(x);
+            if (x == 1u && y == 0u)
             {
                 pixels[y * bounds.w + x].samples =
                         static_cast<uint32_t>(MIN_SAMPLES);
