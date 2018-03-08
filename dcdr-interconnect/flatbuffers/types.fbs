@@ -17,6 +17,7 @@ enum NodeState : uint8
 
 enum CommanderErrorKind : uint16
 {
+    Ok,
     JobNotExist,
     NodeNotExist,
     SceneNotExist

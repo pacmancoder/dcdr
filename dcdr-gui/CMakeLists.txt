@@ -1,7 +1,9 @@
 project(dcdr-gui)
 
 file(GLOB DCDR_GUI_SOURCES src/*.cpp)
-file(GLOB DCDR_GUI_INCLUDES src/*.h)
+file(GLOB DCDR_GUI_INCLUDES include/dcdr/gui/*.h)
+
+include_directories(include)
 
 add_executable(${PROJECT_NAME} ${DCDR_GUI_SOURCES} ${DCDR_GUI_INCLUDES})
 

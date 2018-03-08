@@ -1,5 +1,5 @@
-#include "MainForm.h"
-#include "Commander.h"
+#include "../include/dcdr/gui/MainForm.h"
+#include "dcdr/gui/CommanderNode.h"
 #include <dcdr/logging/Logger.h>
 #include <dcdr/logging/StdoutLogWriter.h>
 #include <dcdr/Exception.h>
@@ -24,7 +24,7 @@ int main()
     {
         try
         {
-            auto commander = std::make_shared<Commander>(mainForm);
+            auto commander = std::make_shared<CommanderNode>(mainForm);
             mainForm->attach_commander(commander);
             commander->run();
         }
@@ -34,7 +34,7 @@ int main()
         }
         catch (const std::exception& e)
         {
-            log_error(std::string("[GUI][Commander] Unknown error: ").append(e.what()));
+            log_error(std::string("[GUI][CommanderNode] Unknown error: ").append(e.what()));
         }
 
     });

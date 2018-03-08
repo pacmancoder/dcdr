@@ -14,7 +14,7 @@ namespace Dcdr::Worker
     class EmptyResponseException : public WorkerException
     {
     public:
-        EmptyResponseException(const std::string& message) :
-                WorkerException("Interconnect", message) {}
+        explicit EmptyResponseException(const std::string& message) :
+                WorkerException("Worker", message) {}
     };
 }

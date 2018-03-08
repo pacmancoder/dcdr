@@ -1,10 +1,10 @@
-#include "MainForm.h"
+#include "../include/dcdr/gui/MainForm.h"
 
 #include <vector>
 #include <mutex>
 
-#include "MainFormWidgets.h"
-#include "ICommander.h"
+#include "../include/dcdr/gui/MainFormWidgets.h"
+#include "../include/dcdr/gui/ICommander.h"
 
 #include <nana/paint/pixel_buffer.hpp>
 #include <nana/gui/msgbox.hpp>
@@ -17,7 +17,7 @@ using namespace Dcdr::Gui;
 
 namespace
 {
-    const std::string DEFAULT_WINDOW_CAPTION("DCDR Commander");
+    const std::string DEFAULT_WINDOW_CAPTION("DCDR CommanderNode");
     const size_t DEFAULT_FORM_WIDTH(1024);
     const size_t DEFAULT_FORM_HEIGHT(600);
 
