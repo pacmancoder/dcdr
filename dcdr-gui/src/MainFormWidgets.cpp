@@ -1,4 +1,4 @@
-#include "MainFormWidgets.h"
+#include "../include/dcdr/gui/MainFormWidgets.h"
 
 #include <nana/paint/pixel_buffer.hpp>
 

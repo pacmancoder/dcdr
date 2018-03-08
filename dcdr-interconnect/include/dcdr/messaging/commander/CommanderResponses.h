@@ -110,7 +110,7 @@ namespace Dcdr::Interconnect
     class CommanderErrorResponse
     {
     public:
-        CommanderErrorResponse(Commander::CommanderErrorKind errorKind, const std::string& message);
+        CommanderErrorResponse(Commander::CommanderErrorKind errorKind, const std::string& message = "");
 
         const std::string& get_message() const;
         Commander::CommanderErrorKind get_error_kind() const;

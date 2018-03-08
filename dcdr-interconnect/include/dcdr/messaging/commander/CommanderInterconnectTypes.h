@@ -46,6 +46,7 @@ namespace Dcdr::Interconnect::Commander
 
     enum class CommanderErrorKind : uint16_t
     {
+        Ok,
         JobNotExist,
         NodeNotExist,
         SceneNotExist

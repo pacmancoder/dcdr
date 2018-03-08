@@ -111,7 +111,7 @@ IParcel::ParcelPtr CommanderRouter::dispatch(const CommanderSetJobStateRequest& 
         job.set_state(request.get_job_state());
     });
 
-    return nullptr;
+    return std::make_unique<CommanderErrorResponseParcel>(Commander::CommanderErrorKind::Ok);
 }
 
 IParcel::ParcelPtr CommanderRouter::dispatch(const CommanderAddJobRequest& request)
@@ -127,7 +127,7 @@ IParcel::ParcelPtr CommanderRouter::dispatch(const CommanderAddJobRequest& reque
         });
     });
 
-    return nullptr;
+    return std::make_unique<CommanderErrorResponseParcel>(Commander::CommanderErrorKind::Ok);
 }
 
 IParcel::ParcelPtr CommanderRouter::dispatch(const CommanderGetNodeListRequest&)
@@ -169,7 +169,7 @@ IParcel::ParcelPtr CommanderRouter::dispatch(const CommanderSetNodeStateRequest&
         node.set_state(request.get_node_state());
     });
 
-    return nullptr;
+    return std::make_unique<CommanderErrorResponseParcel>(Commander::CommanderErrorKind::Ok);
 }
 
 IParcel::ParcelPtr CommanderRouter::dispatch(const CommanderGetServerStatusRequest&)

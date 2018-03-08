@@ -34,6 +34,7 @@ Commander::CommanderErrorKind DeserializerUtils::marshal(DcdrFlatBuffers::Comman
 {
     switch (errorKind)
     {
+        case DcdrFlatBuffers::CommanderErrorKind_Ok:            return Commander::CommanderErrorKind::Ok;
         case DcdrFlatBuffers::CommanderErrorKind_JobNotExist:   return Commander::CommanderErrorKind::JobNotExist;
         case DcdrFlatBuffers::CommanderErrorKind_NodeNotExist:  return Commander::CommanderErrorKind::NodeNotExist;
         case DcdrFlatBuffers::CommanderErrorKind_SceneNotExist: return Commander::CommanderErrorKind::SceneNotExist;
