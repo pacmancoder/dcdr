@@ -24,7 +24,12 @@ using namespace std::chrono_literals;
 int main(/* int argc, char* argv[] */)
 {
     using namespace std::chrono_literals;
-    Logger::get_instance().add_log_writer(std::unique_ptr<ILogWriter>(new StdoutLogWriter()));
+
+    auto& logger = Logger::get_instance();
+    logger.add_log_writer(std::unique_ptr<ILogWriter>(new StdoutLogWriter()));
+    #ifndef NDEBUG
+        logger.enable_debug();
+    #endif
 
     try
     {

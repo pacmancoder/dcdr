@@ -266,7 +266,7 @@ void MainForm::display_preview(uint16_t width, uint16_t height, const uint8_t* d
     for (int row = 0; row < height; ++row)
     {
         pb.fill_row(static_cast<size_t>(row),
-                    data + width * BYTES_PER_PIXEL,
+                    data + row * width * BYTES_PER_PIXEL,
                     static_cast<size_t>(width * BYTES_PER_PIXEL),
                     BITS_PER_PIXEL);
     }

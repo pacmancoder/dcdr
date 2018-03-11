@@ -8,7 +8,11 @@ using namespace Dcdr::Worker;
 
 int main(int /*argc*/, char** /*argv*/) {
 
-    Logger::get_instance().add_log_writer(std::make_unique<StdoutLogWriter>());
+    auto& logger = Logger::get_instance();
+    logger.add_log_writer(std::unique_ptr<ILogWriter>(new StdoutLogWriter()));
+    #ifndef NDEBUG
+        logger.enable_debug();
+    #endif
 
     WorkerNode node;
 

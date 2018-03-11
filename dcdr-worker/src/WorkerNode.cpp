@@ -159,13 +159,15 @@ void WorkerNode::Impl::run()
                         {
                             for (int x = 0; x < task.width; ++x)
                             {
-                                if (nodeId == 0)
+                                if (nodeId == 1)
                                 {
-                                    pixels.push_back(Dcdr::Types::MultisamplePixel {Dcdr::Types::Color(1.0f, 0.0f, 0.0f), 1});
+                                    pixels.push_back(Dcdr::Types::MultisamplePixel {
+                                            Dcdr::Types::Color(1.0f, 0.0f, 0.0f), 1});
                                 }
                                 else
                                 {
-                                    pixels.push_back(Dcdr::Interconnect::Worker::Pixel {Dcdr::Types::Color(0.0f, 0.0f, 1.0f), 1});
+                                    pixels.push_back(Dcdr::Types::MultisamplePixel {
+                                            Dcdr::Types::Color(0.0f, 1.0f, 0.0f), 1});
                                 }
                             }
                         }
@@ -185,7 +187,7 @@ void WorkerNode::Impl::run()
                 });
 
         // some condition will be added
-        break;
+        // break;
     }
 
     std::cin.get();

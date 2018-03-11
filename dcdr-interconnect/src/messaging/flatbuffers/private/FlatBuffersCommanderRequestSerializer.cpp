@@ -15,21 +15,24 @@ using namespace Dcdr::Interconnect::FlatBuffers;
 
 namespace
 {
+    const char* LOG_PREFIX = "[Interconnect][FlatBuffers] ";
+}
+
+namespace
+{
     const size_t COMMANDER_REQUEST_BUILDER_BUFFER_SIZE = 128;
 
     template <class RequestType, class ParcelGenerator>
     IParcel::SerializedParcel build_commander_request_parcel(ParcelGenerator&& parcelGenerator)
     {
-        static const char* LOG_PREFIX_ = "[Interconnect][FlatBuffers] ";
-
         return SerializerUtils::build_parcel<DcdrFlatBuffers::CommanderRequest>(
             [parcelGenerator=std::forward<ParcelGenerator>(parcelGenerator)] (auto& flatBuffersBuilder)
             {
-                log_trace(LOG_PREFIX_, "Serializing parcel into ", RequestType::GetFullyQualifiedName());
+                log_trace(LOG_PREFIX, "Serializing parcel into ", RequestType::GetFullyQualifiedName());
 
                 flatbuffers::Offset<RequestType> requestData = parcelGenerator(flatBuffersBuilder);
 
-                log_trace(LOG_PREFIX_, "Parcel was serialized to ", RequestType::GetFullyQualifiedName());
+                log_trace(LOG_PREFIX, "Parcel was serialized to ", RequestType::GetFullyQualifiedName());
 
                 return DcdrFlatBuffers::CreateCommanderRequest(
                         flatBuffersBuilder,
