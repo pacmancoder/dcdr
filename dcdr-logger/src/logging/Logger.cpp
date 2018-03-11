@@ -5,7 +5,8 @@ using namespace Dcdr::Logging;
 Logger::Logger() :
     logWriters_(),
     logMutex_(),
-    traceEnabled_(false) {}
+    traceEnabled_(false),
+    debugEnabled_(false) {}
 
 Logger& Logger::get_instance()
 {
@@ -18,9 +19,19 @@ void Logger::enable_trace()
     traceEnabled_ = true;
 }
 
-bool Logger::is_trace_enabled()
+bool Logger::is_trace_enabled() const
 {
     return traceEnabled_;
+}
+
+void Logger::enable_debug()
+{
+    debugEnabled_ = true;
+}
+
+bool Logger::is_debug_enabled() const
+{
+    return debugEnabled_;
 }
 
 void Logger::add_log_writer(std::unique_ptr<ILogWriter> logWriter)

@@ -171,7 +171,7 @@ void CommanderNode::run()
 void CommanderNode::Impl::run()
 {
     Utils::Timer updateTimer(1s);
-    Utils::Timer surfaceUpdateTimer(3s);
+    Utils::Timer surfaceUpdateTimer(2s);
 
     while (!terminateRequested_)
     {
@@ -207,9 +207,16 @@ void CommanderNode::Impl::run()
                     CommanderGetJobArtifactRequestParcel(
                         currentScene_.value(), uint8_t(0), Commander::ArtifactFormat::Rgb24Unsigned
                     ),
-                    [](const CommanderGetJobArtifactResponse&)
+                    [this](const CommanderGetJobArtifactResponse& response)
                     {
-                        log_error(LOG_PREFIX, "Got Some Artifact!");
+                        if (response.get_format() != Commander::ArtifactFormat::Rgb24Unsigned)
+                        {
+                            log_error(LOG_PREFIX, "Not supported artifact format!");
+                            return;
+                        }
+
+                        view_->display_preview(
+                                response.get_width(), response.get_height(), response.get_data().data());
                     }
             );
 

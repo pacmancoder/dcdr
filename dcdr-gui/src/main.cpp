@@ -14,7 +14,11 @@ using namespace Dcdr::Logging;
 
 int main()
 {
-    Logger::get_instance().add_log_writer(std::make_unique<StdoutLogWriter>());
+    auto& logger = Logger::get_instance();
+    logger.add_log_writer(std::unique_ptr<ILogWriter>(new StdoutLogWriter()));
+    #ifndef NDEBUG
+        logger.enable_debug();
+    #endif
 
     // gui will start on promary application thread
     auto mainForm = std::make_shared<Dcdr::Gui::MainForm>();

@@ -17,7 +17,10 @@ namespace Dcdr::Logging
         void log(LogCategory messageType, const std::string& message);
 
         void enable_trace();
-        bool is_trace_enabled();
+        bool is_trace_enabled() const;
+
+        void enable_debug();
+        bool is_debug_enabled() const;
 
     private:
         Logger();
@@ -26,6 +29,7 @@ namespace Dcdr::Logging
         std::vector<std::unique_ptr<ILogWriter>> logWriters_;
         std::mutex logMutex_;
         bool traceEnabled_;
+        bool debugEnabled_;
     };
 
     template <typename Arg>
@@ -61,13 +65,8 @@ namespace Dcdr::Logging
     #define log_error(...) Dcdr::Logging::__log_internal(LogCategory::Error, __VA_ARGS__)
     #define log_warning(...) Dcdr::Logging::__log_internal(LogCategory::Warning, __VA_ARGS__)
     #define log_info(...) Dcdr::Logging::__log_internal(LogCategory::Info, __VA_ARGS__)
-
-    #ifndef NDEBUG
-        #define log_debug(...) Dcdr::Logging::__log_internal(LogCategory::Debug, __VA_ARGS__)
-    #else
-        #define log_debug(...) // Dcdr::Logging::__log_internal(LogCategory::Debug, __VA_ARGS__)
-    #endif
-
+    #define log_debug(...) if (Dcdr::Logging::Logger::get_instance().is_debug_enabled()) \
+        Dcdr::Logging::__log_internal(LogCategory::Debug, __VA_ARGS__)
     #define log_trace(...) if (Dcdr::Logging::Logger::get_instance().is_trace_enabled()) \
         Dcdr::Logging::__log_internal(LogCategory::Trace, __VA_ARGS__)
 }
