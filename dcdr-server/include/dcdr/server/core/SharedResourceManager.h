@@ -5,7 +5,7 @@
 #include <map>
 #include <functional>
 #include <atomic>
-#include "../../../../../libs/mongoose/mongoose-git/mongoose.h"
+#include <optional>
 
 namespace Dcdr::Server
 {
@@ -26,6 +26,7 @@ namespace Dcdr::Server
                 Hook addHook = nullptr,
                 Hook removeHook = nullptr) :
             resources_(),
+            manualIndexing_(false),
             nextId_(0),
             addHook_(addHook),
             removeHook_(removeHook) {}
@@ -56,9 +57,23 @@ namespace Dcdr::Server
 
         }
 
-        uint32_t add(ResourceType&& resource)
+        uint32_t add(ResourceType&& resource, std::optional<uint32_t> index = std::nullopt)
         {
-            auto id = nextId_++;
+            uint32_t id = 0;
+
+            if (index == std::nullopt)
+            {
+                if (manualIndexing_)
+                {
+                    throw std::invalid_argument(
+                            "ResourceManager can't be switched to auto indexing after using manual index");
+                }
+                id = nextId_++;
+            }
+            else
+            {
+                id = index.value();
+            }
 
             resources_.access_write([id, &resource](ResourceStorage& resources)
             {
@@ -144,6 +159,7 @@ namespace Dcdr::Server
         // (while container self is still const)
         mutable ResourceStorageProxy resources_;
 
+        bool manualIndexing_;
         IdType nextId_;
 
         Hook addHook_;

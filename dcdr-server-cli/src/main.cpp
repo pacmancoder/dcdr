@@ -2,18 +2,20 @@
 #include <dcdr/Exception.h>
 #include <dcdr/logging/Logger.h>
 #include <dcdr/logging/StdoutLogWriter.h>
+#include <dcdr/utils/ArgsParser.h>
 
 #include <dcdr/server/core/CoreContext.h>
 
 #include <dcdr/server/service-commander/CommanderService.h>
 #include <dcdr/server/service-worker/WorkerService.h>
 
-#include <dcdr/server/loaders/DummySceneLoader.h>
+#include <dcdr/server/loaders/FSSceneLoader.h>
 
 #include <dcdr/transport/WebsocketAsyncServerTransport.h>
 
 #include <chrono>
 
+using namespace Dcdr::Utils;
 using namespace Dcdr::Server;
 using namespace Dcdr::Logging;
 using namespace Dcdr::Interconnect;
@@ -21,8 +23,10 @@ using namespace Dcdr::Transport;
 
 using namespace std::chrono_literals;
 
-int main(/* int argc, char* argv[] */)
+int main(int argc, char* argv[])
 {
+    ArgsParser args(argc, argv);
+
     using namespace std::chrono_literals;
 
     auto& logger = Logger::get_instance();
@@ -35,7 +39,7 @@ int main(/* int argc, char* argv[] */)
     {
         auto coreContext_ = std::make_shared<CoreContext>();
 
-        DummySceneLoader sceneLoader;
+        FSSceneLoader sceneLoader(args.get_argument("scene-cache"));
         sceneLoader.load_scenes(coreContext_->get_scenes());
 
         auto commanderService = std::make_shared<CommanderService>(coreContext_);

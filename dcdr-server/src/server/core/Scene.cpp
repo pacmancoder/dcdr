@@ -2,41 +2,17 @@
 
 #include <dcdr/server/ServerExceptions.h>
 
-#include <ratio>
+#include <algorithm>
 
 using namespace Dcdr::Server;
 
-namespace
-{
-    struct SceneInfo
-    {
-        std::string name;
-        uint16_t width;
-        uint16_t height;
-        uint64_t size;
-    };
 
-    SceneInfo sceneInfo[] = {
-            SceneInfo {"Cornell", 640, 480, 1 * 1024 * 1024},
-            SceneInfo {"Spheres", 800, 600, 1 * 512  * 1024},
-    };
-
-    size_t fake_scene_index(const std::string& path)
-    {
-        if (path.find("cornell.dspf") != std::string::npos)
-        {
-            return 0;
-        }
-
-        return 1;
-    }
-}
-
-Scene::Scene(const std::string& path) :
-    name_(sceneInfo[fake_scene_index(path)].name),
-    width_(sceneInfo[fake_scene_index(path)].width),
-    height_(sceneInfo[fake_scene_index(path)].height),
-    size_(sceneInfo[fake_scene_index(path)].size) {}
+Scene::Scene(const std::string& path, const std::string& name, uint16_t width, uint16_t height) :
+    name_(name),
+    width_(width),
+    height_(height),
+    size_(std::nullopt),
+    stream_(path, std::ios::in | std::ios::binary) {}
 
 uint16_t Scene::get_width() const
 {
@@ -53,21 +29,32 @@ const std::string& Scene::get_name() const
     return name_;
 }
 
-uint64_t Scene::get_package_size() const
+uint64_t Scene::get_package_size()
 {
-    return size_;
+    if (!size_.has_value())
+    {
+        stream_.seekg(0, std::ios::end);
+        size_ = static_cast<uint64_t>(stream_.tellg());
+    }
+
+    return size_.value();
 }
 
-std::vector<uint8_t> Scene::get_scene_part(uint64_t offset, uint32_t partSize) const
+std::vector<uint8_t> Scene::get_scene_part(uint64_t offset, uint32_t partSize)
 {
-    if (offset >= size_)
+    auto size = get_package_size();
+
+    if (offset >= size)
     {
         throw SceneException("Provided offset is bigger than scene size");
     }
-    if (offset + partSize > size_)
-    {
-        return std::vector<uint8_t>(static_cast<size_t>(size_ - offset));
-    }
 
-    return std::vector<uint8_t>(partSize);
+    auto bytesToRead = std::min(size - offset, static_cast<uint64_t>(partSize));
+
+    std::vector<uint8_t> buffer;
+    buffer.resize(bytesToRead);
+    stream_.seekg(offset, std::ios::beg);
+    stream_.read(reinterpret_cast<char*>(buffer.data()), buffer.size());
+
+    return buffer;
 }
