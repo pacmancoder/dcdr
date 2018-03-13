@@ -6,6 +6,7 @@ set(DCDR_COMMON_INCLUDES
 
         include/dcdr/utils/Iterator.h
         include/dcdr/utils/Rng.h
+        include/dcdr/utils/ArgsParser.h
         include/dcdr/utils/Timer.h
 
         include/dcdr/renderer/UnbakedPixel.h
@@ -17,6 +18,7 @@ set(DCDR_COMMON_SOURCES
         src/Constants.cpp
 
         src/utils/Rng.cpp
+        src/utils/ArgsParser.cpp
 
         src/renderer/UnbakedPixel.cpp
         src/renderer/Chunk.cpp)

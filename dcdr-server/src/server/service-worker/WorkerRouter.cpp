@@ -151,8 +151,8 @@ IParcel::ParcelPtr WorkerRouter::dispatch(const WorkerDownloadSceneRequest &requ
     std::vector<uint8_t> data;
     uint64_t sceneSize = 0;
 
-    coreContext_->get_scenes().access_read(request.get_scene_id(),
-    [offset = request.get_offset(), &data, &sceneSize](const Scene& scene)
+    coreContext_->get_scenes().access_write(request.get_scene_id(),
+    [offset = request.get_offset(), &data, &sceneSize](Scene& scene)
     {
         data = scene.get_scene_part(offset, SCENE_PART_SIZE);
         sceneSize = scene.get_package_size();

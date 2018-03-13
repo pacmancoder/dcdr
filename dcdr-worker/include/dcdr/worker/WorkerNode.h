@@ -7,7 +7,7 @@ namespace Dcdr::Worker
     class WorkerNode
     {
     public:
-        WorkerNode();
+        WorkerNode(const std::string& sceneCache = "");
         ~WorkerNode();
 
         void run();

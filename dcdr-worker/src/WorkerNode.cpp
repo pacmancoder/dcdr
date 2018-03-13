@@ -63,14 +63,14 @@ namespace
     };
 }
 
-WorkerNode::WorkerNode() :
+WorkerNode::WorkerNode(const std::string& sceneCache = "") :
     impl_(std::make_unique<Impl>()) {}
 
 WorkerNode::~WorkerNode() = default;
 
 struct WorkerNode::Impl
 {
-    Impl();
+    Impl(const std::string& sceneCache = "");
 
     void run();
 
@@ -84,7 +84,7 @@ private:
     FlatBuffersParcelSerializer serializer_;
 };
 
-WorkerNode::Impl::Impl() :
+WorkerNode::Impl::Impl(const std::string& sceneCache = "") :
     transport_(nullptr),
     deserializer_(),
     serializer_() {}
@@ -186,8 +186,10 @@ void WorkerNode::Impl::run()
                     log_info("Sent work.");
                 });
 
-        // some condition will be added
-        // break;
+        if (!std::cin.eof())
+        {
+            break;
+        }
     }
 
     std::cin.get();
