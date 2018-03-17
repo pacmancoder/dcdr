@@ -133,7 +133,7 @@ TEST_F(FlatBuffersInterconnectTest, WorkerPollTasksResponseParcel)
     WorkerPollTasksResponseParcel response(
             42,
             std::vector<Worker::TaskInfo> {
-                Worker::TaskInfo {0u, 1u, 2u, 3u, 4u, 5u, 6u, 7u, 8u, 9u}
+                Worker::TaskInfo {0u, 1u, 2u, 3u, 4u, 5u, 6u, 7u}
             });
 
     auto serialized = static_cast<const IParcel&>(response).serialize(serializer_);
@@ -146,19 +146,17 @@ TEST_F(FlatBuffersInterconnectTest, WorkerPollTasksResponseParcel)
     const auto& tasks = receivedResponse->get_response().get_tasks();
     ASSERT_EQ(tasks[0].taskId,        0u);
     ASSERT_EQ(tasks[0].sceneId,       1u);
-    ASSERT_EQ(tasks[0].sceneWidth,    2u);
-    ASSERT_EQ(tasks[0].sceneHeight,   3u);
-    ASSERT_EQ(tasks[0].x,             4u);
-    ASSERT_EQ(tasks[0].y,             5u);
-    ASSERT_EQ(tasks[0].width,         6u);
-    ASSERT_EQ(tasks[0].height,        7u);
-    ASSERT_EQ(tasks[0].minIterations, 8u);
-    ASSERT_EQ(tasks[0].maxIterations, 9u);
+    ASSERT_EQ(tasks[0].x,             2u);
+    ASSERT_EQ(tasks[0].y,             3u);
+    ASSERT_EQ(tasks[0].width,         4u);
+    ASSERT_EQ(tasks[0].height,        5u);
+    ASSERT_EQ(tasks[0].minIterations, 6u);
+    ASSERT_EQ(tasks[0].maxIterations, 7u);
 }
 
 TEST_F(FlatBuffersInterconnectTest, WorkerDownloadSceneResponseParcel)
 {
-    WorkerDownloadSceneResponseParcel response(42u, 1u, 64u, 128u, std::vector<uint8_t> {1u, 2u, 3u});
+    WorkerDownloadSceneResponseParcel response(42u, 13u, 64u, 128u, std::vector<uint8_t> {1u, 2u, 3u});
 
     auto serialized = static_cast<const IParcel&>(response).serialize(serializer_);
     auto deserialized = deserializer_.deserialize(std::move(serialized));
@@ -166,11 +164,40 @@ TEST_F(FlatBuffersInterconnectTest, WorkerDownloadSceneResponseParcel)
     auto receivedResponse = dynamic_cast<WorkerDownloadSceneResponseParcel*>(deserialized.get());
     ASSERT_TRUE(receivedResponse != nullptr);
     ASSERT_EQ(receivedResponse->get_response().get_node_id(),    42u);
-    ASSERT_EQ(receivedResponse->get_response().get_scene_id(),   1u);
+    ASSERT_EQ(receivedResponse->get_response().get_scene_id(),   13u);
     ASSERT_EQ(receivedResponse->get_response().get_offset(),     64u);
     ASSERT_EQ(receivedResponse->get_response().get_bytes_left(), 128u);
     ASSERT_EQ(receivedResponse->get_response().get_data()[0],    1u);
     ASSERT_EQ(receivedResponse->get_response().get_data()[1],    2u);
     ASSERT_EQ(receivedResponse->get_response().get_data()[2],    3u);
+}
 
+TEST_F(FlatBuffersInterconnectTest, WorkerGetSceneInfoRequestParcel)
+{
+    WorkerGetSceneInfoRequestParcel request(42u, 13u);
+
+    auto serialized = static_cast<const IParcel&>(request).serialize(serializer_);
+    auto deserialized = deserializer_.deserialize(std::move(serialized));
+
+    auto receivedRequest = dynamic_cast<WorkerGetSceneInfoRequestParcel*>(deserialized.get());
+    ASSERT_TRUE(receivedRequest != nullptr);
+    ASSERT_EQ(receivedRequest->get_request().get_node_id(), 42u);
+    ASSERT_EQ(receivedRequest->get_request().get_scene_id(), 13u);
+}
+
+TEST_F(FlatBuffersInterconnectTest, WorkerGetSceneInfoResponseParcel)
+{
+    WorkerGetSceneInfoResponseParcel response(
+            1u, 2u, 64u, 128u, "Test");
+
+    auto serialized = static_cast<const IParcel&>(response).serialize(serializer_);
+    auto deserialized = deserializer_.deserialize(std::move(serialized));
+
+    auto receivedResponse = dynamic_cast<WorkerGetSceneInfoResponseParcel*>(deserialized.get());
+    ASSERT_TRUE(receivedResponse != nullptr);
+    ASSERT_EQ(receivedResponse->get_response().get_node_id(),    1u);
+    ASSERT_EQ(receivedResponse->get_response().get_scene_id(),   2u);
+    ASSERT_EQ(receivedResponse->get_response().get_width(),      64u);
+    ASSERT_EQ(receivedResponse->get_response().get_height(),     128u);
+    ASSERT_EQ(receivedResponse->get_response().get_file_name(),  std::string("Test"));
 }

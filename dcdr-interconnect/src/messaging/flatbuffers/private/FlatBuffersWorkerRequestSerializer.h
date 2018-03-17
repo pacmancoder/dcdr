@@ -13,5 +13,6 @@ namespace Dcdr::Interconnect::FlatBuffers
         IParcel::SerializedParcel serialize(const WorkerPollTasksRequest& parcel) override;
         IParcel::SerializedParcel serialize(const WorkerCommitTasksRequest& parcel) override;
         IParcel::SerializedParcel serialize(const WorkerDownloadSceneRequest& parcel) override;
+        IParcel::SerializedParcel serialize(const WorkerGetSceneInfoRequest& parcel) override;
     };
 }

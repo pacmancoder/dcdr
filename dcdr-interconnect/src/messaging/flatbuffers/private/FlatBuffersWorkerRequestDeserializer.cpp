@@ -50,6 +50,12 @@ namespace
         return std::make_unique<WorkerDownloadSceneRequestParcel>(
                 request->nodeId(), request->sceneId(), request->offset());
     }
+
+    IParcel::ParcelPtr deserialize(const DcdrFlatBuffers::WorkerGetSceneInfoRequest* request)
+    {
+        return std::make_unique<WorkerGetSceneInfoRequestParcel>(
+                request->nodeId(), request->sceneId());
+    }
 }
 
 
@@ -72,6 +78,8 @@ IParcel::ParcelPtr FlatBuffersWorkerRequestDeserializer::deserialize(
             return ::deserialize(request->requestData_as_WorkerCommitTasksRequest());
         case DcdrFlatBuffers::WorkerRequestData_WorkerDownloadSceneRequest:
             return ::deserialize(request->requestData_as_WorkerDownloadSceneRequest());
+        case DcdrFlatBuffers::WorkerRequestData_WorkerGetSceneInfoRequest:
+            return ::deserialize(request->requestData_as_WorkerGetSceneInfoRequest());
     }
 
     throw DeserializationNotImplementedException("<Unknown>");

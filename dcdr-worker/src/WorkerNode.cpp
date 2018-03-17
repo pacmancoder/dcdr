@@ -63,8 +63,8 @@ namespace
     };
 }
 
-WorkerNode::WorkerNode(const std::string& sceneCache = "") :
-    impl_(std::make_unique<Impl>()) {}
+WorkerNode::WorkerNode(const std::string& sceneCache) :
+    impl_(std::make_unique<Impl>(sceneCache)) {}
 
 WorkerNode::~WorkerNode() = default;
 
@@ -82,12 +82,15 @@ private:
 
     FlatBuffersParcelDeserializer deserializer_;
     FlatBuffersParcelSerializer serializer_;
+
+    std::string sceneCache_;
 };
 
-WorkerNode::Impl::Impl(const std::string& sceneCache = "") :
+WorkerNode::Impl::Impl(const std::string& sceneCache) :
     transport_(nullptr),
     deserializer_(),
-    serializer_() {}
+    serializer_(),
+    sceneCache_(sceneCache) {}
 
 template<class ResponseType, class RequestParcelType, typename ResponseVisitFunc>
 void WorkerNode::Impl::perform_command(RequestParcelType&& request, ResponseVisitFunc&& func)

@@ -39,4 +39,5 @@ namespace Dcdr::Interconnect
     using WorkerLoginResponseParcel = ConcreteWorkerResponseParcel<WorkerLoginResponse>;
     using WorkerPollTasksResponseParcel = ConcreteWorkerResponseParcel<WorkerPollTasksResponse>;
     using WorkerDownloadSceneResponseParcel = ConcreteWorkerResponseParcel<WorkerDownloadSceneResponse>;
+    using WorkerGetSceneInfoResponseParcel = ConcreteWorkerResponseParcel<WorkerGetSceneInfoResponse>;
 }

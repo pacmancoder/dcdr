@@ -51,7 +51,7 @@ namespace Dcdr::Interconnect
         WorkerDownloadSceneResponse(
                 uint32_t nodeId,
                 uint32_t sceneId,
-                uint64_t offset, // TODO: remove
+                uint64_t offset,
                 uint64_t bytesLeft,
                 std::vector<uint8_t>&& data);
 
@@ -61,10 +61,36 @@ namespace Dcdr::Interconnect
         const std::vector<uint8_t>& get_data() const;
 
     private:
-        uint32_t nodeId_;
         uint32_t sceneId_;
         uint64_t offset_;
         uint64_t bytesLeft_;
         std::vector<uint8_t> data_;
+    };
+
+    class WorkerGetSceneInfoResponse : public WorkerResponse
+    {
+    public:
+        WorkerGetSceneInfoResponse(
+                uint32_t nodeId,
+                uint32_t sceneId,
+
+                uint16_t width,
+                uint16_t height,
+
+                const std::string& fileName
+        );
+
+        uint32_t get_scene_id() const;
+        uint16_t get_width() const;
+        uint16_t get_height() const;
+
+        const std::string& get_file_name() const;
+
+    private:
+        uint32_t sceneId_;
+
+        uint16_t width_;
+        uint16_t height_;
+        std::string fileName_;
     };
 }

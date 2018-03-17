@@ -98,6 +98,19 @@ IParcel::SerializedParcel FlatBuffersWorkerRequestSerializer::serialize(const Wo
             [&parcel](flatbuffers::FlatBufferBuilder& builder)
             {
                 return DcdrFlatBuffers::CreateWorkerDownloadSceneRequest(
-                        builder, parcel.get_node_id(), parcel.get_scene_id(), parcel.get_offset());
+                        builder,
+                        parcel.get_node_id(),
+                        parcel.get_scene_id(),
+                        parcel.get_offset());
+            });
+}
+
+IParcel::SerializedParcel FlatBuffersWorkerRequestSerializer::serialize(const WorkerGetSceneInfoRequest &parcel)
+{
+    return build_worker_request_parcel<DcdrFlatBuffers::WorkerGetSceneInfoRequest>(
+            [&parcel](flatbuffers::FlatBufferBuilder& builder)
+            {
+                return DcdrFlatBuffers::CreateWorkerGetSceneInfoRequest(
+                        builder, parcel.get_node_id(), parcel.get_scene_id());
             });
 }

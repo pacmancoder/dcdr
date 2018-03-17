@@ -5,6 +5,7 @@
 #include <dcdr/server/core/ChunkTask.h>
 #include <dcdr/server/core/Scene.h>
 #include <dcdr/server/core/Job.h>
+#include <dcdr/server/core/SharedFile.h>
 
 #include <dcdr/server/core/SharedResourceManager.h>
 
@@ -22,6 +23,7 @@ namespace Dcdr::Server
         SharedResourceManager<Connection>& get_connections();
         SharedResourceManager<Job>& get_jobs();
         SharedResourceManager<ChunkTask>& get_tasks();
+        SharedResourceManager<SharedFile>& get_shared_files();
 
     private:
         void on_delete_connection(uint32_t connectionId);
@@ -32,6 +34,6 @@ namespace Dcdr::Server
         SharedResourceManager<Connection> connections_;
         SharedResourceManager<Job> jobs_;
         SharedResourceManager<ChunkTask> tasks_;
-
+        SharedResourceManager<SharedFile> sharedFiles_;
     };
 }

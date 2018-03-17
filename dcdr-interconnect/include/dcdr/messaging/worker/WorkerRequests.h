@@ -75,7 +75,18 @@ namespace Dcdr::Interconnect
         uint64_t get_offset() const;
 
     private:
-        uint32_t scene_;
+        uint32_t sceneId_;
         uint64_t offset_;
+    };
+
+    class WorkerGetSceneInfoRequest : public WorkerRequest
+    {
+    public:
+        WorkerGetSceneInfoRequest(uint32_t nodeId, uint32_t sceneId);
+
+        uint32_t  get_scene_id() const;
+
+    private:
+        uint32_t scene_;
     };
 }

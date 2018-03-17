@@ -33,6 +33,11 @@ namespace Dcdr::Interconnect
             dispatch_not_implemented("WorkerDownloadSceneResponse");
         }
 
+        virtual void dispatch(const WorkerGetSceneInfoResponse&)
+        {
+            dispatch_not_implemented("WorkerGetSceneInfoResponse");
+        }
+
         virtual void dispatch_not_implemented(const std::string& parcelKind)
         {
             throw DispatchNotImplemented(std::string("Dispatch not implemented for ").append(parcelKind));

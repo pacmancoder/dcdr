@@ -28,10 +28,7 @@ namespace Dcdr::Interconnect::Worker
     struct TaskInfo
     {
         uint32_t taskId;
-
         uint32_t sceneId;
-        uint16_t sceneWidth;
-        uint16_t sceneHeight;
 
         uint16_t x;
         uint16_t y;

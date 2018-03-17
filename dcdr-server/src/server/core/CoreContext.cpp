@@ -54,3 +54,8 @@ SharedResourceManager<ChunkTask>& CoreContext::get_tasks()
 {
     return tasks_;
 }
+
+SharedResourceManager<SharedFile> &CoreContext::get_shared_files()
+{
+    return sharedFiles_;
+}

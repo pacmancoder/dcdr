@@ -43,6 +43,12 @@ table WorkerDownloadSceneRequest
     offset: uint64;
 }
 
+table WorkerGetSceneInfoRequest
+{
+    nodeId: uint32;
+    sceneId: uint32;
+}
+
 union WorkerRequestData
 {
     WorkerLoginRequest,
@@ -50,7 +56,8 @@ union WorkerRequestData
     WorkerSendHardwareInfoRequest,
     WorkerPollTasksRequest,
     WorkerCommitTasksRequest,
-    WorkerDownloadSceneRequest
+    WorkerDownloadSceneRequest,
+    WorkerGetSceneInfoRequest
 }
 
 table WorkerRequest

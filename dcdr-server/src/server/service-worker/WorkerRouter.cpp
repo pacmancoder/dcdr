@@ -100,8 +100,6 @@ IParcel::ParcelPtr WorkerRouter::dispatch(const WorkerPollTasksRequest &request)
                             taskId,
 
                             job.get_scene_id(),
-                            job.get_width(),
-                            job.get_height(),
 
                             chunkTask.get_chunk_rect().x,
                             chunkTask.get_chunk_rect().y,
@@ -115,6 +113,30 @@ IParcel::ParcelPtr WorkerRouter::dispatch(const WorkerPollTasksRequest &request)
     });
 
     return std::make_unique<WorkerPollTasksResponseParcel>(request.get_node_id(), tasks);
+}
+
+IParcel::ParcelPtr WorkerRouter::dispatch(const WorkerGetSceneInfoRequest &request)
+{
+    uint16_t width = 0;
+    uint16_t height = 0;
+    std::string fileName;
+
+    coreContext_->get_scenes().access_read(request.get_scene_id(),
+    [&width, &height, &fileName](const Scene& scene)
+    {
+        width = scene.get_width();
+        height = scene.get_height();
+        fileName = scene.get_scene_file_name();
+    });
+
+    return std::make_unique<WorkerGetSceneInfoResponseParcel>(
+            request.get_node_id(),
+            request.get_scene_id(),
+
+            width,
+            height,
+
+            fileName);
 }
 
 IParcel::ParcelPtr WorkerRouter::dispatch(const WorkerCommitTasksRequest &request)
@@ -148,14 +170,22 @@ IParcel::ParcelPtr WorkerRouter::dispatch(const WorkerDownloadSceneRequest &requ
 {
     static const uint32_t SCENE_PART_SIZE = 1024;
 
+    uint32_t sceneFileId = 0;
+
     std::vector<uint8_t> data;
     uint64_t sceneSize = 0;
 
     coreContext_->get_scenes().access_write(request.get_scene_id(),
-    [offset = request.get_offset(), &data, &sceneSize](Scene& scene)
+    [&sceneFileId](Scene& scene)
     {
-        data = scene.get_scene_part(offset, SCENE_PART_SIZE);
-        sceneSize = scene.get_package_size();
+        sceneFileId = scene.get_scene_file_id();
+    });
+
+    coreContext_->get_shared_files().access_read(sceneFileId,
+    [&data, &sceneSize, offset = request.get_offset()](const SharedFile& sharedFile)
+    {
+       data = sharedFile.read(SCENE_PART_SIZE, offset);
+       sceneSize = sharedFile.size();
     });
 
     return std::make_unique<WorkerDownloadSceneResponseParcel>(
@@ -163,7 +193,6 @@ IParcel::ParcelPtr WorkerRouter::dispatch(const WorkerDownloadSceneRequest &requ
             request.get_scene_id(),
             request.get_offset(),
             (request.get_offset() + data.size() < sceneSize) ?
-                sceneSize - request.get_offset() - data.size() :
-                0,
+                sceneSize - request.get_offset() - data.size() : 0,
             std::move(data));
 }

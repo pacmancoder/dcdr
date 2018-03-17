@@ -11,6 +11,7 @@ namespace Dcdr::Interconnect
     class WorkerPollTasksRequest;
     class WorkerCommitTasksRequest;
     class WorkerDownloadSceneRequest;
+    class WorkerGetSceneInfoRequest;
 
     class IWorkerRequestDispatcher
     {
@@ -48,6 +49,12 @@ namespace Dcdr::Interconnect
         virtual IParcel::ParcelPtr dispatch(const WorkerDownloadSceneRequest&)
         {
             dispatch_not_implemented("WorkerDownloadSceneRequest");
+            return nullptr;
+        }
+
+        virtual IParcel::ParcelPtr dispatch(const WorkerGetSceneInfoRequest&)
+        {
+            dispatch_not_implemented("WorkerGetSceneInfoRequest");
             return nullptr;
         }
 

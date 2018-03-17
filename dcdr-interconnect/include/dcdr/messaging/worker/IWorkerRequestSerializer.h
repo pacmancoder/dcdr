@@ -11,6 +11,7 @@ namespace Dcdr::Interconnect
     class WorkerPollTasksRequest;
     class WorkerCommitTasksRequest;
     class WorkerDownloadSceneRequest;
+    class WorkerGetSceneInfoRequest;
 
     class IWorkerRequestSerializer
     {
@@ -21,6 +22,7 @@ namespace Dcdr::Interconnect
         virtual IParcel::SerializedParcel serialize(const WorkerPollTasksRequest& parcel) = 0;
         virtual IParcel::SerializedParcel serialize(const WorkerCommitTasksRequest& parcel) = 0;
         virtual IParcel::SerializedParcel serialize(const WorkerDownloadSceneRequest& parcel) = 0;
+        virtual IParcel::SerializedParcel serialize(const WorkerGetSceneInfoRequest& parcel) = 0;
 
         virtual ~IWorkerRequestSerializer() = default;
     };

@@ -47,15 +47,24 @@ const std::vector<Worker::TaskArtifact>& WorkerCommitTasksRequest::get_artifacts
     return artifacts_;
 }
 
-WorkerDownloadSceneRequest::WorkerDownloadSceneRequest(uint32_t nodeId, uint32_t sceneId, uint64_t offset) :
-    WorkerRequest(nodeId), scene_(sceneId), offset_(offset) {}
+WorkerDownloadSceneRequest::WorkerDownloadSceneRequest(
+        uint32_t nodeId, uint32_t sceneId, uint64_t offset) :
+    WorkerRequest(nodeId), sceneId_(sceneId), offset_(offset) {}
 
 uint32_t WorkerDownloadSceneRequest::get_scene_id() const
 {
-    return scene_;
+    return sceneId_;
 }
 
 uint64_t WorkerDownloadSceneRequest::get_offset() const
 {
     return offset_;
+}
+
+WorkerGetSceneInfoRequest::WorkerGetSceneInfoRequest(uint32_t nodeId, uint32_t sceneId) :
+    WorkerRequest(nodeId), scene_(sceneId) {}
+
+uint32_t WorkerGetSceneInfoRequest::get_scene_id() const
+{
+    return scene_;
 }

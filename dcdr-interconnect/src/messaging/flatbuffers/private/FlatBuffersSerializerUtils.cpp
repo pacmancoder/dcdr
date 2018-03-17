@@ -119,8 +119,6 @@ SerializerUtils::serialize(flatbuffers::FlatBufferBuilder &builder, const Worker
             builder,
             taskInfo.taskId,
             taskInfo.sceneId,
-            taskInfo.sceneWidth,
-            taskInfo.sceneHeight,
             taskInfo.x,
             taskInfo.y,
             taskInfo.width,
