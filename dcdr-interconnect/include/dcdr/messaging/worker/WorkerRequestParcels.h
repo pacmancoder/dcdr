@@ -41,5 +41,6 @@ namespace Dcdr::Interconnect
     using WorkerPollTasksRequestParcel = ConcreteWorkerRequestParcel<WorkerPollTasksRequest>;
     using WorkerCommitTasksRequestParcel = ConcreteWorkerRequestParcel<WorkerCommitTasksRequest>;
     using WorkerDownloadSceneRequestParcel = ConcreteWorkerRequestParcel<WorkerDownloadSceneRequest>;
+    using WorkerGetSceneInfoRequestParcel = ConcreteWorkerRequestParcel<WorkerGetSceneInfoRequest>;
 
 }

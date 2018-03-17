@@ -8,6 +8,7 @@ namespace Dcdr::Interconnect
     class WorkerLoginResponse;
     class WorkerPollTasksResponse;
     class WorkerDownloadSceneResponse;
+    class WorkerGetSceneInfoResponse;
 
     class IWorkerResponseSerializer
     {
@@ -16,6 +17,7 @@ namespace Dcdr::Interconnect
         virtual IParcel::SerializedParcel serialize(const WorkerLoginResponse& parcel) = 0;
         virtual IParcel::SerializedParcel serialize(const WorkerPollTasksResponse& parcel) = 0;
         virtual IParcel::SerializedParcel serialize(const WorkerDownloadSceneResponse& parcel) = 0;
+        virtual IParcel::SerializedParcel serialize(const WorkerGetSceneInfoResponse& parcel) = 0;
 
         virtual ~IWorkerResponseSerializer() = default;
     };

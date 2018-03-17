@@ -13,24 +13,27 @@ namespace Dcdr::Server
     class Scene
     {
     public:
-        Scene(const std::string& path, const std::string& name, uint16_t width, uint16_t height);
+        Scene(
+                const std::string& sceneFileName,
+                uint32_t sceneFileId,
+                const std::string& name,
+                uint16_t width,
+                uint16_t height);
         Scene(Scene&& rhs) = default;
 
+        const std::string& get_scene_file_name() const;
+        uint32_t get_scene_file_id() const;
         const std::string& get_name() const;
 
         uint16_t get_width() const;
         uint16_t get_height() const;
 
-        uint64_t get_package_size();
-
-        std::vector<uint8_t> get_scene_part(uint64_t offset, uint32_t partSize);
-
     private:
+        std::string sceneFileName_;
+        uint32_t sceneFileId_;
         std::string name_;
         uint16_t width_;
         uint16_t height_;
-        std::optional<uint64_t> size_;
 
-        std::ifstream stream_;
     };
 }

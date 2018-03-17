@@ -40,7 +40,7 @@ int main(int argc, char* argv[])
         auto coreContext_ = std::make_shared<CoreContext>();
 
         FSSceneLoader sceneLoader(args.get_argument("scene-cache"));
-        sceneLoader.load_scenes(coreContext_->get_scenes());
+        sceneLoader.load(*coreContext_);
 
         auto commanderService = std::make_shared<CommanderService>(coreContext_);
         WebsocketAsyncServerTransport commanderTransport("61296", 10s);

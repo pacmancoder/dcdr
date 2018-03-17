@@ -112,8 +112,6 @@ Worker::TaskInfo DeserializerUtils::deserialize(const DcdrFlatBuffers::TaskInfo 
             {
                     taskInfo->taskId(),
                     taskInfo->sceneId(),
-                    taskInfo->sceneWidth(),
-                    taskInfo->sceneHeight(),
                     taskInfo->x(),
                     taskInfo->y(),
                     taskInfo->width(),

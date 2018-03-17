@@ -26,6 +26,7 @@ namespace Dcdr::Server
         Interconnect::IParcel::ParcelPtr dispatch(const Interconnect::WorkerPollTasksRequest &request) override;
         Interconnect::IParcel::ParcelPtr dispatch(const Interconnect::WorkerCommitTasksRequest &request) override;
         Interconnect::IParcel::ParcelPtr dispatch(const Interconnect::WorkerDownloadSceneRequest &request) override;
+        Interconnect::IParcel::ParcelPtr dispatch(const Interconnect::WorkerGetSceneInfoRequest &request) override;
 
     private:
         uint32_t connectionId_;

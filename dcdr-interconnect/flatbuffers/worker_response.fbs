@@ -8,11 +8,8 @@ table WorkerLoginResponse
 table TaskInfo
 {
     taskId: uint32;
-
     sceneId: uint32;
-    sceneWidth: uint16;
-    sceneHeight: uint16;
-
+    
     x: uint16;
     y: uint16;
     width: uint16;
@@ -44,12 +41,24 @@ table WorkerDownloadSceneResponse
     data: [ubyte];
 }
 
+table WorkerGetSceneInfoResponse
+{
+    nodeId: uint32;
+    sceneId: uint32;
+    
+    width: uint16;
+    height: uint16;
+
+    fileName: string;
+}
+
 union WorkerResponseData
 {
     WorkerServerStatusResponse,
     WorkerLoginResponse,
     WorkerPollTasksResponse,
-    WorkerDownloadSceneResponse
+    WorkerDownloadSceneResponse,
+    WorkerGetSceneInfoResponse
 }
 
 table WorkerResponse

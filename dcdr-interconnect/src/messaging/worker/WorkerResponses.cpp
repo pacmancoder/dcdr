@@ -58,3 +58,31 @@ const std::vector<uint8_t> &WorkerDownloadSceneResponse::get_data() const
 {
     return data_;
 }
+
+WorkerGetSceneInfoResponse::WorkerGetSceneInfoResponse(
+        uint32_t nodeId, uint32_t sceneId, uint16_t width, uint16_t height, const std::string &fileName) :
+    WorkerResponse(nodeId),
+    sceneId_(sceneId),
+    width_(width),
+    height_(height),
+    fileName_(fileName) {}
+
+uint32_t WorkerGetSceneInfoResponse::get_scene_id() const
+{
+    return sceneId_;
+}
+
+uint16_t WorkerGetSceneInfoResponse::get_width() const
+{
+    return width_;
+}
+
+uint16_t WorkerGetSceneInfoResponse::get_height() const
+{
+    return height_;
+}
+
+const std::string &WorkerGetSceneInfoResponse::get_file_name() const
+{
+    return fileName_;
+}

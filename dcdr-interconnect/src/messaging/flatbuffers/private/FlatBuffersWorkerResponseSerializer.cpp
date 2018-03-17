@@ -83,3 +83,19 @@ IParcel::SerializedParcel FlatBuffersWorkerResponseSerizlizer::serialize(const W
                         builder.CreateVector<uint8_t>(parcel.get_data()));
             });
 }
+
+IParcel::SerializedParcel FlatBuffersWorkerResponseSerizlizer::serialize(const WorkerGetSceneInfoResponse &parcel)
+{
+    return build_worker_response_parcel<DcdrFlatBuffers::WorkerGetSceneInfoResponse>(
+            [&parcel](flatbuffers::FlatBufferBuilder& builder) {
+                return DcdrFlatBuffers::CreateWorkerGetSceneInfoResponse(
+                        builder,
+                        parcel.get_node_id(),
+                        parcel.get_scene_id(),
+
+                        parcel.get_width(),
+                        parcel.get_height(),
+
+                        builder.CreateString(parcel.get_file_name()));
+            });
+}

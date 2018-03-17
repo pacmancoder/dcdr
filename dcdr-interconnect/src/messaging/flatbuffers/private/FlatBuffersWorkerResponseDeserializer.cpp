@@ -10,36 +10,48 @@ using namespace Dcdr::Interconnect::FlatBuffers;
 
 namespace
 {
-    IParcel::ParcelPtr deserialize(const DcdrFlatBuffers::WorkerLoginResponse* request)
+    IParcel::ParcelPtr deserialize(const DcdrFlatBuffers::WorkerLoginResponse* response)
     {
         return std::make_unique<WorkerLoginResponseParcel>(
-                request->nodeId());
+                response->nodeId());
     }
 
-    IParcel::ParcelPtr deserialize(const DcdrFlatBuffers::WorkerServerStatusResponse* request)
+    IParcel::ParcelPtr deserialize(const DcdrFlatBuffers::WorkerServerStatusResponse* response)
     {
         return std::make_unique<WorkerServerStatusResponseParcel>(
-                request->nodeId(),
-                DeserializerUtils::marshal(request->status()),
-                request->message()->str());
+                response->nodeId(),
+                DeserializerUtils::marshal(response->status()),
+                response->message()->str());
     }
 
-    IParcel::ParcelPtr deserialize(const DcdrFlatBuffers::WorkerPollTasksResponse* request)
+    IParcel::ParcelPtr deserialize(const DcdrFlatBuffers::WorkerPollTasksResponse* response)
     {
         return std::make_unique<WorkerPollTasksResponseParcel>(
-                request->nodeId(),
+                response->nodeId(),
                 DeserializerUtils::deserialize_vector<DcdrFlatBuffers::TaskInfo, Worker::TaskInfo>(
-                        request->taskList()));
+                        response->taskList()));
     }
 
-    IParcel::ParcelPtr deserialize(const DcdrFlatBuffers::WorkerDownloadSceneResponse* request)
+    IParcel::ParcelPtr deserialize(const DcdrFlatBuffers::WorkerDownloadSceneResponse* response)
     {
         return std::make_unique<WorkerDownloadSceneResponseParcel>(
-                request->nodeId(),
-                request->sceneId(),
-                request->offset(),
-                request->bytesLeft(),
-                std::vector<uint8_t>(request->data()->begin(), request->data()->end()));
+                response->nodeId(),
+                response->sceneId(),
+                response->offset(),
+                response->bytesLeft(),
+                std::vector<uint8_t>(response->data()->begin(), response->data()->end()));
+    }
+
+    IParcel::ParcelPtr deserialize(const DcdrFlatBuffers::WorkerGetSceneInfoResponse* response)
+    {
+        return std::make_unique<WorkerGetSceneInfoResponseParcel>(
+                response->nodeId(),
+                response->sceneId(),
+
+                response->width(),
+                response->height(),
+
+                response->fileName()->str());
     }
 }
 
@@ -58,6 +70,8 @@ FlatBuffersWorkerResponseDeserializer::deserialize(const DcdrFlatBuffers::Worker
             return ::deserialize(response->responseData_as_WorkerPollTasksResponse());
         case DcdrFlatBuffers::WorkerResponseData_WorkerDownloadSceneResponse:
             return ::deserialize(response->responseData_as_WorkerDownloadSceneResponse());
+        case DcdrFlatBuffers::WorkerResponseData_WorkerGetSceneInfoResponse:
+            return ::deserialize(response->responseData_as_WorkerGetSceneInfoResponse());
     }
 
     throw DeserializationNotImplementedException("<Unknown>");

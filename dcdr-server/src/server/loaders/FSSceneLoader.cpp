@@ -9,26 +9,29 @@ using namespace Dcdr::Server;
 FSSceneLoader::FSSceneLoader(const std::string& sceneCachePath) :
     sceneCachePath_(sceneCachePath) {}
 
-void FSSceneLoader::load_scenes(SharedResourceManager<Scene> &scenes)
+void FSSceneLoader::load(CoreContext& context)
 {
-    // TODO: Replace with scene meta info parsing
     std::string indexPath (sceneCachePath_ + "/index.txt");
     std::ifstream index(indexPath);
 
     for (;;)
     {
-        std::string scenePath;
+        std::string sceneFileName;
         std::string sceneName;
         uint16_t width = 0, height = 0;
 
-        index >> scenePath >> sceneName >> width >> height;
+        index >> sceneFileName >> sceneName >> width >> height;
 
         if (!index)
         {
             break;
         }
 
-        scenes.add(Scene(sceneCachePath_ + scenePath, sceneName, width, height));
+        auto sceneFileId = context.get_shared_files().add(
+                SharedFile(sceneCachePath_ + "/" + sceneFileName, SharedFile::AccessMode::Readonly));
+
+        context.get_scenes().add(Scene(
+                sceneFileName, sceneFileId, sceneName, width, height));
     }
 }
 
