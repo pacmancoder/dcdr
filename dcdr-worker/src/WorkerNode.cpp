@@ -15,9 +15,16 @@
 
 #include <dcdr/messaging/worker/WorkerInterconnectTypes.h>
 
+#include <dcdr/worker/SceneStorage.h>
+#include <dcdr/worker/SceneLoader.h>
+
+#include <dcdr/renderer/Scene.h>
+
 #include <iostream>
+#include <fstream>
 #include <type_traits>
 
+using namespace Dcdr;
 using namespace Dcdr::Worker;
 using namespace Dcdr::Logging;
 using namespace Dcdr::Interconnect;
@@ -63,14 +70,9 @@ namespace
     };
 }
 
-WorkerNode::WorkerNode(const std::string& sceneCache) :
-    impl_(std::make_unique<Impl>(sceneCache)) {}
-
-WorkerNode::~WorkerNode() = default;
-
 struct WorkerNode::Impl
 {
-    Impl(const std::string& sceneCache = "");
+    explicit Impl(const std::string& sceneCache = "");
 
     void run();
 
@@ -83,14 +85,25 @@ private:
     FlatBuffersParcelDeserializer deserializer_;
     FlatBuffersParcelSerializer serializer_;
 
-    std::string sceneCache_;
+
+    std::string tmpPath_;
+    SceneStorage sceneStorage_;
+    std::map<uint32_t, Renderer::Scene> scenes_;
 };
+
+WorkerNode::WorkerNode(const Utils::ArgsParser& args) :
+        impl_(std::make_unique<Impl>(args.get_argument("scene-cache"))) {}
+
+WorkerNode::~WorkerNode() = default;
+
 
 WorkerNode::Impl::Impl(const std::string& sceneCache) :
     transport_(nullptr),
     deserializer_(),
     serializer_(),
-    sceneCache_(sceneCache) {}
+    tmpPath_(sceneCache),
+    sceneStorage_(sceneCache),
+    scenes_() {}
 
 template<class ResponseType, class RequestParcelType, typename ResponseVisitFunc>
 void WorkerNode::Impl::perform_command(RequestParcelType&& request, ResponseVisitFunc&& func)
@@ -142,37 +155,66 @@ void WorkerNode::Impl::run()
 
     for(;;)
     {
+        // TODO. [INFO] This hydra will be refactored. Just for testing
         std::vector<Dcdr::Interconnect::Worker::TaskArtifact> artifacts;
         perform_command<WorkerPollTasksResponse>(
                 WorkerPollTasksRequestParcel(nodeId),
-                [&artifacts, nodeId](const WorkerPollTasksResponse response)
+                [this, &artifacts, nodeId](const WorkerPollTasksResponse& response)
                 {
                     for (const auto& task : response.get_tasks())
                     {
-                        log_info(std::string("Task: ")
-                                         .append("x: ").append(std::to_string(task.x))
-                                         .append("; y: ").append(std::to_string(task.y))
-                                         .append("; w: ").append(std::to_string(task.width))
-                                         .append("; h: ").append(std::to_string(task.height)));
+                        perform_command<WorkerGetSceneInfoResponse>(
+                                WorkerGetSceneInfoRequestParcel(nodeId, task.sceneId),
+                                [this, nodeId, &task](const WorkerGetSceneInfoResponse& sceneInfo)
+                                {
+                                    if (scenes_.find(sceneInfo.get_scene_id()) == scenes_.cend())
+                                    {
+                                        auto scene = scenes_.emplace(
+                                                sceneInfo.get_scene_id(),
+                                                Renderer::Scene(sceneInfo.get_width(), sceneInfo.get_height()));
 
+                                        if (!sceneStorage_.is_file_cached(sceneInfo.get_file_name()))
+                                        {
+                                            auto downloadHandle = sceneStorage_.cache_start(
+                                                    sceneInfo.get_file_name());
+
+                                            uint64_t offset = 0;
+                                            bool continueDownload = true;
+                                            while (continueDownload)
+                                            {
+                                                perform_command<WorkerDownloadSceneResponse>(
+                                                        WorkerDownloadSceneRequestParcel(nodeId, task.sceneId, offset),
+                                                        [this, downloadHandle, &offset, &continueDownload](const WorkerDownloadSceneResponse& part)
+                                                        {
+
+                                                            sceneStorage_.cache_write_chunk(downloadHandle, part.get_data());
+                                                            offset += part.get_data().size();
+
+                                                            if (part.get_bytes_left() == 0)
+                                                            {
+                                                                continueDownload = false;
+                                                            }
+                                                        });
+                                            }
+
+                                            sceneStorage_.cache_finish(downloadHandle);
+                                            SceneLoader loader(
+                                                    sceneStorage_.get_cached_file_path(sceneInfo.get_file_name()));
+                                            loader.load_to(scene.first->second);
+                                        }
+
+                                        log_info("Scene id: ", scene.first->first);
+                                    }
+                                });
 
                         std::vector<Dcdr::Types::MultisamplePixel> pixels;
-                        pixels.reserve(task.width * task.height);
-                        for (int y = 0; y < task.height; ++y)
+                        pixels.resize(task.width * task.height);
+                        for (auto& pixel : pixels)
                         {
-                            for (int x = 0; x < task.width; ++x)
-                            {
-                                if (nodeId == 1)
-                                {
-                                    pixels.push_back(Dcdr::Types::MultisamplePixel {
-                                            Dcdr::Types::Color(1.0f, 0.0f, 0.0f), 1});
-                                }
-                                else
-                                {
-                                    pixels.push_back(Dcdr::Types::MultisamplePixel {
-                                            Dcdr::Types::Color(0.0f, 1.0f, 0.0f), 1});
-                                }
-                            }
+                            pixel.samples = 1;
+                            pixel.color.r = 1.0;
+                            pixel.color.g = 1.0;
+                            pixel.color.b = 1.0;
                         }
 
                         artifacts.push_back(Dcdr::Interconnect::Worker::TaskArtifact
@@ -182,20 +224,24 @@ void WorkerNode::Impl::run()
                         });
                     }
                 });
+
         perform_command<WorkerServerStatusResponse>(
                 WorkerCommitTasksRequestParcel(nodeId, std::move(artifacts)),
                 [](const WorkerServerStatusResponse&)
                 {
-                    log_info("Sent work.");
                 });
 
         if (!std::cin.eof())
         {
-            break;
+            std::string value;
+
+            std::cin >> value;
+            if (value == "@exit")
+            {
+                break;
+            }
         }
     }
-
-    std::cin.get();
 
     perform_command<WorkerServerStatusResponse>(
             WorkerLogoutRequestParcel(nodeId),

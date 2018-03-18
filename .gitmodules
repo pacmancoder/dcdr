@@ -16,3 +16,6 @@
 [submodule "libs/nana-git"]
 	path = libs/nana-git
 	url = https://github.com/cnjinhao/nana.git
+[submodule "libs/sqlite-git"]
+	path = libs/sqlite-git
+	url = https://github.com/azadkuh/sqlite-amalgamation.git

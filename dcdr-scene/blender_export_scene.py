@@ -54,6 +54,10 @@ textures = {}
 
 print('[>>>>] Exporting bitmap textures...')
 
+for img in bpy.data.images:
+    if not img.users or (img.users == 1 and img.use_fake_user):
+        bpy.data.images.remove(img)
+
 imageCounter = 0
 bpy.context.scene.render.image_settings.file_format = 'PNG'
 
@@ -62,13 +66,14 @@ for texture in bpy.data.textures:
         assetName = 'tex_' + str(imageCounter) + '.png'
         texture.image.save_render(filepath = tmpDirectory + assetName) 
         dbCursor.execute('INSERT INTO Texture(type) VALUES(?)', ['BITMAP'])
+        textures[texture.name] = dbCursor.lastrowid
         dbCursor.execute('INSERT INTO BitmapTexture(id, format, path, channels, filter) VALUES(?, ?, ?, ?, ?)',
             [dbCursor.lastrowid, 'PNG', assetName, 'RGB', 'LINEAR'])
     else:
         print('[WARNING] Texture', texture.name, 'with id', imageCounter, 'has no assigned file')
         dbCursor.execute('INSERT INTO Texture(type) VALUES(?)', ['NONE'])
+        textures[texture.name] = dbCursor.lastrowid        
 
-    textures[texture.name] = imageCounter        
     imageCounter += 1
         
 print('[<<<<]', len(bpy.data.textures), 'textures written to the scene\n\n')
@@ -105,7 +110,7 @@ for material in bpy.data.materials:
         kDiffuse = material.diffuse_intensity
         
         kReflectance = material.raytrace_mirror.reflect_factor
-        kAmbient = material.ambient
+        kAmbient = material.get('ambient', 0.0)
         kGlossiness =  material.raytrace_mirror.gloss_factor
         
         kRefractionGlossiness = material.raytrace_transparency.gloss_factor        
@@ -138,7 +143,13 @@ meshCount = 0
 
 for object in bpy.data.objects:
     if object.type == 'MESH':
-        meshCount += 1        
+        print('[>>>>] Exporting ', object.name ,'...')
+        meshCount += 1
+        
+        objUV = None
+        if len(object.data.uv_layers) > 0:
+            objUV = object.data.uv_layers[0]
+                
         objType = object.get('mesh_type', 'mesh')
         if objType == 'sphere':
             dbCursor.execute("INSERT INTO Geometry(type) VALUES(?)", ['SPHERE'])
@@ -162,12 +173,12 @@ for object in bpy.data.objects:
                     vert = object.data.vertices[vert]
                                         
                     faceVertexPosBuffer += struct.pack('fff', vert.co[0], vert.co[1], vert.co[2])
-                    faceVertexNormalBuffer += struct.pack('fff', vert.normal[0], vert.normal[1], vert.normal[2])
-                    if object.data.uv_layers.active is not None:
-                        uv = object.data.uv_layers.active.data[loop].uv
-                        faceVertexUVBuffer += struct.pack('fff', uv[0], uv[1], uv[2])
+                    faceVertexNormalBuffer += struct.pack('fff', vert.normal[0], vert.normal[1], vert.normal[2])                                                           
+                    if objUV is not None:
+                        uv = objUV.data[loop].uv
+                        faceVertexUVBuffer += struct.pack('ff', uv[0], uv[1])
                     else:
-                        faceVertexUVBuffer += struct.pack('fff', 0.0, 0.0, 0.0)                                         
+                        faceVertexUVBuffer += struct.pack('ff', 0.0, 0.0)                                         
                         
                 vertexPositionBuffer += faceVertexPosBuffer
                 vertexNormalBuffer   += faceVertexNormalBuffer
@@ -214,5 +225,12 @@ tar.add(tmpDirectory, '')
 tar.close()
 
 print('[<<<<] Tar has been generated\n\n')
+
+print('[>>>>] Rebuilding index...')
+
+# TODO
+
+print('[<<<<] Index has been rebuilt\n\n')
+
 
 print('[SUCCESS] Scene export finished (' + uniqueId + '.tar)')

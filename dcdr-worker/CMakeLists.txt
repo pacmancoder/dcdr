@@ -11,6 +11,7 @@ set(SOURCES
         ${SOURCES_WORKER})
 
 include_directories(include)
+include_directories(${sqlite3_SOURCE_DIR})
 
 add_library(${PROJECT_NAME} STATIC ${INCLUDES} ${SOURCES})
 
@@ -18,7 +19,11 @@ target_link_libraries(${PROJECT_NAME} PRIVATE
         dcdr-common
         dcdr-transport
         dcdr-interconnect
-        dcdr-pathtracer)
+        dcdr-renderer
+        microtar
+        sqlite3
+        dl
+        pthread)
 
 target_link_libraries(${PROJECT_NAME} PUBLIC
         dcdr-logger)

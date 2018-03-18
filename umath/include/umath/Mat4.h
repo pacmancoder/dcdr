@@ -2,6 +2,7 @@
 
 #include <cstring>
 #include <algorithm>
+#include <cmath>
 #include <umath/Vec3.h>
 
 // TODO: matrix inverse
@@ -12,9 +13,9 @@ namespace UMath
     union UMat4
     {
     public:
-        static const size_t ELEMENTS = 16;
         static const size_t ROW_ELEMENTS = 4;
         static const size_t COL_ELEMENTS = 4;
+        static const size_t ELEMENTS = ROW_ELEMENTS * COL_ELEMENTS;
 
 #ifdef _MSC_VER
 #pragma warning(disable : 4201)
@@ -23,9 +24,9 @@ namespace UMath
         struct
         {
             T a11, a12, a13, a14,
-                    a21, a22, a23, a24,
-                    a31, a32, a33, a34,
-                    a41, a42, a43, a44;
+              a21, a22, a23, a24,
+              a31, a32, a33, a34,
+              a41, a42, a43, a44;
         };
 
 #ifdef _MSC_VER
@@ -34,15 +35,14 @@ namespace UMath
 
         T data[COL_ELEMENTS][ROW_ELEMENTS];
 
-    private:
-        UMat4()
-        { std::memset(data, 0, sizeof(data)); }
+    public:
+        UMat4(const UMat4<T>& rhs)
+        {
+            std::memcpy(data, rhs.data, sizeof(data));
+        }
 
-        UMat4(const T* buffer)
-        { std::memcpy(data, buffer, sizeof(data)); }
 
     public:
-
         UMat4<T> operator*(const UMat4<T>& rhs)
         {
             // TODO: SIMD, NEON
@@ -117,8 +117,57 @@ namespace UMath
         {
             UMat4 m;
             for (size_t i = 0; i < COL_ELEMENTS; ++i)
-                m.data[i][i] = 1;
+                m.data[i][i] = T(1);
             return m;
+        }
+
+        static UMat4<T> rotate_x(T angle)
+        {
+            UMat4<T> m;
+            m.a11 = T(1);
+            m.a22 = T(std::cos(angle));
+            m.a23 = T(-std::sin(angle));
+            m.a32 = T(std::sin(angle));
+            m.a32 = T(std::cos(angle));
+            m.a44 = T(1);
+        }
+
+        static UMat4<T> rotate_y(T angle)
+        {
+            UMat4<T> m;
+            m.a11 = T(std::cos(angle));
+            m.a13 = T(-std::sin(angle));
+            m.a22 = T(1);
+            m.a31 = T(std::sin(angle));
+            m.a33 = T(std::cos(angle));
+            m.a44 = T(1);
+        }
+
+        static UMat4<T> rotate_z(T angle)
+        {
+            UMat4<T> m;
+            m.a11 = T(std::cos(angle));
+            m.a12 = T(-std::sin(angle));
+            m.a21 = T(std::sin(angle));
+            m.a22 = T(std::cos(angle));
+            m.a33 = T(1);
+            m.a44 = T(1);
+        }
+
+        static UMat4<T> rotate(T angleX, T angleY, T angleZ)
+        {
+            return rotate_x(angleX) * rotate_y(angleY) * rotate_z(angleZ);
+        }
+
+    private:
+        UMat4()
+        {
+            std::memset(data, 0, sizeof(data));
+        }
+
+        UMat4(const T* buffer)
+        {
+            std::memcpy(data, buffer, sizeof(data));
         }
     };
 

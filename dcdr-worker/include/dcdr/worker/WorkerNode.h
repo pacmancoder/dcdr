@@ -1,13 +1,14 @@
 #pragma once
 
 #include <memory>
+#include <dcdr/utils/ArgsParser.h>
 
 namespace Dcdr::Worker
 {
     class WorkerNode
     {
     public:
-        WorkerNode(const std::string& sceneCache = "");
+        WorkerNode(const Utils::ArgsParser& args);
         ~WorkerNode();
 
         void run();
