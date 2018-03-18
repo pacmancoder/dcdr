@@ -4,13 +4,16 @@
 #include <dcdr/logging/StdoutLogWriter.h>
 #include <dcdr/utils/ArgsParser.h>
 
+#include <iostream>
+#include <dcdr/worker/SceneStorage.h>
+
 using namespace Dcdr::Logging;
 using namespace Dcdr::Worker;
 using namespace Dcdr::Utils;
 
 int main(int argc, char* argv[]) {
 
-    ArgsParser argsParser(argc, argv);
+    ArgsParser args(argc, argv);
 
     auto& logger = Logger::get_instance();
     logger.add_log_writer(std::unique_ptr<ILogWriter>(new StdoutLogWriter()));
@@ -18,9 +21,10 @@ int main(int argc, char* argv[]) {
         logger.enable_debug();
     #endif
 
-    WorkerNode node;
+    WorkerNode node(args);
 
     node.run();
+
 
     return 0;
 }

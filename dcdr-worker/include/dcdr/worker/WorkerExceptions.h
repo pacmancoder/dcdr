@@ -15,6 +15,20 @@ namespace Dcdr::Worker
     {
     public:
         explicit EmptyResponseException(const std::string& message) :
-                WorkerException("Worker", message) {}
+                WorkerException("Communication", message) {}
+    };
+
+    class FsIOException : public WorkerException
+    {
+    public:
+        explicit FsIOException(const std::string& message) :
+                WorkerException("SceneStorage", message) {}
+    };
+
+    class SceneLoaderException : public WorkerException
+    {
+    public:
+        explicit SceneLoaderException(const std::string& message) :
+                WorkerException("SceneLoader", message) {}
     };
 }

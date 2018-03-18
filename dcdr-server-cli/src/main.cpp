@@ -53,7 +53,17 @@ int main(int argc, char* argv[])
         workerTransport.register_request_processor(workerService);
         workerTransport.run();
 
-        std::cin.get();
+
+        for(;;)
+        {
+            std::string value;
+
+            std::cin >> value;
+            if (value == "@exit")
+            {
+                break;
+            }
+        }
 
         workerTransport.close();
         commanderTransport.close();
