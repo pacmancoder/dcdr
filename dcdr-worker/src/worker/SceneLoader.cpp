@@ -15,6 +15,22 @@ using namespace Dcdr::Worker;
 namespace
 {
     const char* LOG_PREFIX = "[SceneLoader] ";
+    /*
+    std::vector<uint8_t> load_scene_file(mtar_t* tar, std::string& path)
+    {
+        mtar_header_t header = {};
+        if (mtar_find(tar, path.c_str(), &header) != MTAR_ESUCCESS)
+        {
+            throw SceneLoaderException("Can't find speciifed file in scene");
+        }
+
+        std::vector<uint8_t> fileData;
+        fileData.resize(header.size);
+
+        mtar_read_data(tar, reinterpret_cast<char*>(fileData.data()), header.size);
+        return fileData;
+    }
+    */
 }
 
 struct SceneLoader::Impl
@@ -56,25 +72,6 @@ void SceneLoader::load_to(Renderer::Scene& /*scene*/)
         unpackedFile.write(buffer.data(), buffer.size());
         log_debug(LOG_PREFIX, "Unpacked scene.db file");
     }
-
-    sqlite3* dbHandle = nullptr;
-    std::unique_ptr<sqlite3, std::function<void(sqlite3*)>> sqliteDeleter(dbHandle, [](sqlite3* db){ sqlite3_close(db); });
-
-    if (sqlite3_open(unpackedDBPath.c_str(), &dbHandle) != SQLITE_OK)
-    {
-        log_debug("Can't open sqlite3 database:", sqlite3_errmsg(dbHandle));
-        throw SceneLoaderException("Can't open sqlite3 database");
-    }
-
-    sqlite3_stmt* cursor;
-    if (sqlite3_prepare_v2(dbHandle, "SELECT uid, name FROM Metainfo", -1, &cursor, nullptr) != SQLITE_OK)
-    {
-        log_debug("Can't query metainfo: ", sqlite3_errmsg(dbHandle));
-        throw SceneLoaderException("Can't query metainfo");
-    }
-
-    sqlite3_step(cursor);
-    log_info(LOG_PREFIX, "Parsing scene ", sqlite3_column_text(cursor, 1), " with uid ", sqlite3_column_text(cursor, 0));
 
 }
 
