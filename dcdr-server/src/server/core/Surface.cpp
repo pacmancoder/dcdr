@@ -58,8 +58,8 @@ Surface::Surface(uint16_t width, uint16_t height, uint16_t chunkSize) :
             chunks_[column][row] = std::make_shared<Chunk>(ChunkRect{
                     static_cast<uint16_t>(column * chunkSize),
                     static_cast<uint16_t>(row * chunkSize),
-                    chunkSize,
-                    chunkSize});
+                    static_cast<uint16_t>((column * chunkSize + chunkSize > width_) ? (width_ - column * chunkSize) : chunkSize),
+                    static_cast<uint16_t>((row * chunkSize + chunkSize > height_) ? (height_ - row * chunkSize ): chunkSize)});
         }
     }
 }

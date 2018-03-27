@@ -1,27 +1,29 @@
 #include <dcdr/renderer/Camera.h>
 #include <dcdr/Constants.h>
 
+#include <cmath>
+
 using namespace Dcdr;
 using namespace Dcdr::Renderer;
 
 Camera::Camera(
-        Types::Vec3 center,
-        Types::Vec3 eye,
+        Types::Vec3 pos,
         Types::Vec3 up,
-        Types::Real fov_y,
-        Types::Vec3 focal_point,
-        Types::Real aperture_radius)
+        Types::Vec3 direction,
+        Types::Real fovY,
+        Types::Real focalDistance,
+        Types::Real apertureRadius)
 {
-    pos_ = eye;
+    pos_ = pos;
 
-    w_ = (center - eye).normalize();
+    w_ = direction;
     u_ = (up ^ w_).normalize();
     v_ = (w_ ^ u_).normalize();
 
-    m_ = Types::Real(1.0 / tan(fov_y * Constants::Math::Pi / 360.0 ));
+    m_ = Types::Real(1.0 / std::tan(fovY / 2.0));
 
-    focalDistance_ = focal_point.len() * (((focal_point - center).normalize()) % w_);
-    apertureRadius_ = aperture_radius;
+    focalDistance_ = focalDistance;
+    apertureRadius_ = apertureRadius;
 }
 
 Types::Vec3 Camera::get_pos() const
@@ -36,13 +38,15 @@ Ray Camera::cast_ray(
         Types::Size height,
         Types::Real u,
         Types::Real v,
-        Utils::Rng& rng) const
+        Utils::Rng& /*rng*/) const
 {
     Types::Real aspect = Types::Real(width) / Types::Real(height);
     Types::Real px = ((x + u - Types::Real(0.5)) / (Types::Real(width) - 1)) * 2 - 1;
     Types::Real py = ((y + v - Types::Real(0.5)) / (Types::Real(height) - 1)) * 2 - 1;
     Types::Vec3 rayDir = (u_ * (-px * aspect) + v_ * (-py) + w_ * m_).normalize();
     Types::Vec3 rayPos = pos_;
+
+    /*
     if (apertureRadius_ > 0)
     {
         Types::Vec3 focal_point = pos_ + rayDir * focalDistance_;
@@ -51,5 +55,7 @@ Ray Camera::cast_ray(
         rayPos += u_ * (std::cos(angle) * radius) + v_ * (std::sin(angle) * radius);
         rayDir = (focal_point - rayPos).normalize();
     }
+    */
+
     return Ray {rayPos, rayDir};
 }

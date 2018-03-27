@@ -1,6 +1,7 @@
 #pragma once
 
 #include <memory>
+#include <map>
 
 #include <dcdr/Types.h>
 #include <dcdr/renderer/ITexture.h>
@@ -27,15 +28,21 @@ namespace Dcdr::Renderer
         Types::Real emittance;
     };
 
-    class IMaterial
+    class Material
     {
+    public:
+        using Textures = std::map<TextureType, std::shared_ptr<ITexture>>;
 
     public:
-        virtual bool is_texture_assigned(TextureType textureType) = 0;
-        virtual const ITexture& get_texture(TextureType textureType) = 0;
+        Material(const MaterialParams& params, Textures textures);
 
-        virtual MaterialParams& get_params() = 0;
+        bool is_texture_assigned(TextureType textureType) const;
+        const ITexture& get_texture(TextureType textureType) const;
 
-        virtual ~IMaterial() = default;
+        const MaterialParams& get_params() const;
+
+    private:
+        MaterialParams params_;
+        Textures textures_;
     };
 }

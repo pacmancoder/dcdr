@@ -1,17 +1,18 @@
 #pragma once
 
+#include <dcdr/database/ICursor.h>
+
 #include <memory>
 #include <cstdint>
 #include <vector>
 
 namespace Dcdr::Database
 {
-    class ICursor;
 
     class IStatement
     {
     public:
-        using CursorPtr = std::shared_ptr<ICursor>;
+        using CursorPtr = std::unique_ptr<ICursor>;
 
     public:
         virtual CursorPtr execute() = 0;

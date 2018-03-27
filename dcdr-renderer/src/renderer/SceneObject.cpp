@@ -16,7 +16,7 @@ bool SceneObject::intersect(const Ray& ray, IntersectionInfo& intersection) cons
     return objectGeometry_->intersect(ray, transformMatrix_, intersection);
 }
 
-IMaterial& SceneObject::get_material()
+const Material& SceneObject::get_material()
 {
     return *material_;
 }

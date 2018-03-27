@@ -19,12 +19,12 @@ namespace
 
 Dcdr::Database::SQLiteStatement::SQLiteStatement(sqlite3_stmt* statement) :
     statement_(std::shared_ptr<sqlite3_stmt>(statement, sqlite3_stmt_deleter)),
-    currentBindIndex_(0) {}
+    currentBindIndex_(1) {}
 
 
 Dcdr::Database::IStatement::CursorPtr Dcdr::Database::SQLiteStatement::execute()
 {
-    return std::make_shared<SQLiteCursor>(statement_);
+    return std::make_unique<SQLiteCursor>(statement_);
 }
 
 Dcdr::Database::IStatement &Dcdr::Database::SQLiteStatement::bind(int32_t value)

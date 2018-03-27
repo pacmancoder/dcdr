@@ -1,4 +1,5 @@
 
+#include <dcdr/Exception.h>
 #include <dcdr/worker/WorkerNode.h>
 #include <dcdr/logging/Logger.h>
 #include <dcdr/logging/StdoutLogWriter.h>
@@ -21,10 +22,20 @@ int main(int argc, char* argv[]) {
         logger.enable_debug();
     #endif
 
-    WorkerNode node(args);
+    try
+    {
+        WorkerNode node(args);
 
-    node.run();
-
+        node.run();
+    }
+    catch (const Dcdr::DcdrException& e)
+    {
+        log_error("CRITICAL ERROR: ", e.to_string());
+    }
+    catch (const std::exception& e)
+    {
+        log_error("UNKNOWN CRITICAL ERROR:", e.what());
+    }
 
     return 0;
 }

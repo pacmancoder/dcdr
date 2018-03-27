@@ -3,32 +3,32 @@
 Dcdr::Database::SQLiteCursor::SQLiteCursor(std::shared_ptr<sqlite3_stmt> statement) :
     statement_(std::move(statement)) {}
 
-bool Dcdr::Database::SQLiteCursor::is_null(size_t column)
+bool Dcdr::Database::SQLiteCursor::is_null(size_t column) const
 {
     return sqlite3_column_type(statement_.get(), static_cast<int>(column)) == SQLITE_NULL;
 }
 
-int32_t Dcdr::Database::SQLiteCursor::get_int(size_t column)
+int32_t Dcdr::Database::SQLiteCursor::get_int(size_t column) const
 {
     return sqlite3_column_int(statement_.get(), static_cast<int>(column));
 }
 
-int64_t Dcdr::Database::SQLiteCursor::get_int64(size_t column)
+int64_t Dcdr::Database::SQLiteCursor::get_int64(size_t column) const
 {
     return sqlite3_column_int64(statement_.get(), static_cast<int>(column));
 }
 
-double Dcdr::Database::SQLiteCursor::get_double(size_t column)
+double Dcdr::Database::SQLiteCursor::get_double(size_t column) const
 {
     return sqlite3_column_double(statement_.get(), static_cast<int>(column));
 }
 
-std::string Dcdr::Database::SQLiteCursor::get_string(size_t column)
+std::string Dcdr::Database::SQLiteCursor::get_string(size_t column) const
 {
     return std::string(reinterpret_cast<const char*>(sqlite3_column_text(statement_.get(), static_cast<int>(column))));
 }
 
-std::vector<uint8_t> Dcdr::Database::SQLiteCursor::get_blob(size_t column)
+std::vector<uint8_t> Dcdr::Database::SQLiteCursor::get_blob(size_t column) const
 {
     auto blobPtr = sqlite3_column_blob(statement_.get(), static_cast<int>(column));
     auto blobSize = sqlite3_column_bytes(statement_.get(), static_cast<int>(column));

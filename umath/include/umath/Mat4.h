@@ -126,10 +126,12 @@ namespace UMath
             UMat4<T> m;
             m.a11 = T(1);
             m.a22 = T(std::cos(angle));
-            m.a23 = T(-std::sin(angle));
-            m.a32 = T(std::sin(angle));
-            m.a32 = T(std::cos(angle));
+            m.a32 = T(-std::sin(angle));
+            m.a23 = T(std::sin(angle));
+            m.a33 = T(std::cos(angle));
             m.a44 = T(1);
+
+            return m;
         }
 
         static UMat4<T> rotate_y(T angle)
@@ -141,22 +143,49 @@ namespace UMath
             m.a31 = T(std::sin(angle));
             m.a33 = T(std::cos(angle));
             m.a44 = T(1);
+
+            return m;
         }
 
         static UMat4<T> rotate_z(T angle)
         {
             UMat4<T> m;
             m.a11 = T(std::cos(angle));
-            m.a12 = T(-std::sin(angle));
-            m.a21 = T(std::sin(angle));
+            m.a21 = T(-std::sin(angle));
+            m.a12 = T(std::sin(angle));
             m.a22 = T(std::cos(angle));
             m.a33 = T(1);
             m.a44 = T(1);
+
+            return m;
         }
 
-        static UMat4<T> rotate(T angleX, T angleY, T angleZ)
+        static UMat4<T> rotate(UVec3<T> eulerAngles)
         {
-            return rotate_x(angleX) * rotate_y(angleY) * rotate_z(angleZ);
+            return rotate_x(eulerAngles.x) * rotate_y(eulerAngles.y) * rotate_z(eulerAngles.z);
+        }
+
+        static UMat4<T> translate(UVec3<T> pos)
+        {
+            UMat4<T> m = identity();
+
+            m.a41 = T(pos.x);
+            m.a42 = T(pos.y);
+            m.a43 = T(pos.z);
+
+            return m;
+        }
+
+        static UMat4<T> scale(UVec3<T> scale)
+        {
+            UMat4<T> m;
+
+            m.a11 = T(scale.x);
+            m.a22 = T(scale.y);
+            m.a33 = T(scale.z);
+            m.a44 = T(1);
+
+            return m;
         }
 
     private:

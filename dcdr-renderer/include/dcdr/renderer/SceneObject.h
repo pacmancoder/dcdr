@@ -6,7 +6,7 @@
 #include <dcdr/Types.h>
 #include <dcdr/renderer/Ray.h>
 #include <dcdr/renderer/IntersectionInfo.h>
-#include <dcdr/renderer/IMaterial.h>
+#include <dcdr/renderer/Material.h>
 #include <dcdr/renderer/IObjectGeometry.h>
 
 namespace Dcdr::Renderer
@@ -15,7 +15,7 @@ namespace Dcdr::Renderer
     {
     public:
         using ObjectGeometryPtr = std::shared_ptr<IObjectGeometry>;
-        using MaterialPtr = std::shared_ptr<IMaterial>;
+        using MaterialPtr = std::shared_ptr<Material>;
 
     public:
         SceneObject(
@@ -24,7 +24,7 @@ namespace Dcdr::Renderer
                 const MaterialPtr& material);
 
         bool intersect(const Ray& ray, IntersectionInfo& intersection) const;
-        IMaterial& get_material();
+        const Material& get_material();
 
     private:
         Types::Mat4 transformMatrix_;

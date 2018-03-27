@@ -69,6 +69,9 @@ namespace UMath
         bool operator!=(const UVec3<T> rhs) const
         { return !(rhs == *this); }
 
+        UVec3<T> operator-() const
+        { return UVec3<T>(0) - *this; }
+
         UVec3<T>& operator+=(const UVec3<T> rhs)
         {
             x += rhs.x;

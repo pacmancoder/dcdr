@@ -1,3 +1,4 @@
+
 import bpy
 import struct
 import sqlite3
@@ -7,6 +8,7 @@ import tarfile
 import random
 import string
 import hashlib
+from mathutils import Vector
 
 dbScriptPath = '/home/pacmancoder/core/projects/dcdr/dcdr-scene/scenedb.sql'
 
@@ -39,14 +41,21 @@ print('[>>>>] Reading cameras...')
 for camera in bpy.data.cameras:
     obj = bpy.data.objects[camera.name]
     cameraPos =  struct.pack('fff', obj.location[0], obj.location[1], obj.location[2])
-    cameraRotation =  struct.pack('fff', obj.rotation_euler[0], obj.rotation_euler[1], obj.rotation_euler[2])
 
-    cameraAngle       = camera.angle
+    cameraUpData = obj.matrix_world.to_quaternion() * Vector((0.0, 1.0, 0.0))
+    cameraDirectionData = obj.matrix_world.to_quaternion() * Vector((0.0, 0.0, -1.0))
+    
+    cameraUp = struct.pack('fff', cameraUpData[0], cameraUpData[1], cameraUpData[2])
+    cameraDirection = struct.pack('fff', cameraDirectionData[0], cameraDirectionData[1], cameraDirectionData[2])
+
+    scene = bpy.data.scenes[0]
+    aspectRatio = scene.render.resolution_x / scene.render.resolution_y
+    cameraAngle       = camera.angle / aspectRatio
     cameraDofDistance = camera.dof_distance
     cameraDofRadius   = camera.get('dofRadius', 0.0)
     
-    dbCursor.execute('INSERT INTO Camera(pos, rotation, fov, dofDistance, dofRadius) VALUES(?, ?, ?, ?, ?)',
-        [cameraPos, cameraRotation, cameraAngle, cameraDofDistance, cameraDofRadius])
+    dbCursor.execute('INSERT INTO Camera(pos, up, direction, fov, dofDistance, dofRadius) VALUES(?, ?, ?, ?, ?, ?)',
+        [cameraPos, cameraUp, cameraDirection, cameraAngle, cameraDofDistance, cameraDofRadius])
 
 print('[<<<<]', len(bpy.data.cameras), 'cameras written to the scene\n\n')
 
@@ -124,7 +133,7 @@ for material in bpy.data.materials:
             kRefractionGlossiness, kTransmittance, kIOR, kEmittance]
             
         dbCursor.execute(
-            'INSERT INTO Material(bumpTexId, duffuseTexId, glossinessTexId, ' + 
+            'INSERT INTO Material(bumpTexId, diffuseTexId, glossinessTexId, ' + 
             'refractionGlossinessTexId, kAmbient, kDiffuse, kReflectance, kGlossiness, ' +
             'kRefractionGlossiness, kTransmittance, kIOR, kEmittance) ' +
             'VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)', materialTuple)
@@ -206,7 +215,8 @@ print('[<<<<]', meshCount, 'meshes written to the scene\n\n')
 print('[>>>>] Exporting scene metadata...')
 
 # Scene Metainfo
-uniqueId = ''.join([random.choice(string.ascii_lowercase + string.digits) for n in range(32)])
+#uniqueId = ''.join([random.choice(string.ascii_lowercase + string.digits) for n in range(32)])
+uniqueId = 'scene'
 scene = bpy.data.scenes[0]
 dbCursor.execute("INSERT INTO Metainfo(uid, name, renderWidth, renderHeight) VALUES(?, ?, ?, ?)",
     [uniqueId, scene.name, scene.render.resolution_x, scene.render.resolution_y])

@@ -52,7 +52,7 @@ CREATE TABLE BitmapTexture (
 CREATE TABLE Material (
     id INTEGER PRIMARY KEY,
     bumpTexId INTEGER,
-    duffuseTexId INTEGER,
+    diffuseTexId INTEGER,
     glossinessTexId INTEGER,
     refractionGlossinessTexId INTEGER,
     kAmbient REAL,
@@ -79,7 +79,8 @@ CREATE TABLE SceneObject (
 CREATE TABLE Camera (
     id INTEGER PRIMARY KEY,
     pos BLOB,
-    rotation BLOB,
+    up BLOB,
+    direction BLOB,
     fov REAL,
     dofDistance REAL,
     dofRadius REAL

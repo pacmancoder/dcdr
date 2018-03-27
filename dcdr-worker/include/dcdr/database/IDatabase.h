@@ -1,11 +1,11 @@
 #pragma once
 
+#include <dcdr/database/IStatement.h>
+
 #include <memory>
 
 namespace Dcdr::Database
 {
-    class IStatement;
-
     class IDatabase
     {
     public:

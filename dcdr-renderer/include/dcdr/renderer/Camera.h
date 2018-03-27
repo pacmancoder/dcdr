@@ -11,12 +11,12 @@ namespace Dcdr::Renderer
     {
     public:
         Camera(
-                Types::Vec3 center,
-                Types::Vec3 eye,
+                Types::Vec3 pos,
                 Types::Vec3 up,
-                Types::Real fov_y,
-                Types::Vec3 focal_point,
-                Types::Real aperture_radius);
+                Types::Vec3 direction,
+                Types::Real fovY,
+                Types::Real focalDistance,
+                Types::Real apertureRadius);
 
          Ray cast_ray(
                  Types::Real x,

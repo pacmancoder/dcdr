@@ -1,5 +1,7 @@
 #include <dcdr/server/service-commander/CommanderRouter.h>
 
+#include <dcdr/logging/Logger.h>
+
 #include <dcdr/messaging/commander/CommanderRequestParcels.h>
 #include <dcdr/messaging/commander/CommanderResponseParcels.h>
 
@@ -7,10 +9,12 @@
 
 using namespace Dcdr::Server;
 using namespace Dcdr::Interconnect;
+using namespace Dcdr::Logging;
 
 namespace
 {
-    const uint16_t DEFAULT_CHUNK_SIZE = 16;
+    const char* LOG_PREFIX = "[Server][CommandRouter] ";
+    const uint16_t DEFAULT_CHUNK_SIZE = 32;
 
     std::string generate_scene_name(const Job& job, CoreContext& context)
     {
@@ -119,12 +123,12 @@ IParcel::ParcelPtr CommanderRouter::dispatch(const CommanderAddJobRequest& reque
     coreContext_->get_scenes().access_read(request.get_scene_id(),
     [this, &request](const Scene& scene)
     {
-        coreContext_->get_jobs().add(Job {
-                request.get_scene_id(),
-                static_cast<uint16_t>(scene.get_width() * request.get_scale()),
-                static_cast<uint16_t>(scene.get_height() * request.get_scale()),
-                DEFAULT_CHUNK_SIZE
-        });
+        auto jobSurfaceWidth = static_cast<uint16_t>(scene.get_width() * request.get_scale());
+        auto jobSurfaceHeight =  static_cast<uint16_t>(scene.get_height() * request.get_scale());
+        log_debug(LOG_PREFIX, "Job for scene ", request.get_scene_id(), " added. Scene size: ",
+            jobSurfaceWidth, "x", jobSurfaceHeight);
+        coreContext_->get_jobs().add(
+                Job { request.get_scene_id(), jobSurfaceWidth, jobSurfaceHeight, DEFAULT_CHUNK_SIZE });
     });
 
     return std::make_unique<CommanderErrorResponseParcel>(Commander::CommanderErrorKind::Ok);

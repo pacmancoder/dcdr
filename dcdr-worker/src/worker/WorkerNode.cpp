@@ -19,6 +19,8 @@
 #include <dcdr/worker/SceneLoader.h>
 
 #include <dcdr/renderer/Scene.h>
+#include <dcdr/renderer/PathTracer.h>
+#include <dcdr/renderer/ChunkRenderer.h>
 
 #include <iostream>
 #include <fstream>
@@ -34,6 +36,8 @@ using namespace std::chrono_literals;
 
 namespace
 {
+    const char* LOG_PREFIX = "[Worker][WorkerNode] ";
+
     template<typename ResponseType>
     class WorkerResponseDispatcher : public IParcelDispatcher
     {
@@ -79,6 +83,8 @@ struct WorkerNode::Impl
     template<class ResponseType, class RequestParcelType, typename ResponseVisitFunc>
     void perform_command(RequestParcelType&& request, ResponseVisitFunc&& func);
 
+    void load_scene(const WorkerGetSceneInfoResponse& sceneInfo, uint32_t taskId);
+
 private:
     std::unique_ptr<WebsocketSyncClientTransport> transport_;
 
@@ -89,6 +95,8 @@ private:
     std::string tmpPath_;
     SceneStorage sceneStorage_;
     std::map<uint32_t, Renderer::Scene> scenes_;
+
+    uint32_t nodeId_;
 };
 
 WorkerNode::WorkerNode(const Utils::ArgsParser& args) :
@@ -103,7 +111,8 @@ WorkerNode::Impl::Impl(const std::string& sceneCache) :
     serializer_(),
     tmpPath_(sceneCache),
     sceneStorage_(sceneCache),
-    scenes_() {}
+    scenes_(),
+    nodeId_(0) {}
 
 template<class ResponseType, class RequestParcelType, typename ResponseVisitFunc>
 void WorkerNode::Impl::perform_command(RequestParcelType&& request, ResponseVisitFunc&& func)
@@ -134,6 +143,44 @@ void WorkerNode::Impl::perform_command(RequestParcelType&& request, ResponseVisi
     response->dispatch(responseDispatcher);
 }
 
+void WorkerNode::Impl::load_scene(const WorkerGetSceneInfoResponse& sceneInfo, uint32_t taskId)
+{
+    auto scene = scenes_.emplace(
+            taskId,
+            Renderer::Scene(sceneInfo.get_width(), sceneInfo.get_height()));
+
+    if (!sceneStorage_.is_file_cached(sceneInfo.get_file_name()))
+    {
+        auto downloadHandle = sceneStorage_.cache_start(
+                sceneInfo.get_file_name());
+
+        uint64_t offset = 0;
+        bool continueDownload = true;
+        while (continueDownload)
+        {
+            perform_command<WorkerDownloadSceneResponse>(
+                    WorkerDownloadSceneRequestParcel(nodeId_, sceneInfo.get_scene_id(), offset),
+                    [this, downloadHandle, &offset, &continueDownload](const WorkerDownloadSceneResponse& part)
+                    {
+
+                        sceneStorage_.cache_write_chunk(downloadHandle, part.get_data());
+                        offset += part.get_data().size();
+
+                        if (part.get_bytes_left() == 0)
+                        {
+                            continueDownload = false;
+                        }
+                    });
+        }
+
+        sceneStorage_.cache_finish(downloadHandle);
+        SceneLoader loader(
+                sceneStorage_.get_cached_file_path(sceneInfo.get_file_name()));
+        loader.load_to(scene.first->second);
+    }
+
+    log_info(LOG_PREFIX, "Scene #", scene.first->first, " loaded");
+}
 
 void WorkerNode::Impl::run()
 {
@@ -142,91 +189,55 @@ void WorkerNode::Impl::run()
     FlatBuffersParcelDeserializer deserializer;
     FlatBuffersParcelSerializer serializer;
 
-    uint32_t nodeId = 0;
 
     perform_command<WorkerLoginResponse>(
             WorkerLoginRequestParcel("Test_worker", "098f6bcd4621d373cade4e832627b4f6"),
-            [&nodeId](const WorkerLoginResponse& response)
+            [this](const WorkerLoginResponse& response)
             {
-                nodeId = response.get_node_id();
+                nodeId_ = response.get_node_id();
             });
 
-    log_info(std::string("Logged in. Node id: ").append(std::to_string(nodeId)));
+    log_info(std::string("Logged in. Node id: ").append(std::to_string(nodeId_)));
+
+    Renderer::ChunkRenderer chunkRenderer(
+            Renderer::ChunkRenderStrategy::Normal,
+            std::make_unique<Renderer::PathTracer>());
 
     for(;;)
     {
         // TODO. [INFO] This hydra will be refactored. Just for testing
         std::vector<Dcdr::Interconnect::Worker::TaskArtifact> artifacts;
         perform_command<WorkerPollTasksResponse>(
-                WorkerPollTasksRequestParcel(nodeId),
-                [this, &artifacts, nodeId](const WorkerPollTasksResponse& response)
+                WorkerPollTasksRequestParcel(nodeId_),
+                [this, &artifacts, &chunkRenderer](const WorkerPollTasksResponse& response)
                 {
                     for (const auto& task : response.get_tasks())
                     {
-                        perform_command<WorkerGetSceneInfoResponse>(
-                                WorkerGetSceneInfoRequestParcel(nodeId, task.sceneId),
-                                [this, nodeId, &task](const WorkerGetSceneInfoResponse& sceneInfo)
-                                {
-                                    if (scenes_.find(sceneInfo.get_scene_id()) == scenes_.cend())
-                                    {
-                                        auto scene = scenes_.emplace(
-                                                sceneInfo.get_scene_id(),
-                                                Renderer::Scene(sceneInfo.get_width(), sceneInfo.get_height()));
-
-                                        if (!sceneStorage_.is_file_cached(sceneInfo.get_file_name()))
-                                        {
-                                            auto downloadHandle = sceneStorage_.cache_start(
-                                                    sceneInfo.get_file_name());
-
-                                            uint64_t offset = 0;
-                                            bool continueDownload = true;
-                                            while (continueDownload)
-                                            {
-                                                perform_command<WorkerDownloadSceneResponse>(
-                                                        WorkerDownloadSceneRequestParcel(nodeId, task.sceneId, offset),
-                                                        [this, downloadHandle, &offset, &continueDownload](const WorkerDownloadSceneResponse& part)
-                                                        {
-
-                                                            sceneStorage_.cache_write_chunk(downloadHandle, part.get_data());
-                                                            offset += part.get_data().size();
-
-                                                            if (part.get_bytes_left() == 0)
-                                                            {
-                                                                continueDownload = false;
-                                                            }
-                                                        });
-                                            }
-
-                                            sceneStorage_.cache_finish(downloadHandle);
-                                            SceneLoader loader(
-                                                    sceneStorage_.get_cached_file_path(sceneInfo.get_file_name()));
-                                            loader.load_to(scene.first->second);
-                                        }
-
-                                        log_info("Scene id: ", scene.first->first);
-                                    }
-                                });
-
-                        std::vector<Dcdr::Types::MultisamplePixel> pixels;
-                        pixels.resize(task.width * task.height);
-                        for (auto& pixel : pixels)
+                        // check that scene is present in current run
+                        if (scenes_.find(task.sceneId) == scenes_.cend())
                         {
-                            pixel.samples = 1;
-                            pixel.color.r = 1.0;
-                            pixel.color.g = 1.0;
-                            pixel.color.b = 1.0;
+                            perform_command<WorkerGetSceneInfoResponse>(
+                                    WorkerGetSceneInfoRequestParcel(nodeId_, task.sceneId),
+                                    [this, &task](const WorkerGetSceneInfoResponse &sceneInfo)
+                                    {
+                                        // todo: sceneId -> jobId
+                                        load_scene(sceneInfo, task.sceneId);
+                                    });
                         }
+
+                        // actual rendering
 
                         artifacts.push_back(Dcdr::Interconnect::Worker::TaskArtifact
                         {
                             task.taskId,
-                            std::move(pixels)
+                            chunkRenderer.render_chunk(
+                                    scenes_.at(task.sceneId), task.x, task.y, task.width, task.height)
                         });
                     }
                 });
 
         perform_command<WorkerServerStatusResponse>(
-                WorkerCommitTasksRequestParcel(nodeId, std::move(artifacts)),
+                WorkerCommitTasksRequestParcel(nodeId_, std::move(artifacts)),
                 [](const WorkerServerStatusResponse&)
                 {
                 });
@@ -244,7 +255,7 @@ void WorkerNode::Impl::run()
     }
 
     perform_command<WorkerServerStatusResponse>(
-            WorkerLogoutRequestParcel(nodeId),
+            WorkerLogoutRequestParcel(nodeId_),
             [](const WorkerServerStatusResponse&)
             {
                 log_info(std::string("Logged out."));
@@ -253,12 +264,5 @@ void WorkerNode::Impl::run()
 
 void WorkerNode::run()
 {
-    try
-    {
-        impl_->run();
-    }
-    catch (std::exception e)
-    {
-        log_error(std::string("Error: ").append(e.what()));
-    }
+    impl_->run();
 }

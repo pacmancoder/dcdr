@@ -13,11 +13,20 @@ std::vector<Types::MultisamplePixel> ChunkRenderer::render_chunk(
     std::vector<Types::MultisamplePixel> pixels;
     pixels.reserve(width * height);
 
-    for(uint16_t dy = 0; dy < y + height; ++y)
+
+    const size_t ITERATIONS = 8;
+    for(uint16_t dy = y; dy < y + height; ++dy)
     {
-        for (uint16_t dx = 0; dx < x + width; ++x)
+        for (uint16_t dx = x; dx < x + width; ++dx)
         {
-            pixels.emplace_back(sampleRenderer_->render_sample(scene, dx, dy), 1);
+            Types::Color pixel(0);
+
+            for (size_t i = 0; i < ITERATIONS; ++i)
+            {
+                pixel += sampleRenderer_->render_sample(scene, dx, dy);
+            }
+
+            pixels.emplace_back(pixel, ITERATIONS);
         }
     }
 

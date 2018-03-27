@@ -11,7 +11,7 @@ namespace Dcdr::Database
     class SQLiteStatement : public IStatement
     {
     public:
-        SQLiteStatement(sqlite3_stmt* statement);
+        explicit SQLiteStatement(sqlite3_stmt* statement);
         CursorPtr execute() override;
 
         IStatement& bind(int32_t value) override;

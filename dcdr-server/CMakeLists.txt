@@ -34,7 +34,11 @@ add_library(${PROJECT_NAME} STATIC ${INCLUDE_FILES} ${SOURCE_FILES})
 target_include_directories(${PROJECT_NAME} PUBLIC include)
 
 target_link_libraries(${PROJECT_NAME} PUBLIC
-		dcdr-common dcdr-logger dcdr-interconnect dcdr-transport microtar)
+		dcdr-common
+		dcdr-logger
+		dcdr-interconnect
+		dcdr-transport
+		microtar)
 
 if (NOT WIN32)
 	target_link_libraries(${PROJECT_NAME} PRIVATE pthread)
