@@ -8,7 +8,8 @@ else()
     string(REGEX REPLACE "-Werror" "" CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS}")
 endif()
 
-add_subdirectory(gtest-git)
+#already included by mathfu-git
+#add_subdirectory(gtest-git)
 add_subdirectory(mongoose)
 add_subdirectory(microtar)
 
@@ -28,5 +29,7 @@ endif()
 add_subdirectory(nana-git)
 
 add_subdirectory(sqlite-git)
+
+add_subdirectory(glm-git)
 
 include_directories(${gtest_SOURCE_DIR}/include ${gtest_SOURCE_DIR})

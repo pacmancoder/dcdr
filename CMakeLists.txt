@@ -44,7 +44,6 @@ set(CMAKE_LIBRARY_OUTPUT_DIRECTORY_RELEASE ${CMAKE_BINARY_DIR}/bin)
 add_subdirectory(libs)
 
 # Core modules
-add_subdirectory(umath)
 add_subdirectory(dcdr-common)
 add_subdirectory(dcdr-logger)
 add_subdirectory(dcdr-renderer)

@@ -78,7 +78,7 @@ IParcel::ParcelPtr WorkerRouter::dispatch(const WorkerPollTasksRequest &request)
     coreContext_->get_jobs().iterate(
     [this, &request, &tasks](uint32_t jobId, Job& job)
     {
-        const size_t CHUNKS_PER_NODE = 3;
+        const size_t CHUNKS_PER_NODE = 4;
         const uint32_t MIN_SAMPLES = 128;
         const uint32_t MAX_SAMPLES = 1024;
 

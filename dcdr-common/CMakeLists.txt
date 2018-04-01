@@ -25,5 +25,5 @@ add_library(${PROJECT_NAME} STATIC ${SOURCE_FILES})
 
 set_property(TARGET ${PROJECT_NAME} PROPERTY POSITION_INDEPENDENT_CODE ON)
 
-target_link_libraries(${PROJECT_NAME} PUBLIC umath)
+target_link_libraries(${PROJECT_NAME} PUBLIC glm)
 target_include_directories(${PROJECT_NAME} PUBLIC include)

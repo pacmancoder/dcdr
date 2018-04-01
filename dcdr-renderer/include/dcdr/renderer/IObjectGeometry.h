@@ -10,8 +10,8 @@ namespace Dcdr::Renderer
     {
     public:
         virtual bool intersect(
-                const Ray& ray,
-                const Types::Mat4& objectTransform,
+                Ray ray,
+                Types::Mat4 objectTransform,
                 IntersectionInfo& intersection) const = 0;
 
         virtual ~IObjectGeometry() = default;

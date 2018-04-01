@@ -7,7 +7,8 @@ Material::Material(const MaterialParams &params, Material::Textures textures) :
 
 bool Material::is_texture_assigned(TextureType textureType) const
 {
-    return textures_.find(textureType) != textures_.cend();
+    auto foundTextureIter = textures_.find(textureType);
+    return foundTextureIter != textures_.cend() && foundTextureIter->second != nullptr;
 }
 
 const ITexture &Material::get_texture(TextureType textureType) const

@@ -41,7 +41,7 @@ Types::Vec3 Pixel::get_variance() const
 
 Types::Vec3 Pixel::get_standard_derivation() const
 {
-    return get_variance().pow(Types::Real(0.5));
+    return glm::pow(get_variance(), Types::Vec3(0.5f));
 }
 
 uint32_t Pixel::get_samples() const

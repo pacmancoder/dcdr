@@ -2,16 +2,12 @@
 #include <dcdr/Constants.h>
 #include <dcdr/utils/Rng.h>
 
-#include <umath/Operations.h>
-
 #include <cmath>
 
 using namespace Dcdr::Renderer;
 using namespace Dcdr::Types;
 using namespace Dcdr::Utils;
 using namespace Dcdr;
-
-using namespace UMath;
 
 namespace
 {
@@ -43,30 +39,33 @@ namespace
 
                 float a = sampler.generate_real(0, Constants::Math::Pi);
                 float b = sampler.generate_real(0, Constants::Math::Pi);
+
                 Vec3 generatedDir(
                         std::cos(a) * std::sin(b),
                         std::sin(a) * std::sin(b),
                         std::cos(b));
-                if (generatedDir % intersectionInfo.normal < 0)
+
+                if (glm::dot(generatedDir, intersectionInfo.normal) < 0.f)
                 {
                     generatedDir = -generatedDir;
                 }
 
                 color += get_diffuse(material, intersectionInfo.uv) *
                         trace_ray(scene, sampler, Ray {intersectionInfo.hit, generatedDir}, reflectionsLeft - 1) *
-                         (intersectionInfo.normal % generatedDir);
+                         glm::dot(intersectionInfo.normal, generatedDir);
+
             }
 
             /*
             if (material.get_params().reflectance > Real(0))
             {
-                Vec3 reflectedRay(ray.dir - 2 * (intersectionInfo.normal % ray.dir) * intersectionInfo.normal);
+                Vec3 reflectedRay(ray.dir - (glm::dot(intersectionInfo.normal, ray.dir) * intersectionInfo.normal) * 2.f);
                 color += trace_ray(
-                        scene, sampler, Ray { intersectionInfo.hit, reflectedRay.normalize() }, reflectionsLeft - 1) *
+                        scene, sampler, Ray { intersectionInfo.hit, glm::normalize(reflectedRay) }, reflectionsLeft - 1) *
                         material.get_params().reflectance *
-                        clamp(intersectionInfo.normal % -ray.dir, 0.f, 1.f);
+                        glm::dot(intersectionInfo.normal, -ray.dir);
             }
-*/
+            */
         }
 
         return color;
@@ -91,5 +90,5 @@ Color Dcdr::Renderer::PathTracer::render_sample(const Dcdr::Renderer::Scene& sce
             v,
             sampler);
 
-    return clamp(trace_ray(scene, sampler, ray), Vec3(0), Vec3(1));
+    return glm::clamp(trace_ray(scene, sampler, ray), Types::Real(0), Types::Real(1));
 }

@@ -25,6 +25,7 @@
 #include <iostream>
 #include <fstream>
 #include <type_traits>
+#include <future>
 
 using namespace Dcdr;
 using namespace Dcdr::Worker;
@@ -205,12 +206,13 @@ void WorkerNode::Impl::run()
 
     for(;;)
     {
-        // TODO. [INFO] This hydra will be refactored. Just for testing
         std::vector<Dcdr::Interconnect::Worker::TaskArtifact> artifacts;
         perform_command<WorkerPollTasksResponse>(
                 WorkerPollTasksRequestParcel(nodeId_),
                 [this, &artifacts, &chunkRenderer](const WorkerPollTasksResponse& response)
                 {
+                    std::map<uint32_t, std::future<std::vector<Types::MultisamplePixel>>> asyncTasks;
+
                     for (const auto& task : response.get_tasks())
                     {
                         // check that scene is present in current run
@@ -227,11 +229,19 @@ void WorkerNode::Impl::run()
 
                         // actual rendering
 
+
+                        asyncTasks.emplace(task.taskId, std::async(std::launch::async, [this, &chunkRenderer, &task]()
+                        {
+                            return chunkRenderer.render_chunk(
+                                    scenes_.at(task.sceneId), task.x, task.y, task.width, task.height);
+                        }));
+                    }
+
+                    for (auto& asyncTask : asyncTasks)
+                    {
                         artifacts.push_back(Dcdr::Interconnect::Worker::TaskArtifact
                         {
-                            task.taskId,
-                            chunkRenderer.render_chunk(
-                                    scenes_.at(task.sceneId), task.x, task.y, task.width, task.height)
+                            asyncTask.first, asyncTask.second.get()
                         });
                     }
                 });

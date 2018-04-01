@@ -4,12 +4,17 @@
 #include <dcdr/database/SQLiteDatabase.h>
 #include <dcdr/renderer/ColorTexture.h>
 #include <dcdr/renderer/SphereGeometry.h>
+#include <dcdr/renderer/MeshGeometry.h>
 
 #include <functional>
 #include <fstream>
 #include <cstdlib>
 
 #include <microtar.h>
+
+#define GLM_ENABLE_EXPERIMENTAL
+#include <glm/gtx/transform.hpp>
+#include <glm/gtx/euler_angles.hpp>
 
 using namespace Dcdr;
 using namespace Dcdr::Logging;
@@ -158,8 +163,8 @@ namespace
         auto geometryType = geometryTypeCursor->get_string(0);
         if (geometryType == "SPHERE")
         {
-            auto sphereGeometryQuery = database.prepare("SELECT radius FROM SphereGeomery");
-            auto sphereGeometryCursor = sphereGeometryQuery->execute();
+            auto sphereGeometryQuery = database.prepare("SELECT radius FROM SphereGeomery WHERE id = ? LIMIT 1");
+            auto sphereGeometryCursor = sphereGeometryQuery->bind(id).execute();
             if (!sphereGeometryCursor->next())
             {
                 throw SceneLoaderException(
@@ -170,6 +175,59 @@ namespace
 
             log_debug(LOG_PREFIX, "Loaded geometry #", id, " (SphereGeometry)");
             return std::make_shared<Renderer::SphereGeometry>(radius);
+        }
+
+        else if (geometryType == "MESH")
+        {
+            auto meshGeometryQuery = database.prepare(
+                    "SELECT points, normals, uvs FROM MeshGeometry WHERE id = ? LIMIT 1");
+            auto meshGeometryCursor = meshGeometryQuery->bind(id).execute();
+            if (!meshGeometryCursor->next())
+            {
+                throw SceneLoaderException(
+                        std::string("Can't find mesh geometry with id ").append(std::to_string(id)));
+            }
+
+            static const size_t POINTS_IN_TRIANGLE = 3;
+            static const size_t FLOATS_IN_VEC3 = 3;
+            static const size_t FLOATS_IN_VEC2 = 2;
+            static const size_t FLOATS_IN_TRIANGLE_VEC3 = POINTS_IN_TRIANGLE * FLOATS_IN_VEC3;
+            static const size_t FLOATS_IN_TRIANGLE_VEC2 = POINTS_IN_TRIANGLE * FLOATS_IN_VEC2;
+
+            auto pointsBlob = meshGeometryCursor->get_blob(0);
+            auto normalsBlob = meshGeometryCursor->get_blob(1);
+            auto uvsBlob = meshGeometryCursor->get_blob(2);
+
+            auto trianglesCount = pointsBlob.size() / FLOATS_IN_TRIANGLE_VEC3 / sizeof(float);
+            std::vector<Renderer::MeshGeometry::Triangle> triangles;
+            triangles.reserve(trianglesCount);
+
+            for (size_t triangleIdx = 0; triangleIdx < trianglesCount; ++triangleIdx)
+            {
+
+                Renderer::MeshGeometry::Triangle triangle = {};
+
+                for (size_t pointIdx = 0; pointIdx < 3; ++pointIdx)
+                {
+                    triangle.pos[pointIdx] = Types::Vec3(
+                            *(reinterpret_cast<const float*>(pointsBlob.data()) + (triangleIdx * FLOATS_IN_TRIANGLE_VEC3 + pointIdx * FLOATS_IN_VEC3) + 0),
+                            *(reinterpret_cast<const float*>(pointsBlob.data()) + (triangleIdx * FLOATS_IN_TRIANGLE_VEC3 + pointIdx * FLOATS_IN_VEC3) + 1),
+                            *(reinterpret_cast<const float*>(pointsBlob.data()) + (triangleIdx * FLOATS_IN_TRIANGLE_VEC3 + pointIdx * FLOATS_IN_VEC3) + 2));
+
+                    triangle.normal[pointIdx] = Types::Vec3(
+                            *(reinterpret_cast<const float*>(normalsBlob.data()) + (triangleIdx * FLOATS_IN_TRIANGLE_VEC3 + pointIdx * FLOATS_IN_VEC3) + 0),
+                            *(reinterpret_cast<const float*>(normalsBlob.data()) + (triangleIdx * FLOATS_IN_TRIANGLE_VEC3 + pointIdx * FLOATS_IN_VEC3) + 1),
+                            *(reinterpret_cast<const float*>(normalsBlob.data()) + (triangleIdx * FLOATS_IN_TRIANGLE_VEC3 + pointIdx * FLOATS_IN_VEC3) + 2));
+
+                    triangle.uv[pointIdx] = Types::Vec2(
+                            *(reinterpret_cast<const float*>(uvsBlob.data()) + (triangleIdx * FLOATS_IN_TRIANGLE_VEC2 + pointIdx * FLOATS_IN_VEC2) + 0),
+                            *(reinterpret_cast<const float*>(uvsBlob.data()) + (triangleIdx * FLOATS_IN_TRIANGLE_VEC2 + pointIdx * FLOATS_IN_VEC2) + 1));
+                }
+
+                triangles.push_back(triangle);
+            }
+
+            return std::make_shared<Renderer::MeshGeometry>(std::move(triangles));
         }
 
         log_warning(LOG_PREFIX, "Unsupported geometry type: ", geometryType);
@@ -214,10 +272,15 @@ namespace
                 log_warning(LOG_PREFIX, "Can't load texture for ", name, " assigning default texture");
             }
 
+
+            auto pos = blob_to_vec3(objectsCursor->get_blob(3));
+            auto euler_angles = blob_to_vec3(objectsCursor->get_blob(4));
+            auto scale = blob_to_vec3(objectsCursor->get_blob(5));
+
             Types::Mat4 transformationMatrix =
-                Types::Mat4::translate(blob_to_vec3(objectsCursor->get_blob(3))) *
-                Types::Mat4::rotate(blob_to_vec3(objectsCursor->get_blob(4))) *
-                Types::Mat4::scale(blob_to_vec3(objectsCursor->get_blob(5)));
+                    glm::translate(pos) *
+                    glm::eulerAngleXYX(euler_angles.x, euler_angles.y, euler_angles.z) *
+                    glm::scale(scale);
 
             log_debug(LOG_PREFIX, "Loaded object \"", name, "\"");
             scene.add_object(std::make_shared<Renderer::SceneObject>(transformationMatrix, geometry, material));

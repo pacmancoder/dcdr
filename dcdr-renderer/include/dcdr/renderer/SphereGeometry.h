@@ -11,8 +11,8 @@ namespace Dcdr::Renderer
         explicit SphereGeometry(Types::Real radius);
 
         bool intersect(
-                const Ray& ray,
-                const Types::Mat4& objectTransform,
+                Ray ray,
+                Types::Mat4 objectTransform,
                 IntersectionInfo& intersection) const override;
 
     private:

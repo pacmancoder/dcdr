@@ -13,7 +13,7 @@ target_link_libraries(${PROJECT_NAME} PUBLIC
         dcdr-common )
 
 target_link_libraries(${PROJECT_NAME} PRIVATE
-        dcdr-logger microtar umath)
+        dcdr-logger microtar)
 
 if (NOT WIN32)
     target_link_libraries(${PROJECT_NAME} PRIVATE pthread)

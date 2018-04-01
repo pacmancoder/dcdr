@@ -51,7 +51,7 @@ Scene::SceneObjectPtr Scene::intersect(const Ray& ray, IntersectionInfo& info) c
         if (object->intersect(ray, lastHit))
         {
             if (hitObject == nullptr ||
-                (info.hit - camera_->get_pos()).len() > (lastHit.hit - camera_->get_pos()).len())
+                glm::length(info.hit - ray.pos) > glm::length(lastHit.hit - ray.pos))
             {
                 info = lastHit;
                 hitObject = object;

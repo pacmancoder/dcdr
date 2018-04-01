@@ -17,8 +17,8 @@ Camera::Camera(
     pos_ = pos;
 
     w_ = direction;
-    u_ = (up ^ w_).normalize();
-    v_ = (w_ ^ u_).normalize();
+    u_ = glm::normalize(glm::cross(up , w_));
+    v_ = glm::normalize(glm::cross(w_ , u_));
 
     m_ = Types::Real(1.0 / std::tan(fovY / 2.0));
 
@@ -43,7 +43,7 @@ Ray Camera::cast_ray(
     Types::Real aspect = Types::Real(width) / Types::Real(height);
     Types::Real px = ((x + u - Types::Real(0.5)) / (Types::Real(width) - 1)) * 2 - 1;
     Types::Real py = ((y + v - Types::Real(0.5)) / (Types::Real(height) - 1)) * 2 - 1;
-    Types::Vec3 rayDir = (u_ * (-px * aspect) + v_ * (-py) + w_ * m_).normalize();
+    Types::Vec3 rayDir = glm::normalize(u_ * (-px * aspect) + v_ * (-py) + w_ * m_);
     Types::Vec3 rayPos = pos_;
 
     /*

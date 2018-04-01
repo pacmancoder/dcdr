@@ -1,8 +1,8 @@
 #pragma once
 
-#include <umath/Vec3.h>
+#include <glm/ext.hpp>
+
 #include <cstdint>
-#include <umath/Mat4.h>
 
 namespace Dcdr::Types
 {
@@ -16,12 +16,16 @@ namespace Dcdr::Types
     typedef float RealOffset;
     typedef float RealSize;
 
-    typedef UMath::UVec3<Real> Vec3;
-    typedef UMath::UMat4<Real> Mat4;
+    typedef glm::vec2 Vec2;
+    typedef glm::vec3 Vec3;
+    typedef glm::vec4 Vec4;
+    typedef glm::mat4 Mat4;
 
     typedef Vec3 Position;
     typedef Vec3 Direction;
     typedef Vec3 Color;
+    typedef Vec2 UVCoord;
+
 
     struct MultisamplePixel
     {
@@ -35,14 +39,5 @@ namespace Dcdr::Types
 
         Vec3 color;
         uint32_t samples;
-    };
-
-    struct UVCoord
-    {
-        UVCoord() = default;
-        UVCoord(Real u_, Real v_) : u(u_), v(v_) {};
-
-        Real u;
-        Real v;
     };
 }

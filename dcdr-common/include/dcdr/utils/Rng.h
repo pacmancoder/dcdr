@@ -14,7 +14,7 @@ namespace Dcdr::Utils
         Types::Real generate_real(Types::Real from, Types::Real to);
         Types::Size generate_int(Types::Size from, Types::Size to);
     private:
-        std::default_random_engine random_engine_;
+        std::mt19937 random_engine_;
     };
 
 }
