@@ -32,4 +32,6 @@ add_subdirectory(sqlite-git)
 
 add_subdirectory(glm-git)
 
+add_subdirectory(mcrt-dcdr)
+
 include_directories(${gtest_SOURCE_DIR}/include ${gtest_SOURCE_DIR})

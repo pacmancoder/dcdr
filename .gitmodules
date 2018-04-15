@@ -19,9 +19,9 @@
 [submodule "libs/sqlite-git"]
 	path = libs/sqlite-git
 	url = https://github.com/azadkuh/sqlite-amalgamation.git
-[submodule "libs/mathfu-git"]
-	path = libs/mathfu-git
-	url = https://github.com/google/mathfu.git
 [submodule "libs/glm-git"]
 	path = libs/glm-git
 	url = https://github.com/g-truc/glm.git
+[submodule "libs/mcrt-dcdr"]
+	path = libs/mcrt-dcdr
+	url = https://github.com/pacmancoder/mcrt-dcdr
