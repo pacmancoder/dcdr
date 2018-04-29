@@ -1,6 +1,6 @@
 #pragma once
 
-#include <dcdr/renderer/Scene.h>
+#include <mcrt/Scene.h>
 
 #include <string>
 #include <memory>
@@ -12,7 +12,7 @@ namespace Dcdr::Worker
     {
     public:
         explicit SceneLoader(const std::string& path);
-        void load_to(Renderer::Scene& scene);
+        void load_to(Mcrt::Scene& scene);
 
         ~SceneLoader();
 

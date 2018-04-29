@@ -23,7 +23,7 @@ target_link_libraries(${PROJECT_NAME} PRIVATE
         dcdr-common
         dcdr-transport
         dcdr-interconnect
-        dcdr-renderer
+        mcrt
         microtar
         sqlite3
         dl

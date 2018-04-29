@@ -1,10 +1,11 @@
+#include <dcdr/Types.h>
 #include <dcdr/worker/SceneLoader.h>
 #include <dcdr/worker/WorkerExceptions.h>
 #include <dcdr/logging/Logger.h>
 #include <dcdr/database/SQLiteDatabase.h>
-#include <dcdr/renderer/ColorTexture.h>
-#include <dcdr/renderer/SphereGeometry.h>
-#include <dcdr/renderer/MeshGeometry.h>
+
+#include <mcrt/Object3D.h>
+#include <mcrt/Camera.h>
 
 #include <functional>
 #include <fstream>
@@ -24,22 +25,6 @@ using namespace Dcdr::Database;
 namespace
 {
     const char* LOG_PREFIX = "[Worker][SceneLoader] ";
-    /*
-    std::vector<uint8_t> load_scene_file(mtar_t* tar, std::string& path)
-    {
-        mtar_header_t header = {};
-        if (mtar_find(tar, path.c_str(), &header) != MTAR_ESUCCESS)
-        {
-            throw SceneLoaderException("Can't find speciifed file in scene");
-        }
-
-        std::vector<uint8_t> fileData;
-        fileData.resize(header.size);
-
-        mtar_read_data(tar, reinterpret_cast<char*>(fileData.data()), header.size);
-        return fileData;
-    }
-    */
 
     Types::Vec3 blob_to_vec3(std::vector<uint8_t> blob)
     {
@@ -49,23 +34,35 @@ namespace
                 Types::Real(*(reinterpret_cast<float*>(blob.data()) + 2)));
     }
 
-    void load_camera(IDatabase& database, Renderer::Scene& scene)
+    void load_camera(IDatabase& database, Mcrt::Scene& scene)
     {
         auto cameraQuery = database.prepare(
                 "SELECT pos, up, direction, fov, dofDistance, dofRadius FROM Camera LIMIT 1");
         auto cameraCursor = cameraQuery->execute();
 
+        auto metaInfoQuery = database.prepare(
+                "SELECT renderWidth, renderHeight FROM Metainfo LIMIT 1");
+        auto metaInfoCursor = metaInfoQuery->execute();
+
+        if (!metaInfoCursor->next())
+        {
+            throw SceneLoaderException("Can't execute Scene meta info query");
+        }
+
+        auto baseWidth = metaInfoCursor->get_int(0);
+        auto baseHeight = metaInfoCursor->get_int(1);
+
+        Mcrt::Scene::SceneEntityId cameraId = 0;
         while(cameraCursor->next())
         {
-            scene.set_camera(std::make_unique<Dcdr::Renderer::Camera>(
-                    blob_to_vec3(cameraCursor->get_blob(0)),
-                    blob_to_vec3(cameraCursor->get_blob(1)),
-                    blob_to_vec3(cameraCursor->get_blob(2)),
-                    Types::Real(cameraCursor->get_double(3)),
-                    Types::Real(cameraCursor->get_double(4)),
-                    Types::Real(cameraCursor->get_double(5))
-            ));
-            
+            auto eye = blob_to_vec3(cameraCursor->get_blob(0));
+            auto direction = blob_to_vec3(cameraCursor->get_blob(2));
+            auto center = eye + direction * 1.f;
+            auto up = blob_to_vec3(cameraCursor->get_blob(1));
+            auto fov = Types::Real(cameraCursor->get_double(3));
+
+            scene.AddCamera(cameraId++, std::make_shared<Mcrt::Camera>(
+                    eye, center, up, fov, baseWidth, baseHeight));
         }
     }
 
