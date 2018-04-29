@@ -51,15 +51,12 @@ CREATE TABLE BitmapTexture (
 
 CREATE TABLE Material (
     id INTEGER PRIMARY KEY,
-    bumpTexId INTEGER,
     diffuseTexId INTEGER,
-    glossinessTexId INTEGER,
-    refractionGlossinessTexId INTEGER,
-    kAmbient REAL,
+    specularTexId INTEGER,
     kDiffuse REAL,
+    kSpecular REAL,
     kReflectance REAL,
     kGlossiness REAL,
-    kRefractionGlossiness REAL,
     kTransmittance REAL,
     kIOR REAL,
     kEmittance REAL

@@ -18,9 +18,7 @@
 #include <dcdr/worker/SceneStorage.h>
 #include <dcdr/worker/SceneLoader.h>
 
-#include <dcdr/renderer/Scene.h>
-#include <dcdr/renderer/PathTracer.h>
-#include <dcdr/renderer/ChunkRenderer.h>
+#include <mcrt/SurfaceRenderer.h>
 
 #include <iostream>
 #include <fstream>
@@ -95,7 +93,7 @@ private:
 
     std::string tmpPath_;
     SceneStorage sceneStorage_;
-    std::map<uint32_t, Renderer::Scene> scenes_;
+    std::map<uint32_t, Mcrt::Scene> scenes_;
 
     uint32_t nodeId_;
 };
@@ -146,9 +144,7 @@ void WorkerNode::Impl::perform_command(RequestParcelType&& request, ResponseVisi
 
 void WorkerNode::Impl::load_scene(const WorkerGetSceneInfoResponse& sceneInfo, uint32_t taskId)
 {
-    auto scene = scenes_.emplace(
-            taskId,
-            Renderer::Scene(sceneInfo.get_width(), sceneInfo.get_height()));
+    auto scene = scenes_.emplace(taskId, Mcrt::Scene(sceneInfo.get_width(), sceneInfo.get_height()));
 
     if (!sceneStorage_.is_file_cached(sceneInfo.get_file_name()))
     {
@@ -200,16 +196,14 @@ void WorkerNode::Impl::run()
 
     log_info(std::string("Logged in. Node id: ").append(std::to_string(nodeId_)));
 
-    Renderer::ChunkRenderer chunkRenderer(
-            Renderer::ChunkRenderStrategy::Normal,
-            std::make_unique<Renderer::PathTracer>());
+    Mcrt::SurfaceRenderer surfaceRenderer;
 
     for(;;)
     {
         std::vector<Dcdr::Interconnect::Worker::TaskArtifact> artifacts;
         perform_command<WorkerPollTasksResponse>(
                 WorkerPollTasksRequestParcel(nodeId_),
-                [this, &artifacts, &chunkRenderer](const WorkerPollTasksResponse& response)
+                [this, &artifacts, &surfaceRenderer](const WorkerPollTasksResponse& response)
                 {
                     std::map<uint32_t, std::future<std::vector<Types::MultisamplePixel>>> asyncTasks;
 
@@ -230,10 +224,22 @@ void WorkerNode::Impl::run()
                         // actual rendering
 
 
-                        asyncTasks.emplace(task.taskId, std::async(std::launch::async, [this, &chunkRenderer, &task]()
+                        asyncTasks.emplace(task.taskId, std::async(std::launch::async, [this, &surfaceRenderer, &task]()
                         {
-                            return chunkRenderer.render_chunk(
-                                    scenes_.at(task.sceneId), task.x, task.y, task.width, task.height);
+                            auto& scene = scenes_.at(task.sceneId);
+
+                            auto frameInfo = Mcrt::FrameInfo {scene.get_frame_width(), scene.get_frame_height()};
+                            auto chunkInfo = Mcrt::ChunkInfo {task.x, task.y, task.width, task.height};
+
+                            auto rawData = surfaceRenderer.RenderChunk(scene, frameInfo, chunkInfo);
+
+                            auto multisamplePixels = std::vector<Types::MultisamplePixel>(rawData.size());
+                            for (size_t i = 0; i < multisamplePixels.size(); ++i)
+                            {
+                                multisamplePixels[i].color = Types::Color(rawData[i][0], rawData[i][1], rawData[i][2]);
+                            }
+
+                            return multisamplePixels;
                         }));
                     }
 

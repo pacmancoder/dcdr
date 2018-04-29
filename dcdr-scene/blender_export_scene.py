@@ -95,55 +95,51 @@ for material in bpy.data.materials:
     if material.type == 'SURFACE':
 
         diffuseMap = None
-        bumpMap = None
-        glossinessMap = None
-        refractionGlossinessMap = None
+        specularMap = None
                 
         for textureSlot in material.texture_slots:
             if textureSlot is not None:
                 if textureSlot.use_map_color_diffuse:
                     diffuseMap = textures[textureSlot.name]
-                elif textureSlot.use_map_normal:
-                    bumpMap = textures[textureSlot.name]
-                elif textureSlot.use_map_hardness:
-                    glossinessMap = textures[textureSlot.name]
-                elif textureSlot.use_map_translucency:
-                    refractionGlossinessMap = textures[textureSlot.name]
+                elif textureSlot.use_map_specular:
+                    specularMap = textures[textureSlot.name]
         
         if diffuseMap is None:
             dbCursor.execute('INSERT INTO Texture(type) VALUES(?)', ['COLOR'])
             diffuseMap = dbCursor.lastrowid
             dbCursor.execute('INSERT INTO ColorTexture(id, r, g, b) VALUES(?, ?, ?, ?)',
-                [diffuseMap, material.diffuse_color.r, material.diffuse_color.g, material.diffuse_color.b])            
+                [diffuseMap, material.diffuse_color.r, material.diffuse_color.g, material.diffuse_color.b])
+        
+        if specularMap is None:
+            dbCursor.execute('INSERT INTO Texture(type) VALUES(?)', ['COLOR'])
+            specularMap = dbCursor.lastrowid
+            dbCursor.execute('INSERT INTO ColorTexture(id, r, g, b) VALUES(?, ?, ?, ?)',
+                [specularMap, material.specular_color.r, material.specular_color.g, material.specular_color.b])        
         
         kDiffuse = material.diffuse_intensity
+        kSpecular = material.specular_intensity
         
         kReflectance = material.raytrace_mirror.reflect_factor
-        kAmbient = material.get('ambient', 0.0)
         kGlossiness =  material.raytrace_mirror.gloss_factor
-        
-        kRefractionGlossiness = material.raytrace_transparency.gloss_factor        
+          
         kTransmittance = max(0, min(1.0 - material.alpha, 1))
         kIOR = material.raytrace_transparency.ior
         
         kEmittance = material.emit
         
-        materialTuple = [bumpMap, diffuseMap, glossinessMap, refractionGlossinessMap,
-            kAmbient, kDiffuse, kReflectance, kGlossiness,
+        materialTuple = [
+            bumpMap, diffuseMap, kDiffuse, kReflectance, kGlossiness,
             kRefractionGlossiness, kTransmittance, kIOR, kEmittance]
             
         dbCursor.execute(
-            'INSERT INTO Material(bumpTexId, diffuseTexId, glossinessTexId, ' + 
-            'refractionGlossinessTexId, kAmbient, kDiffuse, kReflectance, kGlossiness, ' +
-            'kRefractionGlossiness, kTransmittance, kIOR, kEmittance) ' +
-            'VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)', materialTuple)
+            'INSERT INTO Material(diffuseTexId, specularTexId, kDiffuse, kSpecular, kReflectance, kGlossiness, kTransmittance, kIOR, kEmittance) ' +
+            'VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?)', materialTuple)
 
         materials[material.name] = dbCursor.lastrowid
-        
     else:
         print("[ERROR]: ", material.type, 'material type is not supported')
         raise
-print('wtf')
+
 print('[<<<<]', len(bpy.data.materials), 'materials written to the scene\n\n')
 
 print('[>>>>] Exporting meshes...')
