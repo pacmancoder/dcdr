@@ -3,6 +3,8 @@
 
 using namespace Dcdr::Server;
 
+#include <glm/glm.hpp>
+
 namespace
 {
     template<typename T>
@@ -115,6 +117,15 @@ SurfaceBuffer Surface::get_surface_buffer(
                 {
                     auto pixelOffset = startPixelOffset + (rowSize * y + x * 3) / scaleDownFactor;
                     auto color = chunk->get_pixels()[y * chunkBounds.w + x].color;
+
+                    // gamma correction
+
+                    const float GAMMA = 2.2;
+
+                    color.x = glm::clamp(glm::pow(color.x, GAMMA), 0.0f, 1.0f);
+                    color.y = glm::clamp(glm::pow(color.y, GAMMA), 0.0f, 1.0f);
+                    color.z = glm::clamp(glm::pow(color.z, GAMMA), 0.0f, 1.0f);
+
                     buffer.data[pixelOffset + 0] =
                             static_cast<uint8_t>(clamp_integer<size_t>(static_cast<size_t>(color.r * 255), 0, 255));
                     buffer.data[pixelOffset + 1] =

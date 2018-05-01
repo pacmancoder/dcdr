@@ -127,12 +127,10 @@ for material in bpy.data.materials:
         
         kEmittance = material.emit
         
-        materialTuple = [
-            bumpMap, diffuseMap, kDiffuse, kReflectance, kGlossiness,
-            kRefractionGlossiness, kTransmittance, kIOR, kEmittance]
+        materialTuple = [diffuseMap, specularMap, kDiffuse, kSpecular, kReflectance, kGlossiness,kTransmittance, kIOR, kEmittance]
             
         dbCursor.execute(
-            'INSERT INTO Material(diffuseTexId, specularTexId, kDiffuse, kSpecular, kReflectance, kGlossiness, kTransmittance, kIOR, kEmittance) ' +
+            'INSERT INTO Material(diffuseTexId, specularTexId, kDiffuse, kSpecular, kReflectance, kGlossiness, kTransmittance, kIOR, kEmittance) ' 
             'VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?)', materialTuple)
 
         materials[material.name] = dbCursor.lastrowid

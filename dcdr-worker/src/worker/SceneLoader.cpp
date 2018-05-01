@@ -41,29 +41,16 @@ namespace
                 "SELECT pos, up, direction, fov, dofDistance, dofRadius FROM Camera LIMIT 1");
         auto cameraCursor = cameraQuery->execute();
 
-        auto metaInfoQuery = database.prepare(
-                "SELECT renderWidth, renderHeight FROM Metainfo LIMIT 1");
-        auto metaInfoCursor = metaInfoQuery->execute();
-
-        if (!metaInfoCursor->next())
-        {
-            throw SceneLoaderException("Can't execute Scene meta info query");
-        }
-
-        auto baseWidth = metaInfoCursor->get_int(0);
-        auto baseHeight = metaInfoCursor->get_int(1);
-
         Mcrt::Scene::SceneEntityId cameraId = 0;
         while(cameraCursor->next())
         {
-            auto eye = blob_to_vec3(cameraCursor->get_blob(0));
-            auto direction = blob_to_vec3(cameraCursor->get_blob(2));
-            auto center = eye + direction * 1.f;
+            auto pos = blob_to_vec3(cameraCursor->get_blob(0));
             auto up = blob_to_vec3(cameraCursor->get_blob(1));
+            auto direction = blob_to_vec3(cameraCursor->get_blob(2));
             auto fov = Types::Real(cameraCursor->get_double(3));
 
             scene.AddCamera(cameraId++, std::make_shared<Mcrt::Camera>(
-                    eye, center, up, fov, baseWidth, baseHeight));
+                    pos, up, direction, fov, 0, 0));
         }
     }
 
@@ -128,6 +115,7 @@ namespace
         material->reflectance = static_cast<float>(materialCursor->get_double(4));
         // roughness from glossiness
         material->diffuse_roughness = 1.0f - static_cast<float>(materialCursor->get_double(5));
+        log_debug("roughness:", 1.0f - static_cast<float>(materialCursor->get_double(5)));
         material->transmissivity = static_cast<float>(materialCursor->get_double(6));
         material->refraction_index = static_cast<float>(materialCursor->get_double(7));
         material->emittance = static_cast<float>(materialCursor->get_double(8));
@@ -136,89 +124,7 @@ namespace
         log_debug(LOG_PREFIX, "Loaded material #", id);
         return material;
     }
-/*
-    std::shared_ptr<Renderer::IObjectGeometry> load_geometry(IDatabase& database, int32_t id)
-    {
-        auto geometryTypeQuery = database.prepare("SELECT type FROM Geometry WHERE id = ? LIMIT 1");
-        auto geometryTypeCursor = geometryTypeQuery->bind(id).execute();
-        if (!geometryTypeCursor->next())
-        {
-            throw SceneLoaderException(std::string("No geometry found with id ").append(std::to_string(id)));
-        }
-        auto geometryType = geometryTypeCursor->get_string(0);
-        if (geometryType == "SPHERE")
-        {
-            auto sphereGeometryQuery = database.prepare("SELECT radius FROM SphereGeomery WHERE id = ? LIMIT 1");
-            auto sphereGeometryCursor = sphereGeometryQuery->bind(id).execute();
-            if (!sphereGeometryCursor->next())
-            {
-                throw SceneLoaderException(
-                        std::string("Can't find sphere geometry with id ").append(std::to_string(id)));
-            }
 
-            auto radius = sphereGeometryCursor->get_double(0);
-
-            log_debug(LOG_PREFIX, "Loaded geometry #", id, " (SphereGeometry)");
-            return std::make_shared<Renderer::SphereGeometry>(radius);
-        }
-
-        else if (geometryType == "MESH")
-        {
-            auto meshGeometryQuery = database.prepare(
-                    "SELECT points, normals, uvs FROM MeshGeometry WHERE id = ? LIMIT 1");
-            auto meshGeometryCursor = meshGeometryQuery->bind(id).execute();
-            if (!meshGeometryCursor->next())
-            {
-                throw SceneLoaderException(
-                        std::string("Can't find mesh geometry with id ").append(std::to_string(id)));
-            }
-
-            static const size_t POINTS_IN_TRIANGLE = 3;
-            static const size_t FLOATS_IN_VEC3 = 3;
-            static const size_t FLOATS_IN_VEC2 = 2;
-            static const size_t FLOATS_IN_TRIANGLE_VEC3 = POINTS_IN_TRIANGLE * FLOATS_IN_VEC3;
-            static const size_t FLOATS_IN_TRIANGLE_VEC2 = POINTS_IN_TRIANGLE * FLOATS_IN_VEC2;
-
-            auto pointsBlob = meshGeometryCursor->get_blob(0);
-            auto normalsBlob = meshGeometryCursor->get_blob(1);
-            auto uvsBlob = meshGeometryCursor->get_blob(2);
-
-            auto trianglesCount = pointsBlob.size() / FLOATS_IN_TRIANGLE_VEC3 / sizeof(float);
-            std::vector<Renderer::MeshGeometry::Triangle> triangles;
-            triangles.reserve(trianglesCount);
-
-            for (size_t triangleIdx = 0; triangleIdx < trianglesCount; ++triangleIdx)
-            {
-
-                Renderer::MeshGeometry::Triangle triangle = {};
-
-                for (size_t pointIdx = 0; pointIdx < 3; ++pointIdx)
-                {
-                    triangle.pos[pointIdx] = Types::Vec3(
-                            *(reinterpret_cast<const float*>(pointsBlob.data()) + (triangleIdx * FLOATS_IN_TRIANGLE_VEC3 + pointIdx * FLOATS_IN_VEC3) + 0),
-                            *(reinterpret_cast<const float*>(pointsBlob.data()) + (triangleIdx * FLOATS_IN_TRIANGLE_VEC3 + pointIdx * FLOATS_IN_VEC3) + 1),
-                            *(reinterpret_cast<const float*>(pointsBlob.data()) + (triangleIdx * FLOATS_IN_TRIANGLE_VEC3 + pointIdx * FLOATS_IN_VEC3) + 2));
-
-                    triangle.normal[pointIdx] = Types::Vec3(
-                            *(reinterpret_cast<const float*>(normalsBlob.data()) + (triangleIdx * FLOATS_IN_TRIANGLE_VEC3 + pointIdx * FLOATS_IN_VEC3) + 0),
-                            *(reinterpret_cast<const float*>(normalsBlob.data()) + (triangleIdx * FLOATS_IN_TRIANGLE_VEC3 + pointIdx * FLOATS_IN_VEC3) + 1),
-                            *(reinterpret_cast<const float*>(normalsBlob.data()) + (triangleIdx * FLOATS_IN_TRIANGLE_VEC3 + pointIdx * FLOATS_IN_VEC3) + 2));
-
-                    triangle.uv[pointIdx] = Types::Vec2(
-                            *(reinterpret_cast<const float*>(uvsBlob.data()) + (triangleIdx * FLOATS_IN_TRIANGLE_VEC2 + pointIdx * FLOATS_IN_VEC2) + 0),
-                            *(reinterpret_cast<const float*>(uvsBlob.data()) + (triangleIdx * FLOATS_IN_TRIANGLE_VEC2 + pointIdx * FLOATS_IN_VEC2) + 1));
-                }
-
-                triangles.push_back(triangle);
-            }
-
-            return std::make_shared<Renderer::MeshGeometry>(std::move(triangles));
-        }
-
-        log_warning(LOG_PREFIX, "Unsupported geometry type: ", geometryType);
-        return nullptr;
-    }
-*/
     std::shared_ptr<Mcrt::Object3D> load_object(
             IDatabase& database,
             Types::Mat4& transform,
@@ -243,7 +149,7 @@ namespace
                         std::string("Can't find sphere geometry with id ").append(std::to_string(geometryId)));
             }
 
-            auto originalRadius = sphereGeometryCursor->get_double(0);
+            auto originalRadius = 1.0f;
 
             auto radius = glm::length(transform * Types::Vec4(Types::Vec3(originalRadius, 0.f, 0.f), 0.0f));
             auto position = transform * Types::Vec4(Types::Vec3(0.f), 1.0f);
@@ -408,7 +314,7 @@ namespace
 
             Types::Mat4 transformationMatrix =
                     glm::translate(pos) *
-                    glm::eulerAngleXYX(euler_angles.x, euler_angles.y, euler_angles.z) *
+                    glm::eulerAngleXZY(euler_angles.x, euler_angles.y, euler_angles.z) *
                     glm::scale(scale);
 
             auto geometryId = objectsCursor->get_int(1);
@@ -483,6 +389,11 @@ void SceneLoader::load_to(Mcrt::Scene& scene)
 
     load_camera(db, scene);
     load_objects(db, scene);
+
+    static const int NUMBER_OF_PHOTONS_EMISSION = 20000;
+    log_info(LOG_PREFIX, "Building Photon map with ", NUMBER_OF_PHOTONS_EMISSION, " photons...");
+    //scene.buildPhotonMap(NUMBER_OF_PHOTONS_EMISSION);
+    log_info(LOG_PREFIX, "Photon map has been built...");
 }
 
 SceneLoader::~SceneLoader() = default;

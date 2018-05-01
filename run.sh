@@ -19,4 +19,7 @@ kill $DCDR_GUI_PID
 kill $DCDR_WORKER_PID
 kill $DCDR_SERVER_PID
 
+killall dcdr-gui
+killall dcdr-worker-cli
+killall dcdr-server-cli
 

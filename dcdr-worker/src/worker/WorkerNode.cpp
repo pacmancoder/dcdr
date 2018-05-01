@@ -236,7 +236,9 @@ void WorkerNode::Impl::run()
                             auto multisamplePixels = std::vector<Types::MultisamplePixel>(rawData.size());
                             for (size_t i = 0; i < multisamplePixels.size(); ++i)
                             {
-                                multisamplePixels[i].color = Types::Color(rawData[i][0], rawData[i][1], rawData[i][2]);
+                                multisamplePixels[i].color =
+                                        Types::Color(rawData[i][0], rawData[i][1], rawData[i][2]);
+                                multisamplePixels[i].samples = 1;
                             }
 
                             return multisamplePixels;
