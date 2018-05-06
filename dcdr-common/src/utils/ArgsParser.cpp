@@ -3,11 +3,6 @@
 
 using namespace Dcdr::Utils;
 
-namespace
-{
-    const std::string EMPTY_VALUE;
-}
-
 ArgsParser::ArgsParser(int argc, char* argv[]) :
         args_(), abbr_()
 
@@ -26,12 +21,12 @@ ArgsParser::ArgsParser(int argc, char* argv[]) :
 }
 
 
-const std::string& ArgsParser::get_argument(const std::string &arg) const
+const std::string& ArgsParser::get_argument(const std::string &arg, const std::string& defaultValue) const
 {
     auto foundValue = args_.find(arg);
     if (foundValue == args_.cend())
     {
-        return EMPTY_VALUE;
+        return defaultValue;
     }
 
     return args_.at(arg);

@@ -117,6 +117,8 @@ public:
 
     float new_scene_scale = 1.0f;
     uint32_t new_scene_id = std::numeric_limits<uint32_t>::max();
+
+    int current_scene = -1;
 };
 
 void MainForm::Impl::update_new_scene_params()
@@ -187,11 +189,22 @@ Dcdr::Gui::MainForm::MainForm() :
        }
     });
 
+    impl_->widgets_.removeJobButton_.events().click([this](const nana::arg_click& event)
+    {
+        if (event.mouse_args->button == nana::mouse::left_button)
+        {
+            if (auto commander = impl_->commander_.lock())
+            {
+                commander->send_job_control(Dcdr::Interconnect::Commander::JobState::Removed);
+            }
+        }
+    });
+
     impl_->widgets_.jobListBox_.events().selected([this](const nana::arg_listbox& event)
     {
        if (auto commander = impl_->commander_.lock())
        {
-           commander->select_job(static_cast<uint32_t>(event.item.pos().item));
+           commander->select_job(impl_->commanderData_.jobIds_[static_cast<uint32_t>(event.item.pos().item)]);
        }
     });
 }

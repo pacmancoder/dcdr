@@ -14,10 +14,7 @@ namespace Dcdr::Utils
     public:
         template <typename... Args>
         explicit RwLockProxy(Args&&... args) :
-                obj_(std::forward<Args>(args)...)
-        {
-            update_modify_timestamp();
-        }
+                obj_(std::forward<Args>(args)...)  {}
 
         template<typename AccessFunc>
         void access_read(AccessFunc&& accessFunc) const
@@ -40,26 +37,12 @@ namespace Dcdr::Utils
 
             std::unique_lock<std::shared_timed_mutex> accessLock(mutex_);
 
-            update_modify_timestamp();
             accessFunc(obj_);
-        }
-
-        Timestamp get_last_modified() const
-        {
-            return timestamp_;
-        }
-
-        void update_modify_timestamp()
-        {
-            timestamp_ = static_cast<Timestamp>(std::chrono::duration_cast<std::chrono::nanoseconds>(
-                    std::chrono::high_resolution_clock::now().time_since_epoch()).count());
         }
 
     private:
         mutable std::shared_timed_mutex priorityMutex_;
         mutable std::shared_timed_mutex mutex_;
-
-        std::atomic<Timestamp> timestamp_;
 
         InnerType obj_;
     };

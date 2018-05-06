@@ -29,7 +29,11 @@ namespace Dcdr::Server
             manualIndexing_(false),
             nextId_(0),
             addHook_(addHook),
-            removeHook_(removeHook) {}
+            removeHook_(removeHook),
+            timestamp_()
+        {
+            update_modify_timestamp();
+        }
 
 
         template<typename AccessFunc>
@@ -80,6 +84,8 @@ namespace Dcdr::Server
                 resources.emplace(id, std::move(resource));
             });
 
+            update_modify_timestamp();
+
             if (addHook_ != nullptr)
             {
                 addHook_(id);
@@ -99,6 +105,8 @@ namespace Dcdr::Server
             {
                 resources.erase(id);
             });
+
+            update_modify_timestamp();
         }
 
         bool exists(IdType id) const
@@ -114,7 +122,7 @@ namespace Dcdr::Server
 
         Timestamp get_last_modified() const
         {
-            return resources_.get_last_modified();
+            return timestamp_;
         }
 
         template <typename IterateFunc>
@@ -138,7 +146,6 @@ namespace Dcdr::Server
         template <typename IterateFunc>
         void iterate(IterateFunc&& iterateFunc) const
         {
-            resources_.update_modify_timestamp();
             resources_.access_read(
             [iterateFunc = std::forward<IterateFunc>(iterateFunc)]
                     (const ResourceStorage& resources) mutable
@@ -155,6 +162,13 @@ namespace Dcdr::Server
         }
 
     private:
+        void update_modify_timestamp()
+        {
+            timestamp_ = static_cast<Timestamp>(std::chrono::duration_cast<std::chrono::nanoseconds>(
+                    std::chrono::high_resolution_clock::now().time_since_epoch()).count());
+        }
+
+    private:
         // mutable is for setting new timestamp when writing internal data of container
         // (while container self is still const)
         mutable ResourceStorageProxy resources_;
@@ -164,5 +178,7 @@ namespace Dcdr::Server
 
         Hook addHook_;
         Hook removeHook_;
+
+        std::atomic<Timestamp> timestamp_;
     };
 }

@@ -109,12 +109,19 @@ IParcel::ParcelPtr CommanderRouter::dispatch(const CommanderGetJobArtifactReques
 
 IParcel::ParcelPtr CommanderRouter::dispatch(const CommanderSetJobStateRequest& request)
 {
-    coreContext_->get_jobs().access_write(request.get_job_id(),
-    [&request](Job& job)
+    if (request.get_job_state() == Interconnect::Commander::JobState::Removed)
     {
-        job.set_state(request.get_job_state());
-    });
-
+        coreContext_->get_jobs().remove(request.get_job_id());
+    }
+    else
+    {
+        coreContext_->get_jobs().access_write(
+                request.get_job_id(),
+                [&request](Job& job)
+                {
+                    job.set_state(request.get_job_state());
+                });
+    }
     return std::make_unique<CommanderErrorResponseParcel>(Commander::CommanderErrorKind::Ok);
 }
 

@@ -114,13 +114,17 @@ namespace
         material->specular_reflectance = static_cast<float>(materialCursor->get_double(3));
         material->reflectance = static_cast<float>(materialCursor->get_double(4));
         // roughness from glossiness
-        material->diffuse_roughness = 1.0f - static_cast<float>(materialCursor->get_double(5));
-        log_debug("roughness:", 1.0f - static_cast<float>(materialCursor->get_double(5)));
+        material->diffuse_roughness =
+            static_cast<float>(
+                1.0f / glm::pow(materialCursor->get_double(5), 4) - 1.0f);
+        if (material->diffuse_roughness < 0)
+        {
+            material->diffuse_roughness = 0;
+        }
         material->transmissivity = static_cast<float>(materialCursor->get_double(6));
         material->refraction_index = static_cast<float>(materialCursor->get_double(7));
         material->emittance = static_cast<float>(materialCursor->get_double(8));
-
-        log_debug(LOG_PREFIX, "Emittance: ", material->emittance);
+        
         log_debug(LOG_PREFIX, "Loaded material #", id);
         return material;
     }

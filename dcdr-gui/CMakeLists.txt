@@ -5,7 +5,7 @@ file(GLOB DCDR_GUI_INCLUDES include/dcdr/gui/*.h)
 
 include_directories(include)
 
-add_executable(${PROJECT_NAME} ${DCDR_GUI_SOURCES} ${DCDR_GUI_INCLUDES})
+add_executable(${PROJECT_NAME} ${DCDR_GUI_INCLUDES} ${DCDR_GUI_SOURCES})
 
 set(DCDR_GUI_LINKS dcdr-interconnect dcdr-transport dcdr-logger nana)
 

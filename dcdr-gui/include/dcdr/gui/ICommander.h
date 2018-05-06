@@ -9,8 +9,8 @@ namespace Dcdr::Gui
     {
     public:
 
-        virtual void send_job_control(uint32_t id, Interconnect::Commander::JobState state) = 0;
-        virtual void send_node_control(uint32_t id, Interconnect::Commander::NodeState state) = 0;
+        virtual void send_job_control(Interconnect::Commander::JobState state) = 0;
+        virtual void send_node_control(Interconnect::Commander::NodeState state) = 0;
 
         virtual void add_job(uint32_t sceneId, float scale) = 0;
 

@@ -154,18 +154,27 @@ IParcel::ParcelPtr WorkerRouter::dispatch(const WorkerCommitTasksRequest &reques
         uint32_t jobId = 0;
         ChunkRect chunkRect = {};
 
-        coreContext_->get_tasks().access_read(artifact.taskId,
-        [&jobId, &chunkRect](const ChunkTask& task)
+        if (coreContext_->get_tasks().exists(artifact.taskId))
         {
-            jobId = task.get_job_id();
-            chunkRect = task.get_chunk_rect();
-        });
 
-        coreContext_->get_jobs().access_write(jobId,
-        [&chunkRect, &artifact](Job& job)
-        {
-            job.get_surface().commit_chunk(Chunk(chunkRect, artifact.data));
-        });
+            coreContext_->get_tasks().access_read(
+                artifact.taskId,
+                [&jobId, &chunkRect](const ChunkTask& task)
+                {
+                    jobId = task.get_job_id();
+                    chunkRect = task.get_chunk_rect();
+                });
+
+            if (coreContext_->get_jobs().exists(jobId))
+            {
+                coreContext_->get_jobs().access_write(
+                        jobId,
+                        [&chunkRect, &artifact](Job& job)
+                        {
+                            job.get_surface().commit_chunk(Chunk(chunkRect, artifact.data));
+                        });
+            }
+        }
     }
 
     return std::make_unique<WorkerServerStatusResponseParcel>(

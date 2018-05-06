@@ -1,4 +1,4 @@
-#include "dcdr/gui/CommanderNode.h"
+#include <dcdr/gui/CommanderNode.h>
 
 #include <dcdr/utils/Timer.h>
 
@@ -35,7 +35,7 @@ using namespace std::chrono_literals;
 
 namespace
 {
-    const char* LOG_PREFIX = "[Worker][CommanderNode] ";
+    const char* LOG_PREFIX = "[GUI][CommanderNode] ";
     struct Scene
     {
         std::string name;
@@ -105,6 +105,7 @@ struct CommanderNode::Impl
     FlatBuffersParcelDeserializer deserializer_;
 
     std::optional<uint32_t> currentScene_;
+    std::optional<uint32_t> currentNode_;
 
     void run();
 
@@ -125,7 +126,8 @@ CommanderNode::Impl::Impl(std::shared_ptr<IMainFormView> view) :
     jobsTimestamp_(0),
     serializer_(),
     deserializer_(),
-    currentScene_(std::nullopt) {}
+    currentScene_(std::nullopt),
+    currentNode_(std::nullopt) {}
 
 CommanderNode::~CommanderNode() = default;
 
@@ -233,30 +235,55 @@ void CommanderNode::request_terminate()
     impl_->terminateRequested_ = true;
 }
 
-void CommanderNode::send_job_control(uint32_t id, Dcdr::Interconnect::Commander::JobState state)
+void CommanderNode::send_job_control(Dcdr::Interconnect::Commander::JobState state)
 {
+    if (impl_->currentScene_ == std::nullopt)
+    {
+
+        log_warning(LOG_PREFIX, "No scene selected! Can't change the state.");
+        return;
+    }
+
     impl_->perform_command<CommanderErrorResponse>(
-            CommanderSetJobStateRequestParcel(id, state),
-            [this, id](const CommanderErrorResponse& response)
+            CommanderSetJobStateRequestParcel(impl_->currentScene_.value(), state),
+            [this, state](const CommanderErrorResponse& response)
             {
                 if (response.get_error_kind() != Interconnect::Commander::CommanderErrorKind::Ok)
                 {
-                    log_error(LOG_PREFIX, "Can't set job state for job with id ", id);
+                    log_error(LOG_PREFIX, "Can't set job state for job with id ", impl_->currentScene_.value());
                     impl_->view_->show_error("Can't set new job state");
+                    return;
+                }
+
+                if (state == Dcdr::Interconnect::Commander::JobState::Removed)
+                {
+                    impl_->currentScene_ = std::nullopt;
                 }
             });
 }
 
-void CommanderNode::send_node_control(uint32_t id, Dcdr::Interconnect::Commander::NodeState state)
+void CommanderNode::send_node_control(Dcdr::Interconnect::Commander::NodeState state)
 {
+    if (impl_->currentNode_ == std::nullopt)
+    {
+        log_warning(LOG_PREFIX, "No node selected! Can't change the state.");
+        return;
+    }
+
     impl_->perform_command<CommanderErrorResponse>(
-            CommanderSetNodeStateRequestParcel(id, state),
-            [this, id, state](const CommanderErrorResponse& response)
+            CommanderSetNodeStateRequestParcel(impl_->currentNode_.value(), state),
+            [this, state](const CommanderErrorResponse& response)
             {
                 if (response.get_error_kind() != Interconnect::Commander::CommanderErrorKind::Ok)
                 {
-                    log_error(LOG_PREFIX, "Can't set job state for node with id ", id);
+                    log_error(LOG_PREFIX, "Can't set node state for node with id ", impl_->currentNode_.value());
                     impl_->view_->show_error("Can't set new node state");
+                    return;
+                }
+
+                if (state == Dcdr::Interconnect::Commander::NodeState::Offline)
+                {
+                    impl_->currentNode_ = std::nullopt;
                 }
             });
 }
@@ -278,6 +305,7 @@ void CommanderNode::add_job(uint32_t sceneId, float scale)
 
 void CommanderNode::select_job(uint32_t id)
 {
+    log_warning(LOG_PREFIX, "Selected scene ", id);
     impl_->currentScene_ = id;
 
     impl_->perform_command<CommanderGetJobInfoResponse>(
@@ -294,6 +322,8 @@ void CommanderNode::select_job(uint32_t id)
 
 void CommanderNode::select_node(uint32_t id)
 {
+    impl_->currentNode_ = id;
+
     impl_->perform_command<CommanderGetNodeInfoResponse>(
             CommanderGetNodeInfoRequestParcel(id),
             [this, id](const CommanderGetNodeInfoResponse& response)
@@ -330,6 +360,7 @@ void CommanderNode::Impl::update_job_list()
                 for (const auto& job : response.get_jobs())
                 {
                     view_->add_job(job.id, job.name, job.state);
+                    log_warning(LOG_PREFIX, "Added job ", job.name);
                 }
             });
 }

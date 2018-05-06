@@ -20,6 +20,5 @@ add_executable(
 
 add_test(NAME DcdrInterconnectTest COMMAND ${PROJECT_NAME})
 
-target_link_libraries(${PROJECT_NAME} PRIVATE test-utils)
 target_link_libraries(${PROJECT_NAME} PRIVATE gtest)
 target_link_libraries(${PROJECT_NAME} PRIVATE dcdr-interconnect)

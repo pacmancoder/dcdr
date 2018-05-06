@@ -75,7 +75,10 @@ namespace
 
 struct WorkerNode::Impl
 {
-    explicit Impl(const std::string& sceneCache = "");
+    explicit Impl(
+            const std::string& sceneCache,
+            const std::string& ip,
+            const std::string& port);
 
     void run();
 
@@ -96,22 +99,33 @@ private:
     std::map<uint32_t, Mcrt::Scene> scenes_;
 
     uint32_t nodeId_;
+
+    std::string ip_;
+    std::string port_;
 };
 
 WorkerNode::WorkerNode(const Utils::ArgsParser& args) :
-        impl_(std::make_unique<Impl>(args.get_argument("scene-cache"))) {}
+        impl_(std::make_unique<Impl>(
+                args.get_argument("scene-cache", ""),
+                args.get_argument("ip", "127.0.0.1"),
+                args.get_argument("port", "61297"))) {}
 
 WorkerNode::~WorkerNode() = default;
 
 
-WorkerNode::Impl::Impl(const std::string& sceneCache) :
+WorkerNode::Impl::Impl(
+        const std::string& sceneCache,
+        const std::string& ip,
+        const std::string& port) :
     transport_(nullptr),
     deserializer_(),
     serializer_(),
     tmpPath_(sceneCache),
     sceneStorage_(sceneCache),
     scenes_(),
-    nodeId_(0) {}
+    nodeId_(0),
+    ip_(ip),
+    port_(port) {}
 
 template<class ResponseType, class RequestParcelType, typename ResponseVisitFunc>
 void WorkerNode::Impl::perform_command(RequestParcelType&& request, ResponseVisitFunc&& func)
@@ -171,10 +185,13 @@ void WorkerNode::Impl::load_scene(const WorkerGetSceneInfoResponse& sceneInfo, u
         }
 
         sceneStorage_.cache_finish(downloadHandle);
-        SceneLoader loader(
-                sceneStorage_.get_cached_file_path(sceneInfo.get_file_name()));
-        loader.load_to(scene.first->second);
     }
+
+    SceneLoader loader(
+            sceneStorage_.get_cached_file_path(sceneInfo.get_file_name()));
+
+    loader.load_to(scene.first->second);
+
 
     log_info(LOG_PREFIX, "Scene #", scene.first->first, " loaded");
 }
@@ -209,8 +226,9 @@ void WorkerNode::Impl::run()
 
                     for (const auto& task : response.get_tasks())
                     {
+                        auto foundScene = scenes_.find(task.sceneId);
                         // check that scene is present in current run
-                        if (scenes_.find(task.sceneId) == scenes_.cend())
+                        if (foundScene == scenes_.cend())
                         {
                             perform_command<WorkerGetSceneInfoResponse>(
                                     WorkerGetSceneInfoRequestParcel(nodeId_, task.sceneId),
@@ -237,8 +255,11 @@ void WorkerNode::Impl::run()
                             for (size_t i = 0; i < multisamplePixels.size(); ++i)
                             {
                                 multisamplePixels[i].color =
-                                        Types::Color(rawData[i][0], rawData[i][1], rawData[i][2]);
-                                multisamplePixels[i].samples = 1;
+                                        Types::Color(
+                                                glm::clamp(rawData[i][0], 0.0f, 1.0f),
+                                                glm::clamp(rawData[i][1], 0.0f, 1.0f),
+                                                glm::clamp(rawData[i][2], 0.0f, 1.0f));
+                                multisamplePixels[i].samples = 32;
                             }
 
                             return multisamplePixels;
