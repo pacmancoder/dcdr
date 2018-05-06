@@ -198,7 +198,7 @@ void WorkerNode::Impl::load_scene(const WorkerGetSceneInfoResponse& sceneInfo, u
 
 void WorkerNode::Impl::run()
 {
-    transport_ = std::make_unique<WebsocketSyncClientTransport>("127.0.0.1:61297", 10s);
+    transport_ = std::make_unique<WebsocketSyncClientTransport>(ip_ + ":" + port_, 10s);
 
     FlatBuffersParcelDeserializer deserializer;
     FlatBuffersParcelSerializer serializer;
