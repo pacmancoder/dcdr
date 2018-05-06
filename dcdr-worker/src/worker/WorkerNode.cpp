@@ -280,17 +280,6 @@ void WorkerNode::Impl::run()
                 [](const WorkerServerStatusResponse&)
                 {
                 });
-
-        if (!std::cin.eof())
-        {
-            std::string value;
-
-            std::cin >> value;
-            if (value == "@exit")
-            {
-                break;
-            }
-        }
     }
 
     perform_command<WorkerServerStatusResponse>(

@@ -40,6 +40,8 @@ IParcel::ParcelPtr WorkerRouter::dispatch(const Dcdr::Interconnect::AWorkerReque
 
 IParcel::ParcelPtr WorkerRouter::dispatch(const WorkerLoginRequest&)
 {
+    //std::lock_guard<std::mutex> coreContextGuard(coreContextMutex_);
+
     auto nodeId = coreContext_->get_nodes().add(Node());
 
     coreContext_->get_connections().access_write(connectionId_,
@@ -52,6 +54,8 @@ IParcel::ParcelPtr WorkerRouter::dispatch(const WorkerLoginRequest&)
 
 IParcel::ParcelPtr WorkerRouter::dispatch(const WorkerLogoutRequest &request)
 {
+    //std::lock_guard<std::mutex> coreContextGuard(coreContextMutex_);
+
     coreContext_->get_nodes().remove(request.get_node_id());
 
     return nullptr;
@@ -59,6 +63,8 @@ IParcel::ParcelPtr WorkerRouter::dispatch(const WorkerLogoutRequest &request)
 
 IParcel::ParcelPtr WorkerRouter::dispatch(const WorkerSendHardwareInfoRequest &request)
 {
+    //std::lock_guard<std::mutex> coreContextGuard(coreContextMutex_);
+
     coreContext_->get_nodes().access_write(request.get_node_id(),
     [&request](Node& node)
     {
@@ -73,6 +79,8 @@ IParcel::ParcelPtr WorkerRouter::dispatch(const WorkerSendHardwareInfoRequest &r
 
 IParcel::ParcelPtr WorkerRouter::dispatch(const WorkerPollTasksRequest &request)
 {
+    //std::lock_guard<std::mutex> coreContextGuard(coreContextMutex_);
+
     std::vector<Worker::TaskInfo> tasks;
 
     coreContext_->get_jobs().iterate(
@@ -117,6 +125,8 @@ IParcel::ParcelPtr WorkerRouter::dispatch(const WorkerPollTasksRequest &request)
 
 IParcel::ParcelPtr WorkerRouter::dispatch(const WorkerGetSceneInfoRequest &request)
 {
+    //std::lock_guard<std::mutex> coreContextGuard(coreContextMutex_);
+
     uint16_t width = 0;
     uint16_t height = 0;
     std::string fileName;
@@ -149,6 +159,8 @@ IParcel::ParcelPtr WorkerRouter::dispatch(const WorkerGetSceneInfoRequest &reque
 
 IParcel::ParcelPtr WorkerRouter::dispatch(const WorkerCommitTasksRequest &request)
 {
+    //std::lock_guard<std::mutex> coreContextGuard(coreContextMutex_);
+
     for (const auto& artifact : request.get_artifacts())
     {
         uint32_t jobId = 0;
@@ -183,6 +195,8 @@ IParcel::ParcelPtr WorkerRouter::dispatch(const WorkerCommitTasksRequest &reques
 
 IParcel::ParcelPtr WorkerRouter::dispatch(const WorkerDownloadSceneRequest &request)
 {
+    //std::lock_guard<std::mutex> coreContextGuard(coreContextMutex_);
+
     static const uint32_t SCENE_PART_SIZE = 1024;
 
     uint32_t sceneFileId = 0;
